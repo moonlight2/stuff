@@ -4,6 +4,7 @@ namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 
 /**
  * Account
@@ -11,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Account implements UserInterface {
+class Account implements UserInterface, EquatableInterface {
 
     /**
      * @var integer
@@ -51,8 +52,7 @@ class Account implements UserInterface {
      */
     private $password;
 
-    public function __construct($email) {
-        $this->email = $email;
+    public function __construct() {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
     }
@@ -74,6 +74,7 @@ class Account implements UserInterface {
      */
     public function setUsername($name) {
         $this->username = $name;
+
         return $this;
     }
 
@@ -94,6 +95,7 @@ class Account implements UserInterface {
      */
     public function setPassword($password) {
         $this->password = $password;
+
         return $this;
     }
 
@@ -115,86 +117,11 @@ class Account implements UserInterface {
     }
 
     public function getSalt() {
-        return $this->salt;
+        
     }
 
-    /**
-     * Set salt
-     *
-     * @param string $salt
-     * @return Account
-     */
-    public function setSalt($salt) {
-        $this->salt = $salt;
-        return $this;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return Account
-     */
-    public function setEmail($email) {
-        $this->email = $email;
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail() {
-        return $this->email;
-    }
-
-    /**
-     * Set isActive
-     *
-     * @param boolean $isActive
-     * @return Account
-     */
-    public function setIsActive($isActive) {
-        $this->isActive = $isActive;
-        return $this;
-    }
-
-    /**
-     * Get isActive
-     *
-     * @return boolean 
-     */
-    public function getIsActive() {
-        return $this->isActive;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isAccountNonExpired() {
-        return true;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isAccountNonLocked() {
-        return true;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isCredentialsNonExpired() {
-        return true;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isEnabled() {
-        return true;
+    public function isEqualTo(UserInterface $user) {
+        return $this->username === $user->getUsername();
     }
 
 }

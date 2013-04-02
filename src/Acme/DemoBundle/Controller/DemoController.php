@@ -23,14 +23,20 @@ class DemoController extends Controller
     }
 
     /**
-     * @Route("/hello/{name}", name="_demo_hello")
+     * @Route("/hello/{name}/{pass}", name="_demo_hello")
      * @Template()
      */
-    public function helloAction($name)
+    public function helloAction($name, $pass=null)
     {
-        $account = new Account();
-        $account->setName($name);
-        $account->setPassword("Password");
+
+        $factory = $this->get('security.encoder_factory');
+        
+        $account = new Account("email@home.com");
+        $encoder = $factory->getEncoder($account);
+        $password = $encoder->encodePassword($pass, $account->getSalt());
+        $account->setUsername($name);
+        $account->setPassword($password);
+
         
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($account);
