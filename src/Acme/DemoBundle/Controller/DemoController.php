@@ -5,6 +5,7 @@ namespace Acme\DemoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Acme\DemoBundle\Form\ContactType;
+use Acme\DemoBundle\Entity\Account;
 
 // these import the "@Route" and "@Template" annotations
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,6 +28,14 @@ class DemoController extends Controller
      */
     public function helloAction($name)
     {
+        $account = new Account();
+        $account->setName($name);
+        $account->setPassword("Password");
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($account);
+        $em->flush();
+        
         return array('name' => $name);
     }
 
