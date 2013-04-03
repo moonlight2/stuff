@@ -4,12 +4,14 @@ namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Account
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Acme\DemoBundle\Repository\AccountRepository")
  */
 class Account implements UserInterface {
 
@@ -40,6 +42,11 @@ class Account implements UserInterface {
     private $email;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Group", inversedBy="users")
+     */
+    private $groups;
+
+    /**
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
@@ -51,10 +58,18 @@ class Account implements UserInterface {
      */
     private $password;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="Account")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $product;
+
     public function __construct($email) {
         $this->email = $email;
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
+        $this->groups = new ArrayCollection();
+        $this->product = new ArrayCollection();
     }
 
     /**
@@ -111,7 +126,7 @@ class Account implements UserInterface {
     }
 
     public function getRoles() {
-        return array('ROLE_USER');
+        return $this->groups->toArray();
     }
 
     public function getSalt() {
@@ -197,4 +212,60 @@ class Account implements UserInterface {
         return true;
     }
 
+
+    /**
+     * Add groups
+     *
+     * @param \Acme\DemoBundle\Entity\Group $groups
+     * @return Account
+     */
+    public function addGroup(\Acme\DemoBundle\Entity\Group $groups)
+    {
+        $this->groups[] = $groups;
+    
+        return $this;
+    }
+
+    /**
+     * Remove groups
+     *
+     * @param \Acme\DemoBundle\Entity\Group $groups
+     */
+    public function removeGroup(\Acme\DemoBundle\Entity\Group $groups)
+    {
+        $this->groups->removeElement($groups);
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * Set product
+     *
+     * @param \Acme\DemoBundle\Entity\Category $product
+     * @return Account
+     */
+    public function setProduct(\Acme\DemoBundle\Entity\Category $product = null)
+    {
+        $this->product = $product;
+    
+        return $this;
+    }
+
+    /**
+     * Get product
+     *
+     * @return \Acme\DemoBundle\Entity\Category 
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
 }

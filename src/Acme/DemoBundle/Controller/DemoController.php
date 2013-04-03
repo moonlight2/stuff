@@ -11,37 +11,94 @@ use Acme\DemoBundle\Entity\Account;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class DemoController extends Controller
-{
+class DemoController extends Controller {
+
+    public function __construct() {
+
+    }
+    
     /**
      * @Route("/", name="_demo")
      * @Template()
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         return array();
+    }
+
+    /**
+     * @Route("/query/{name}", name="_demo_query")
+     * @Template()
+     */
+    public function queryAction($name) {
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $acc = $em->getRepository('AcmeDemoBundle:Account')->loadUserByUserName($name);
+
+        return array('name' => $acc[0]->getUsername());
+    }
+
+    /**
+     * @Route("/test/{id}", name="_demo_test")
+     * @Template()
+     */
+    public function testAction($id) {
+
+        $repository = $this->getDoctrine()
+                ->getRepository('AcmeDemoBundle:Account');
+
+        $acc = $repository->find($id);
+        $acc = $repository->findOneByUsername('ilisa');
+//        $all = $repository->findAll();
+        $acc = $repository->findOneBy(array('username' => 'moo',
+            'password' => 'Password'));
+
+        $all = $repository->findBy(array('username' => 'moo'), array('password' => 'ASC'));
+
+
+//        foreach ($all as $o) {
+//            echo $o->getUsername() . "<br>";
+//            echo $o->getPassword() . "<br>";
+//        }
+//        exit('2');
+
+        if (!$acc) {
+            echo "Not found";
+            exit();
+        }
+
+        print_r($acc->getUsername() . "  " . $acc->getPassword());
+
+        exit('1');
     }
 
     /**
      * @Route("/hello/{name}/{pass}", name="_demo_hello")
      * @Template()
      */
-    public function helloAction($name, $pass=null)
-    {
+    public function helloAction($name, $pass = null) {
 
         $factory = $this->get('security.encoder_factory');
-        
+
         $account = new Account("email@home.com");
+        $category = new \Acme\DemoBundle\Entity\Category();
+        $category->setName('MUSSIK');
+
         $encoder = $factory->getEncoder($account);
         $password = $encoder->encodePassword($pass, $account->getSalt());
+        
         $account->setUsername($name);
         $account->setPassword($password);
+        $account->setProduct($category);
+        
 
-        
-        $em = $this->getDoctrine()->getEntityManager();
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($category);
         $em->persist($account);
+
         $em->flush();
-        
+
         return array('name' => $name);
     }
 
@@ -49,8 +106,7 @@ class DemoController extends Controller
      * @Route("/contact", name="_demo_contact")
      * @Template()
      */
-    public function contactAction()
-    {
+    public function contactAction() {
         $form = $this->get('form.factory')->create(new ContactType());
 
         $request = $this->get('request');
@@ -69,4 +125,5 @@ class DemoController extends Controller
 
         return array('form' => $form->createView());
     }
+
 }
