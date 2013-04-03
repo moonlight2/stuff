@@ -7,11 +7,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Acme\DemoBundle\Form\ContactType;
 use Acme\DemoBundle\Entity\Account;
 use Acme\DemoBundle\IceManager\IceManager;
-
 // these import the "@Route" and "@Template" annotations
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
 
 class DemoController extends Controller {
 
@@ -34,18 +32,20 @@ class DemoController extends Controller {
     public function emailAction($id = null) {
 
 //        $ice = $this->get('ice');
-        
+
         $iceManager = $this->get('ice_manager');
-        
+
         if (null != $id) {
             $message = \Swift_Message::newInstance()
-                    ->setSubject('Hello Email')
+                    ->setSubject('Pisik misikk')
                     ->setFrom('yakov.the.smart@gmail.com')
                     ->setTo('yakov.the.smart@gmail.com')
                     ->setBody($id);
-            $iceManager->get()->send($message);
+            $this->get('mailer')->send($message);
+            return array('name' => 'Email sent!');
+        } else {
+            return array('name' => $iceManager->get()->getIce());
         }
-        return array('name' => $iceManager->get()->getIce());
     }
 
     /**

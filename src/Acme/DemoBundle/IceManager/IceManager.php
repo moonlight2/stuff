@@ -11,7 +11,7 @@ class IceManager
         $this->ice = $ice;
     }
     
-    public function get() {
+    public function getObject() {
         return $this->ice;
     }
     
