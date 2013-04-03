@@ -25,5 +25,18 @@ monolog:
 assetic:
     use_controller: true
 
-#swiftmailer:
+swiftmailer:
+    transport:  smtp
+    encryption: ssl
+    auth_mode:  login
+    host:       smtp.gmail.com
+    username:   yakov.the.smart@gmail.com
+    password:   moontopic26
 #    delivery_address: me@example.com
+
+############################ SERVICES ##########################################
+
+services:
+    ice:
+        class:        Acme\DemoBundle\Ice\Icecream
+        arguments:    [My mega ultra ice!!!!]

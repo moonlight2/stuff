@@ -18,4 +18,15 @@ class AccountRepository extends EntityRepository {
                         ->getResult();
     }
 
+    public function findProduct($id) {
+
+        $query = $this->getEntityManager()
+                ->createQuery('SELECT a, p FROM AcmeDemoBundle:Account a
+                                JOIN a.product p
+                                WHERE a.id = :id')
+                ->setParameter('id', $id);
+            return $query->getSingleResult();
+
+    }
+
 }

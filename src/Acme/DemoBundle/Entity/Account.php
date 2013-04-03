@@ -69,7 +69,6 @@ class Account implements UserInterface {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
         $this->groups = new ArrayCollection();
-        $this->product = new ArrayCollection();
     }
 
     /**

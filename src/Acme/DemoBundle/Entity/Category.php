@@ -30,7 +30,7 @@ class Category {
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Account", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Account", mappedBy="Category")
      */
     private $accounts;
 
@@ -72,10 +72,10 @@ class Category {
     /**
      * Add accounts
      *
-     * @param \Acme\DemoBundle\Entity\Acount $accounts
+     * @param \Acme\DemoBundle\Entity\Account $accounts
      * @return Category
      */
-    public function addAccount(\Acme\DemoBundle\Entity\Acount $accounts)
+    public function addAccount(\Acme\DemoBundle\Entity\Account $accounts)
     {
         $this->accounts[] = $accounts;
     
@@ -85,9 +85,9 @@ class Category {
     /**
      * Remove accounts
      *
-     * @param \Acme\DemoBundle\Entity\Acount $accounts
+     * @param \Acme\DemoBundle\Entity\Account $accounts
      */
-    public function removeAccount(\Acme\DemoBundle\Entity\Acount $accounts)
+    public function removeAccount(\Acme\DemoBundle\Entity\Account $accounts)
     {
         $this->accounts->removeElement($accounts);
     }

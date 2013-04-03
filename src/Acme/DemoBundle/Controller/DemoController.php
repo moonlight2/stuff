@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Acme\DemoBundle\Form\ContactType;
 use Acme\DemoBundle\Entity\Account;
-
 // these import the "@Route" and "@Template" annotations
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -14,9 +13,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class DemoController extends Controller {
 
     public function __construct() {
-
+        
     }
-    
+
     /**
      * @Route("/", name="_demo")
      * @Template()
@@ -26,16 +25,35 @@ class DemoController extends Controller {
     }
 
     /**
+     * @Route("/email/{id}", name="_demo_email")
+     * @Template()
+     */
+    public function emailAction($id = null) {
+
+        $ice = $this->get('ice');
+        
+        if (null != $id) {
+            $message = \Swift_Message::newInstance()
+                    ->setSubject('Hello Email')
+                    ->setFrom('yakov.the.smart@gmail.com')
+                    ->setTo('yakov.the.smart@gmail.com')
+                    ->setBody($id);
+            $this->get('mailer')->send($message);
+        }
+        return array('name' => $ice->getIce());
+    }
+
+    /**
      * @Route("/query/{name}", name="_demo_query")
      * @Template()
      */
     public function queryAction($name) {
-        
+
         $em = $this->getDoctrine()->getManager();
+        $reposiyory = $em->getRepository('AcmeDemoBundle:Account');
+        $acc = $reposiyory->loadUserByUserName($name);
 
-        $acc = $em->getRepository('AcmeDemoBundle:Account')->loadUserByUserName($name);
-
-        return array('name' => $acc[0]->getUsername());
+        return array('name' => $acc[0]->getProduct()->getName());
     }
 
     /**
@@ -86,11 +104,11 @@ class DemoController extends Controller {
 
         $encoder = $factory->getEncoder($account);
         $password = $encoder->encodePassword($pass, $account->getSalt());
-        
+
         $account->setUsername($name);
         $account->setPassword($password);
         $account->setProduct($category);
-        
+
 
 
         $em = $this->getDoctrine()->getManager();
