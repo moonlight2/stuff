@@ -1,0 +1,14 @@
+parameters:
+    ice.class:      Acme\DemoBundle\Ice\Icecream
+    ice.transport:  My mega ultra ice!!!! Giga ice 3 m
+    
+    ice_manager.class: Acme\DemoBundle\IceManager\IceManager
+
+services:
+    ice:
+        class:        %ice.class%
+        arguments:    [%ice.transport%]
+    ice_manager:
+        class:        %ice_manager.class%
+        arguments:    [@ice]   
+     

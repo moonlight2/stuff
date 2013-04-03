@@ -1,6 +1,9 @@
 imports:
+    - { resource: @AcmeDemoBundle/Resources/config/services.yml }
     - { resource: parameters.yml }
     - { resource: security.yml }
+    
+
 
 framework:
     #esi:             ~

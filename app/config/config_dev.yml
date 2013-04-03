@@ -1,6 +1,7 @@
 imports:
     - { resource: config.yml }
 
+
 framework:
     router:   { resource: "%kernel.root_dir%/config/routing_dev.yml" }
     profiler: { only_exceptions: false }
@@ -34,9 +35,4 @@ swiftmailer:
     password:   moontopic26
 #    delivery_address: me@example.com
 
-############################ SERVICES ##########################################
 
-services:
-    ice:
-        class:        Acme\DemoBundle\Ice\Icecream
-        arguments:    [My mega ultra ice!!!!]
