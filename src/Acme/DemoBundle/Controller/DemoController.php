@@ -6,10 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Acme\DemoBundle\Form\ContactType;
 use Acme\DemoBundle\Entity\Account;
-use Acme\DemoBundle\IceManager\IceManager;
 // these import the "@Route" and "@Template" annotations
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DemoController extends Controller {
 
@@ -22,6 +24,53 @@ class DemoController extends Controller {
      * @Template()
      */
     public function indexAction() {
+        return array();
+    }
+
+    /**
+     * @Route("/json", name="_demo_json")
+     */
+    public function jsonAction() {
+        $text = 'This is content from Json Action';
+        $body = 'And this is from Route Action forward';
+        return new JsonResponse(array('name' => $text, 'body' => $body));
+    }
+
+    
+    
+    /**
+     * @Route("/json2", name="_demo_json2")
+     */
+    public function json2Action() {
+
+        $text = 'Здесь будет другой текст с другой страницы';
+        $body = 'Это будет текст тела, но уже с другой страницы';
+
+        $content = (!isset($_SERVER['HTTP_X_PJAX'])) ?
+                ($this->renderView(
+                        'AcmeDemoBundle:Demo:json3.html.twig', array('name' => $text, 'body' => $body))) :
+                ($this->renderView(
+                        'AcmeDemoBundle:Demo:json2.html.twig', array('name' => $text, 'body' => $body)));
+        
+        return new Response($content);
+    }
+
+    /**
+     * @Route("/route", name="_demo_route")
+     */
+    public function routeAction() {
+        if (!isset($_SERVER['HTTP_X_PJAX'])) {
+            return $this->forward('AcmeDemoBundle:Demo:fromjson');
+        } else {
+            return $this->forward('AcmeDemoBundle:Demo:json');
+        }
+    }
+
+    /**
+     * @Route("/encode", name="_demo_encode")
+     * @Template()
+     */
+    public function fromjsonAction() {
         return array();
     }
 

@@ -1,9 +1,9 @@
 {% extends "AcmeDemoBundle::layout.html.twig" %}
 
-{% block title "Yeah " ~ name %}
 
 {% block content %}
     <h1>Yeah {{ name }}!</h1>
+    <p>Json2 {{ body }}!</p>
 {% endblock %}
 
 {% set code = code(_self) %}
