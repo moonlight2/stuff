@@ -1,0 +1,5 @@
+flash_default:
+    resource: "@FlashDefaultBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
