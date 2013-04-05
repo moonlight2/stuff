@@ -1,6 +1,6 @@
 <?php
 
-namespace Acme\DemoBundle\Entity;
+namespace Flash\Bundle\DefaultBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -9,9 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Account
  *
- * @ORM\Table()
+ * @ORM\Table(name="account")
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="Acme\DemoBundle\Repository\AccountRepository")
+ * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\AccountRepository")
  */
 class Account implements UserInterface {
 
@@ -42,9 +42,9 @@ class Account implements UserInterface {
     private $email;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Group", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="Account")
      */
-    private $groups;
+    private $roles;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -58,17 +58,13 @@ class Account implements UserInterface {
      */
     private $password;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="Account")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     */
-    private $product;
 
     public function __construct($email) {
         $this->email = $email;
+        $this->username = $email;
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
-        $this->groups = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     /**
@@ -92,15 +88,6 @@ class Account implements UserInterface {
     }
 
     /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getUsername() {
-        return $this->username;
-    }
-
-    /**
      * Set password
      *
      * @param string $password
@@ -118,18 +105,6 @@ class Account implements UserInterface {
      */
     public function getPassword() {
         return $this->password;
-    }
-
-    public function eraseCredentials() {
-        
-    }
-
-    public function getRoles() {
-        return $this->groups->toArray();
-    }
-
-    public function getSalt() {
-        return $this->salt;
     }
 
     /**
@@ -213,58 +188,54 @@ class Account implements UserInterface {
 
 
     /**
-     * Add groups
+     * Add roles
      *
-     * @param \Acme\DemoBundle\Entity\Group $groups
+     * @param \Flash\Bundle\DemoBundle\Entity\Role $roles
      * @return Account
      */
-    public function addGroup(\Acme\DemoBundle\Entity\Group $groups)
+    public function addRole(\Flash\Bundle\DefaultBundle\Entity\Role $role)
     {
-        $this->groups[] = $groups;
+        $this->roles[] = $role;
     
         return $this;
     }
 
     /**
-     * Remove groups
+     * Remove roles
      *
-     * @param \Acme\DemoBundle\Entity\Group $groups
+     * @param \Flash\Bundle\DemoBundle\Entity\Role $roles
      */
-    public function removeGroup(\Acme\DemoBundle\Entity\Group $groups)
+    public function removeRole(\Flash\Bundle\DefaultBundle\Entity\Role $role)
     {
-        $this->groups->removeElement($groups);
+        $this->roles->removeElement($role);
     }
 
     /**
-     * Get groups
+     * Get roles
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getGroups()
+    public function getRoles()
     {
-        return $this->groups;
+        $rolesArray =  $this->roles->getValues();
+        $rolesNames = array();
+        foreach($rolesArray as $role) {
+            $rolesNames[] = $role->getName();
+        }
+        return $rolesNames;
     }
 
-    /**
-     * Set product
-     *
-     * @param \Acme\DemoBundle\Entity\Category $product
-     * @return Account
-     */
-    public function setProduct(\Acme\DemoBundle\Entity\Category $product = null)
-    {
-        $this->product = $product;
-    
-        return $this;
+
+    public function eraseCredentials() {
+        
     }
 
-    /**
-     * Get product
-     *
-     * @return \Acme\DemoBundle\Entity\Category 
-     */
-    public function getProduct()
-    {
-        return $this->product;
+
+    public function getSalt() {
+        return $this->salt;
+    }
+
+    public function getUsername() {
+        return $this->username;
     }
 }
