@@ -5,7 +5,6 @@ window.WineView = Backbone.View.extend({
         this.model.bind('change', this.render, this);
     },
     render: function(eventName) {
-       // $(this.el).html(this.template());
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
     },

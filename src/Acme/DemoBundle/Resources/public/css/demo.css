@@ -109,6 +109,11 @@ ul#demo-list a {
     width: 250px;
 }
 
+#preload {
+    display: none;
+    padding: 10px;
+    background: greenyellow;
+}
 
 .sf-reset .block {
     overflow: hidden;

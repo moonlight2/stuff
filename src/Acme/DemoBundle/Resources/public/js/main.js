@@ -9,6 +9,17 @@ Backbone.View.prototype.close = function() {
     this.unbind();
 };
 
+var Helper = {
+    
+    showAnimation: function(selector) {
+        $(selector).show();
+    },
+    stopAnimation: function(selector) {
+        $(selector).hide();
+    }
+}
+
+
 var AppRouter = Backbone.Router.extend({
     
     routes: {
@@ -18,12 +29,15 @@ var AppRouter = Backbone.Router.extend({
     },
     
     initialize: function() {
+        Helper.showAnimation('#preload');
         $('#header').html(new HeaderView().render().el);
         
     },
             
     wineList: function() {
-        this.before();
+        this.before(function(){
+            Helper.stopAnimation('#preload');
+        });
     },
             
     newWine: function() {
@@ -44,6 +58,7 @@ var AppRouter = Backbone.Router.extend({
             this.currentView.close();
         $(selector).html(view.render().el);
         this.currentView = view;
+        Helper.stopAnimation('#preload');
         return view;
     },
             
