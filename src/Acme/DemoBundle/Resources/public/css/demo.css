@@ -99,3 +99,17 @@ ul#demo-list a {
     white-space: pre;
     font-family: monospace;
 }
+
+#main-content {
+    float: left;
+    width: 500px;
+}
+#sidebar {
+    float: left;
+    width: 250px;
+}
+
+
+.sf-reset .block {
+    overflow: hidden;
+}

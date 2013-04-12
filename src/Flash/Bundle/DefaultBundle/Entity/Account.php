@@ -60,6 +60,7 @@ class Account implements UserInterface {
 
 
     public function __construct($email) {
+        
         $this->email = $email;
         $this->username = $email;
         $this->isActive = true;

@@ -5,11 +5,62 @@ namespace Flash\Bundle\DefaultBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Flash\Bundle\DefaultBundle\Entity\Account;
 
 class DefaultController extends Controller {
+
+    /**
+     * @Route("/rest/{id}", name="_default_rest")
+     * @Template()
+     */
+    public function restAction($id = null) {
+
+        return array('name' => 'Supername');
+    }
+
+
+    /**
+     * @Route("/wines/{id}")
+     */
+    public function wineAction($id = null) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        if (null != $id) {
+            $wine = $em->getRepository('FlashDefaultBundle:Wine')->find($id);
+
+            $resp['id'] = $wine->getId();
+            $resp['name'] = $wine->getName();
+            $resp['grapes'] = $wine->getGrapes();
+            $resp['country'] = $wine->getCountry();
+            $resp['region'] = $wine->getRegion();
+            $resp['year'] = $wine->getYear();
+            $resp['description'] = $wine->getDescription();
+            $resp['picture'] = $wine->getPicture();
+
+            return new JsonResponse($resp);
+        } else {
+
+            $wines = $em->getRepository('FlashDefaultBundle:Wine')->findAll();
+
+            $resp = array();
+            $end = array();
+            foreach ($wines as $wine) {
+                $resp['id'] = $wine->getId();
+                $resp['name'] = $wine->getName();
+                $resp['grapes'] = $wine->getGrapes();
+                $resp['country'] = $wine->getCountry();
+                $resp['region'] = $wine->getRegion();
+                $resp['year'] = $wine->getYear();
+                $resp['description'] = $wine->getDescription();
+                $resp['picture'] = $wine->getPicture();
+                $end[] = $resp;
+            }
+
+            return new JsonResponse($end);
+        }
+    }
 
     /**
      * @Route("/flash/{name}")
@@ -23,10 +74,10 @@ class DefaultController extends Controller {
 
         if (true != $em->getRepository('FlashDefaultBundle:Account')
                         ->exists($name)) {
-            
+
             $account = new Account("email@home.com");
             $account->setUsername($name);
-            
+
             $role = $em->getRepository('FlashDefaultBundle:Role')->findBy(
                     array('name' => 'ROLE_ADMIN'));
 

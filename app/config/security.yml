@@ -28,7 +28,7 @@ security:
             security: false
 
         secured_area:
-            pattern:    ^/
+            pattern:    ^/demo/
             form_login:
                 check_path: _security_check
                 login_path: _demo_login
