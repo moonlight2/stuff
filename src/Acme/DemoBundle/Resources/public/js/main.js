@@ -29,7 +29,6 @@ var AppRouter = Backbone.Router.extend({
     },
     
     initialize: function() {
-        Helper.showAnimation('#preload');
         $('#header').html(new HeaderView().render().el);
         
     },
@@ -77,7 +76,7 @@ var AppRouter = Backbone.Router.extend({
     }
 });
 
-
+Helper.showAnimation('#preload');
 tpl.loadTemplates(['header', 'wine-details', 'wine-list-item'], function () {
     app = new AppRouter();
     Backbone.history.start();

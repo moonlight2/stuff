@@ -5,7 +5,7 @@ namespace Flash\Bundle\DefaultBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Flash\Bundle\DefaultBundle\Entity\Account;
 
 class DefaultController extends Controller {
@@ -18,51 +18,7 @@ class DefaultController extends Controller {
 
         return array('name' => 'Supername');
     }
-
-
-
-    /**
-     * @Route("/wines/{id}")
-     */
-    public function wineAction($id = null) {
-
-        $em = $this->getDoctrine()->getManager();
-
-        if (null != $id) {
-            $wine = $em->getRepository('FlashDefaultBundle:Wine')->find($id);
-
-            $resp['id'] = $wine->getId();
-            $resp['name'] = $wine->getName();
-            $resp['grapes'] = $wine->getGrapes();
-            $resp['country'] = $wine->getCountry();
-            $resp['region'] = $wine->getRegion();
-            $resp['year'] = $wine->getYear();
-            $resp['description'] = $wine->getDescription();
-            $resp['picture'] = $wine->getPicture();
-
-            return new JsonResponse($resp);
-        } else {
-
-            $wines = $em->getRepository('FlashDefaultBundle:Wine')->findAll();
-
-            $resp = array();
-            $end = array();
-            foreach ($wines as $wine) {
-                $resp['id'] = $wine->getId();
-                $resp['name'] = $wine->getName();
-                $resp['grapes'] = $wine->getGrapes();
-                $resp['country'] = $wine->getCountry();
-                $resp['region'] = $wine->getRegion();
-                $resp['year'] = $wine->getYear();
-                $resp['description'] = $wine->getDescription();
-                $resp['picture'] = $wine->getPicture();
-                $end[] = $resp;
-            }
-
-            return new JsonResponse($end);
-        }
-    }
-
+    
     /**
      * @Route("/flash/{name}")
      * @Template()

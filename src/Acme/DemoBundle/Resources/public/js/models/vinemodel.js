@@ -1,6 +1,6 @@
 
 window.Wine = Backbone.Model.extend({
-    urlRoot: 'wines',
+    urlRoot: 'api/wines',
     defaults: {
         "id": null,
         "name": "",
@@ -15,5 +15,5 @@ window.Wine = Backbone.Model.extend({
 
 window.WineList = Backbone.Collection.extend({
     model: Wine,
-    url: 'wines'
+    url: 'api/wines'
 });
