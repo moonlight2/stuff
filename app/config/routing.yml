@@ -1,3 +1,8 @@
+flash_api:
+    resource: "@FlashApiBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 flash_default:
     resource: "@FlashDefaultBundle/Controller/"
     type:     annotation
