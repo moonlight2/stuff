@@ -224,6 +224,7 @@ class Account implements AdvancedUserInterface {
     public function getRoles()
     {
         $rolesArray =  $this->roles->getValues();
+        $rolesNames = array();
         foreach($rolesArray as $role) {
             $rolesNames[] = $role->getName();
         }
@@ -242,28 +243,5 @@ class Account implements AdvancedUserInterface {
 
     public function getUsername() {
         return $this->username;
-    }
-
-    /**
-     * Set about
-     *
-     * @param string $about
-     * @return Account
-     */
-    public function setAbout($about)
-    {
-        $this->about = $about;
-    
-        return $this;
-    }
-
-    /**
-     * Get about
-     *
-     * @return string 
-     */
-    public function getAbout()
-    {
-        return $this->about;
     }
 }

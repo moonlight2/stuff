@@ -5,7 +5,6 @@ namespace Flash\Bundle\ApiBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use JMS\SecurityExtraBundle\Annotation\Secure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Flash\Bundle\DefaultBundle\Entity\Account;
@@ -57,9 +56,10 @@ class AccountApiController extends Controller implements GenericRestApi {
 
             $account = new Account($data['email']);
             $account->setUsername($data['username']);
+            $account->setAbout($data['about']);
 
             $role = $em->getRepository('FlashDefaultBundle:Role')->findBy(
-                    array('name' => 'ROLE_ADMIN'));
+                    array('name' => 'ROLE_USER'));
 
             $encoder = $factory->getEncoder($account);
             $password = $encoder->encodePassword($data['password'], $account->getSalt());
@@ -81,6 +81,7 @@ class AccountApiController extends Controller implements GenericRestApi {
     /**
      * @Route("/accounts/{id}")
      * @Method({"DELETE"})
+     * @param Integer $id
      * @return JSON string  
      */
     public function deleteAction($id) {
@@ -97,6 +98,7 @@ class AccountApiController extends Controller implements GenericRestApi {
     /**
      * @Route("/accounts/{id}")
      * @Method({"GET"})
+     * @param Integer $id
      * @return JSON string:  single Account data or array of accounts
      */
     public function getAction($id = null) {
@@ -114,7 +116,6 @@ class AccountApiController extends Controller implements GenericRestApi {
         } else {
             $accounts = $em->getRepository('FlashDefaultBundle:Account')->findAll();
 
-            $response = array();
             foreach ($accounts as $account) {
                 $response[] = $this->setResponse($account);
             }
@@ -125,6 +126,7 @@ class AccountApiController extends Controller implements GenericRestApi {
     /**
      * @Route("/accounts/byname/{name}")
      * @Method({"GET"})
+     * @param String $name
      * @return JSON string: single Account data  
      */
     public function getByNameAction($name) {
@@ -143,6 +145,7 @@ class AccountApiController extends Controller implements GenericRestApi {
     /**
      * @Route("/accounts/byemail/{email}")
      * @Method({"GET"})
+     * @param String $email
      * @return JSON string: single Account data
      */
     public function getByEmailAction($email) {
@@ -160,6 +163,7 @@ class AccountApiController extends Controller implements GenericRestApi {
     /**
      * @Route("/accounts/byrole/{role}")
      * @Method({"GET"})
+     * @param String $role
      * @return JSON string: array of Accounts
      */
     public function getByRoleAction($role) {
@@ -177,6 +181,55 @@ class AccountApiController extends Controller implements GenericRestApi {
     }
 
     /**
+     * This method adds a new role to the account
+     * 
+     * @Route("/accounts/role")
+     * @Method({"POST"})
+     * @return JSON string: single Account data
+     */
+    public function postRoleAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = json_decode($request->getContent(), true);
+
+        $account = $em->getRepository('FlashDefaultBundle:Account')->find($data['account_id']);
+        $role = $em->getRepository('FlashDefaultBundle:Role')->find($data['role_id']);
+
+        $account->addRole($role);
+
+        $em->persist($account);
+        $em->persist($role);
+
+        $em->flush();
+
+        return new JsonResponse($this->setResponse($account));
+    }
+    
+    /**
+     * This method removes a role from the account
+     * 
+     * @Route("/accounts/role/{accountId}/{roleId}")
+     * @Method({"DELETE"})
+     * @return JSON string: single Account data
+     */
+    public function deleteRoleAction($accountId, $roleId) {
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $account = $em->getRepository('FlashDefaultBundle:Account')->find($accountId);
+        $role = $em->getRepository('FlashDefaultBundle:Role')->find($roleId);
+
+        $account->removeRole($role);
+
+        $em->persist($account);
+        $em->persist($role);
+
+        $em->flush();
+
+        return new JsonResponse($this->setResponse($account));
+    }
+
+    /**
      * @param Account $account 
      * @return array
      */
@@ -191,6 +244,7 @@ class AccountApiController extends Controller implements GenericRestApi {
         $response['is_credititials_non_expired'] = $account->isCredentialsNonExpired();
         $response['is_enabled'] = $account->isEnabled();
         $response['roles'] = $account->getRoles();
+        $response['about'] = $account->getAbout();
 
         return $response;
     }
