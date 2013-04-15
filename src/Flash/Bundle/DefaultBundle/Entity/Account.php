@@ -5,6 +5,7 @@ namespace Flash\Bundle\DefaultBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\ManyToOne;
 
 /**
  * Account
@@ -57,15 +58,20 @@ class Account implements AdvancedUserInterface {
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
-    
+
     /**
      * @ORM\Column(type="text")
      */
     private $about;
 
+    /**
+     *
+     * @ManyToOne(targetEntity="Account", inversedBy="accounts")
+     */
+    private $group;
 
     public function __construct($email) {
-        
+
         $this->email = $email;
         $this->username = $email;
         $this->isActive = true;
@@ -192,17 +198,15 @@ class Account implements AdvancedUserInterface {
         return true;
     }
 
-
     /**
      * Add roles
      *
      * @param \Flash\Bundle\DemoBundle\Entity\Role $roles
      * @return Account
      */
-    public function addRole(\Flash\Bundle\DefaultBundle\Entity\Role $role)
-    {
+    public function addRole(\Flash\Bundle\DefaultBundle\Entity\Role $role) {
         $this->roles[] = $role;
-    
+
         return $this;
     }
 
@@ -211,8 +215,7 @@ class Account implements AdvancedUserInterface {
      *
      * @param \Flash\Bundle\DemoBundle\Entity\Role $roles
      */
-    public function removeRole(\Flash\Bundle\DefaultBundle\Entity\Role $role)
-    {
+    public function removeRole(\Flash\Bundle\DefaultBundle\Entity\Role $role) {
         $this->roles->removeElement($role);
     }
 
@@ -221,20 +224,17 @@ class Account implements AdvancedUserInterface {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRoles()
-    {
-        $rolesArray =  $this->roles->getValues();
-        foreach($rolesArray as $role) {
+    public function getRoles() {
+        $rolesArray = $this->roles->getValues();
+        foreach ($rolesArray as $role) {
             $rolesNames[] = $role->getName();
         }
         return $rolesNames;
     }
 
-
     public function eraseCredentials() {
         
     }
-
 
     public function getSalt() {
         return $this->salt;
@@ -250,10 +250,9 @@ class Account implements AdvancedUserInterface {
      * @param string $about
      * @return Account
      */
-    public function setAbout($about)
-    {
+    public function setAbout($about) {
         $this->about = $about;
-    
+
         return $this;
     }
 
@@ -262,8 +261,8 @@ class Account implements AdvancedUserInterface {
      *
      * @return string 
      */
-    public function getAbout()
-    {
+    public function getAbout() {
         return $this->about;
     }
+
 }
