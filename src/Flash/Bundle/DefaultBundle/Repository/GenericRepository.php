@@ -14,7 +14,7 @@ interface GenericRepository
      * @param type $name - name of the object to get
      * @return a populated object
      */
-    public function get($name);
+    public function getByName($name);
     
 }
 ?>

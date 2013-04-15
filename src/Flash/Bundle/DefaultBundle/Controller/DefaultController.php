@@ -65,7 +65,7 @@ class DefaultController extends Controller {
 
         $account = $em->getRepository('FlashDefaultBundle:Account')->get($name);
 
-        print_r($account->getRoles());
+        //print_r($account->getRoles());
 
         exit();
     }
