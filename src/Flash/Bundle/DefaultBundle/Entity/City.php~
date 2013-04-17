@@ -35,6 +35,11 @@ class City {
      * @OneToMany(targetEntity="Group", mappedBy="city")
      */
     private $groups;
+    
+    /**
+     * @OneToMany(targetEntity="Event", mappedBy="city")
+     */
+    private $events;
 
     /**
      *
@@ -44,6 +49,7 @@ class City {
 
     public function __construct() {
         $this->groups = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -106,4 +112,62 @@ class City {
         return $this->name;
     }
 
+
+    /**
+     * Set country
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Country $country
+     * @return City
+     */
+    public function setCountry(\Flash\Bundle\DefaultBundle\Entity\Country $country = null)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\Country 
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+
+
+    /**
+     * Add events
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
+     * @return City
+     */
+    public function addEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events)
+    {
+        $this->events[] = $events;
+    
+        return $this;
+    }
+
+    /**
+     * Remove events
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
+     */
+    public function removeEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events)
+    {
+        $this->events->removeElement($events);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
 }

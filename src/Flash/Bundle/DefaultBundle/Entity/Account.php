@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * Account
@@ -66,9 +67,19 @@ class Account implements AdvancedUserInterface {
 
     /**
      *
-     * @ManyToOne(targetEntity="Account", inversedBy="accounts")
+     * @ManyToOne(targetEntity="Group", inversedBy="accounts")
      */
     private $group;
+
+    /**
+     * @OneToMany(targetEntity="Photo", mappedBy="account")
+     */
+    private $photos;
+    
+    /**
+     * @OneToMany(targetEntity="Video", mappedBy="account")
+     */
+    private $videos;
 
     public function __construct($email) {
 
@@ -77,6 +88,8 @@ class Account implements AdvancedUserInterface {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();
+        $this->photos = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     /**

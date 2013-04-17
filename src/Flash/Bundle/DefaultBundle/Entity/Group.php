@@ -36,6 +36,16 @@ class Group {
      * @OneToMany(targetEntity="Account", mappedBy="group")
      */
     private $accounts;
+    
+    /**
+     * @OneToMany(targetEntity="Event", mappedBy="group")
+     */
+    private $events;
+    
+    /**
+     * @ORM\Column(name="rating", type="integer")
+     */
+    private $rating;
 
     /**
      *
@@ -46,6 +56,7 @@ class Group {
     public function __construct() {
 
         $this->accounts = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -108,4 +119,83 @@ class Group {
         return $this->accounts;
     }
 
+
+    /**
+     * Set rating
+     *
+     * @param integer $rating
+     * @return Group
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+    
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return integer 
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * Set city
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\City $city
+     * @return Group
+     */
+    public function setCity(\Flash\Bundle\DefaultBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+    
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\City 
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Add events
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
+     * @return Group
+     */
+    public function addEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events)
+    {
+        $this->events[] = $events;
+    
+        return $this;
+    }
+
+    /**
+     * Remove events
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
+     */
+    public function removeEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events)
+    {
+        $this->events->removeElement($events);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
 }
