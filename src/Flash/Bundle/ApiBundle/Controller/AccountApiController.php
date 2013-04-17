@@ -10,14 +10,14 @@ use Flash\Bundle\ApiBundle\RESTApi\RESTController;
 use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 
 /**
- * @Route("/rest/api")
+ * @Route("/rest/api/accounts")
  */
 class AccountApiController extends RESTController implements GenericRestApi {
 
     private $respAction = 'FlashApiBundle:AccountApi:responseDataType';
 
     /**
-     * @Route("/accounts/{id}/{type}")
+     * @Route("/{id}/{type}")
      * @Method({"PUT"})
      * @return single Account data
      */
@@ -44,7 +44,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/accounts/{type}")
+     * @Route("/{type}")
      * @Method({"POST"})
      * @return single Account data
      */
@@ -88,7 +88,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/accounts/{id}/{type}")
+     * @Route("/{id}/{type}")
      * @Method({"DELETE"})
      * @param Integer $id
      */
@@ -108,7 +108,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/accounts/{id}/{type}")
+     * @Route("/{id}/{type}")
      * @Method({"GET"})
      * @param Integer $id
      * @return single Account data or array of accounts
@@ -139,7 +139,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/accounts/byname/{name}/{type}")
+     * @Route("/byname/{name}/{type}")
      * @Method({"GET"})
      * @param String $name
      * @return single Account data  
@@ -162,7 +162,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/accounts/byemail/{email}/{type}")
+     * @Route("/byemail/{email}/{type}")
      * @Method({"GET"})
      * @param String $email
      * @return single Account data
@@ -184,7 +184,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/accounts/byrole/{role}/{type}")
+     * @Route("/byrole/{role}/{type}")
      * @Method({"GET"})
      * @param String $role
      * @return array of Accounts
@@ -210,7 +210,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     /**
      * This method adds a new role to the account
      * 
-     * @Route("/accounts/role/{type}")
+     * @Route("/role/{type}")
      * @Method({"POST"})
      * @return single Account data
      */
@@ -238,7 +238,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     /**
      * This method removes a role from the account
      * 
-     * @Route("/accounts/role/{accountId}/{roleId}/{type}")
+     * @Route("/role/{accountId}/{roleId}/{type}")
      * @Method({"DELETE"})
      * @return single Account data
      */

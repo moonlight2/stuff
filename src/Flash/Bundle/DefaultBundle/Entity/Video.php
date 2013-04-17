@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 
 /**
- * Photo
+ * Video
  *
  * @ORM\Table(name="video")
  * @ORM\Entity

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 /**
  * Photo
  *
- * @ORM\Table(name="video")
+ * @ORM\Table(name="event")
  * @ORM\Entity
  */
 class Event {
