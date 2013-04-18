@@ -1,0 +1,6 @@
+[submodule "vendor/bundles/FOS/RestBundle"]
+	path = vendor/bundles/FOS/RestBundle
+	url = git://github.com/FriendsOfSymfony/FOSRestBundle.git
+[submodule "vendor/fos/FOS/Rest"]
+	path = vendor/fos/FOS/Rest
+	url = git://github.com/FriendsOfSymfony/FOSRest.git

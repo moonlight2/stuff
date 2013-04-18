@@ -1,7 +1,15 @@
+acme_blog:
+    resource: "@AcmeBlogBundle/Resources/config/routing.yml"
+    prefix:   /
+
+
+
 flash_api:
     resource: "@FlashApiBundle/Controller/"
     type:     annotation
     prefix:   /
+    
+
 
 flash_default:
     resource: "@FlashDefaultBundle/Controller/"
