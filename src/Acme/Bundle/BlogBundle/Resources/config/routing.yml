@@ -1,3 +1,12 @@
 acme_blog_homepage:
     pattern:  /rest/{name}
     defaults: { _controller: AcmeBlogBundle:Default:index }
+
+organisation:
+    type: rest
+    resource: Acme\Bundle\BlogBundle\Controller\GroupController
+
+user:
+    type: rest
+    parent: organisation
+    resource: Acme\Bundle\BlogBundle\Controller\AccountController

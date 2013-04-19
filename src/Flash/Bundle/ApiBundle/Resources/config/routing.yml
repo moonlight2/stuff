@@ -1,0 +1,6 @@
+
+rest_all:
+    pattern:  /all
+    defaults: { _controller: FlashApiBundle:Best:all, _format: ~ }
+    requirements:
+        _method: GET

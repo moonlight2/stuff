@@ -1,0 +1,7 @@
+organisation:
+    type: rest
+    resource: Acme\RestBundle\Controller\OrganisationController
+user:
+    type: rest
+    parent: organisation
+    resource: Acme\RestBundle\Controller\UserController

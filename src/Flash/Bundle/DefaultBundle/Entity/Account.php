@@ -8,12 +8,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Type;
+
 /**
  * Account
  *
  * @ORM\Table(name="account")
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\AccountRepository")
+ * @ExclusionPolicy("all")
  */
 class Account implements AdvancedUserInterface {
 
@@ -23,13 +29,16 @@ class Account implements AdvancedUserInterface {
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     private $id;
 
     /**
      * @var string
-     *
+     * @Type("string")
      * @ORM\Column(name="username", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Expose
      */
     private $username;
 
@@ -40,11 +49,15 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ORM\Column(type="string", length=60)
+     * @Expose
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="Account")
+     * @Expose
      */
     private $roles;
 
@@ -57,6 +70,7 @@ class Account implements AdvancedUserInterface {
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $password;
 
@@ -68,11 +82,13 @@ class Account implements AdvancedUserInterface {
     /**
      *
      * @ManyToOne(targetEntity="Group", inversedBy="accounts")
+     * @Expose
      */
     private $group;
 
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="account")
+     * @Expose
      */
     private $photos;
     
@@ -278,4 +294,93 @@ class Account implements AdvancedUserInterface {
         return $this->about;
     }
 
+
+    /**
+     * Set group
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Group $group
+     * @return Account
+     */
+    public function setGroup(\Flash\Bundle\DefaultBundle\Entity\Group $group = null)
+    {
+        $this->group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\Group 
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * Add photos
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photos
+     * @return Account
+     */
+    public function addPhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos)
+    {
+        $this->photos[] = $photos;
+    
+        return $this;
+    }
+
+    /**
+     * Remove photos
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photos
+     */
+    public function removePhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos)
+    {
+        $this->photos->removeElement($photos);
+    }
+
+    /**
+     * Get photos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
+    }
+
+    /**
+     * Add videos
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Video $videos
+     * @return Account
+     */
+    public function addVideo(\Flash\Bundle\DefaultBundle\Entity\Video $videos)
+    {
+        $this->videos[] = $videos;
+    
+        return $this;
+    }
+
+    /**
+     * Remove videos
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Video $videos
+     */
+    public function removeVideo(\Flash\Bundle\DefaultBundle\Entity\Video $videos)
+    {
+        $this->videos->removeElement($videos);
+    }
+
+    /**
+     * Get videos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVideos()
+    {
+        return $this->videos;
+    }
 }

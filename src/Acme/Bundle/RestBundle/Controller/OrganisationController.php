@@ -1,21 +1,17 @@
 <?php
 
-namespace Acme\Bundle\TestBundle\Controller;
+namespace Nmpolo\RestBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
-use Flash\Bundle\DefaultBundle\Entity\Account;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use JMS\Serializer\SerializationContext;
-use FOS\RestBundle\View\View,
-    FOS\RestBundle\View\ViewHandler,
-    FOS\RestBundle\View\RouteRedirectView;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference,
-    Symfony\Component\Routing\Exception\ResourceNotFoundException,
-    Symfony\Component\Validator\ValidatorInterface;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\Rest\Util\Codes;
+use Symfony\Component\HttpFoundation\Request;
+use Nmpolo\RestBundle\Entity\Organisation;
+use Nmpolo\RestBundle\Form\OrganisationType;
 
-class GroupController extends FOSRestController {
-
+class OrganisationController extends FOSRestController implements ClassResourceInterface
+{
     /**
      * Collection get action
      * @var Request $request
@@ -23,12 +19,15 @@ class GroupController extends FOSRestController {
      *
      * @Rest\View()
      */
-    public function getAction(\Symfony\Component\HttpFoundation\Request $request) {
-
+    public function cgetAction(Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
-        $groups = $em->getRepository('FlashDefaultBundle:Group')->findAll();
 
-        return array('groups' => $groups);
+        $entities = $em->getRepository('NmpoloRestBundle:Organisation')->findAll();
+
+        return array(
+            'entities' => $entities,
+        );
     }
 
     /**
@@ -38,8 +37,9 @@ class GroupController extends FOSRestController {
      *
      * @Rest\View()
      */
-    public function getOneAction($id) {
-        $entity = $this->getGroup($id);
+    public function getAction($id)
+    {
+        $entity = $this->getEntity($id);
 
         return array(
             'entity' => $entity,
@@ -51,11 +51,10 @@ class GroupController extends FOSRestController {
      * @var Request $request
      * @return View|array
      */
-    public function cpostAction(Request $request) {
-
-        $entity = new \Flash\Bundle\DefaultBundle\Entity\Group();
-
-        $form = $this->createForm(new \Flash\Bundle\DefaultBundle\Form\GroupTypeType(), $entity);
+    public function cpostAction(Request $request)
+    {
+        $entity = new Organisation();
+        $form = $this->createForm(new OrganisationType(), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -64,9 +63,11 @@ class GroupController extends FOSRestController {
             $em->flush();
 
             return $this->redirectView(
-                            $this->generateUrl(
-                                    'get_group', array('id' => $entity->getId())
-                            ), Codes::HTTP_CREATED
+                $this->generateUrl(
+                    'get_organisation',
+                    array('id' => $entity->getId())
+                ),
+                Codes::HTTP_CREATED
             );
         }
 
@@ -81,11 +82,10 @@ class GroupController extends FOSRestController {
      * @var integer $id Id of the entity
      * @return View|array
      */
-    public function putAction(Request $request, $id) {
-
-        $entity = $this->getGroup($id);
-
-        $form = $this->createForm(new \Flash\Bundle\DefaultBundle\Form\GroupTypeType(), $entity);
+    public function putAction(Request $request, $id)
+    {
+        $entity = $this->getEntity($id);
+        $form = $this->createForm(new OrganisationType(), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -106,8 +106,9 @@ class GroupController extends FOSRestController {
      * @var integer $id Id of the entity
      * @return View
      */
-    public function deleteAction($id) {
-        $entity = $this->getGroup($id);
+    public function deleteAction($id)
+    {
+        $entity = $this->getEntity($id);
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($entity);
@@ -116,17 +117,21 @@ class GroupController extends FOSRestController {
         return $this->view(null, Codes::HTTP_NO_CONTENT);
     }
 
-    private function getGroup($id) {
-
+    /**
+     * Get entity instance
+     * @var integer $id Id of the entity
+     * @return Organisation
+     */
+    protected function getEntity($id)
+    {
         $em = $this->getDoctrine()->getManager();
 
-        $group = $em->getRepository('FlashDefaultBundle:Group')->find($id);
+        $entity = $em->getRepository('NmpoloRestBundle:Organisation')->find($id);
 
-        if (!$group) {
+        if (!$entity) {
             throw $this->createNotFoundException('Unable to find organisation entity');
         }
 
-        return $group;
+        return $entity;
     }
-
 }

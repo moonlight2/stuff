@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Flash\Bundle\DefaultBundle\Entity\Account;
 use Flash\Bundle\ApiBundle\RESTApi\RESTController;
 use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/rest/api/accounts")
@@ -44,6 +45,74 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
+     * @Route("/add/{type}")
+     * @Method({"POST"})
+     * @return 
+     */
+    public function addAccountAction(Request $request, $type = null) {
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $factory = $this->get('security.encoder_factory');
+        $data = json_decode($request->getContent(), true);
+
+        if (true != $em->getRepository('FlashDefaultBundle:Account')
+                        ->exists($data['username'])) {
+
+            $account = new Account($data['email']);
+            $account->setUsername($data['username']);
+            $account->setAbout($data['about']);
+
+            $role = $em->getRepository('FlashDefaultBundle:Role')->findBy(
+                    array('name' => 'ROLE_USER'));
+
+            $encoder = $factory->getEncoder($account);
+            $password = $encoder->encodePassword($data['password'], $account->getSalt());
+
+            $account->setPassword($password);
+            $account->addRole($role[0]);
+        }
+
+        return $this->responce($account, '.xml', 201);
+        //return $this->processForm($request, $account);
+    }
+
+    private function processForm($request, Account $user) {
+
+        $statusCode = 201;
+
+        $form = $this->createForm(new \Flash\Bundle\DefaultBundle\Form\AccountType(), $user);
+        $form->bind($request);
+
+        print_r($form);
+        exit('3');
+        
+        if ($form->isValid()) {
+            $user->save();
+
+            $response = new Response();
+            $response->setStatusCode($statusCode);
+
+            // set the `Location` header only when creating new resources
+            if (201 === $statusCode) {
+                $response->headers->set('Location', $this->generateUrl(
+                                '_get_account', array('id' => $user->getId()), true // absolute
+                        )
+                );
+            }
+
+            return $response;
+        }
+
+        if($form->hasErrors()) {
+            $e = 'errors';
+        } else {
+            $e = 'nomal';
+        }
+        return new Response($e);
+    }
+
+    /**
      * @Route("/{type}")
      * @Method({"POST"})
      * @return single Account data
@@ -54,7 +123,6 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
         $factory = $this->get('security.encoder_factory');
         $data = json_decode($request->getContent(), true);
-        $request->request->replace(is_array($data) ? $data : array());
 
         if (true != $em->getRepository('FlashDefaultBundle:Account')
                         ->exists($data['username'])) {
@@ -108,7 +176,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/{id}/{type}")
+     * @Route("/{id}/{type}", name="_get_account")
      * @Method({"GET"})
      * @param Integer $id
      * @return single Account data or array of accounts
@@ -121,21 +189,16 @@ class AccountApiController extends RESTController implements GenericRestApi {
             $account = $em->getRepository('FlashDefaultBundle:Account')->find($id);
 
             if (null != $account) {
-                $response = $this->setResponse($account);
+                $response = $this->responce($account, $type, 200);
             } else {
-                $response = array('success' => 'false');
+                $response = $this->responce(array('success' => 'false'), $type, 404);
             }
         } else {
             $accounts = $em->getRepository('FlashDefaultBundle:Account')->findAll();
-
-            foreach ($accounts as $account) {
-                $response[] = $this->setResponse($account);
-            }
+            $response = $this->responce($accounts, $type, 200);
         }
-        return $this->forward($this->respAction, array(
-                    'data' => $response,
-                    'type' => $type,
-        ));
+
+        return $response;
     }
 
     /**
@@ -150,7 +213,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
         $account = $em->getRepository('FlashDefaultBundle:Account')->getByName($name);
         if (null != $account) {
-            $response = $this->setResponse($account);
+            $response = $this->responce($account, $type, 200);
         } else {
             $response = array('success' => 'false');
         }

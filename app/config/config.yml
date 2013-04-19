@@ -68,12 +68,14 @@ swiftmailer:
     spool:     { type: memory }
 
 sensio_framework_extra:
-    view:
-        annotations: false
+    view:    { annotations: false }
+    router:  { annotations: true }
 
 fos_rest:
     param_fetcher_listener: true
-    body_listener: true
+    body_listener:
+        decoders:    true
     format_listener: true
     view:
         view_response_listener: 'force'
+        
