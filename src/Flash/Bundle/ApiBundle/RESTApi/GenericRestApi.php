@@ -11,6 +11,6 @@ interface GenericRestApi
     
     public function deleteAction($id, $type);
     
-    public function getAction($id, $type);
+    public function getAction($id);
 }
 ?>

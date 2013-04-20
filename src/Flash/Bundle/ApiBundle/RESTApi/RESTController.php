@@ -9,20 +9,26 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class RESTController extends Controller {
 
-    protected function responce($obj, $format, $status = 200) {
+    protected function responce($obj, $status = 200) {
+
+        $cType = $this->getRequest()->headers->get('content-type');
 
         $serializer = $this->get('jms_serializer');
 
-        switch ($format) {
-            case '.xml':
+        switch ($cType) {
+            case 'text/xml':
+                $data = $serializer->serialize($obj, 'xml');
+                $headers = array('Content-Type'=>'text/xml');
+                break;
+            case 'application/xml':
                 $data = $serializer->serialize($obj, 'xml');
                 $headers = array('Content-Type'=>'application/xml');
                 break;
-            case '.json':
+            case 'application/json':
                 $data = $serializer->serialize($obj, 'json');
                 $headers = array('Content-Type'=>'application/json');
                 break;
-            case '.yml':
+            case 'text/x-yaml':
                 $data = $serializer->serialize($obj, 'yml');
                 $headers = array('Content-Type'=>'text/x-yaml'); 
                 break;

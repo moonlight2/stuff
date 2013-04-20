@@ -45,12 +45,23 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
+     * @Route("/request")
+     * @Method({"GET", "POST"})
+     */
+    public function requestAction() {
+        
+        print_r($this->getRequest()->headers->get('content-type'));
+//        /echo "request";
+        exit();
+    }
+
+    /**
      * @Route("/add/{type}")
      * @Method({"POST"})
      * @return 
      */
     public function addAccountAction(Request $request, $type = null) {
-        
+
         $em = $this->getDoctrine()->getManager();
 
         $factory = $this->get('security.encoder_factory');
@@ -86,7 +97,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
         print_r($form);
         exit('3');
-        
+
         if ($form->isValid()) {
             $user->save();
 
@@ -104,7 +115,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
             return $response;
         }
 
-        if($form->hasErrors()) {
+        if ($form->hasErrors()) {
             $e = 'errors';
         } else {
             $e = 'nomal';
@@ -176,12 +187,12 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/{id}/{type}", name="_get_account")
+     * @Route("/{id}/", name="_get_account")
      * @Method({"GET"})
      * @param Integer $id
      * @return single Account data or array of accounts
      */
-    public function getAction($id = null, $type = null) {
+    public function getAction($id = null) {
 
         $em = $this->getDoctrine()->getManager();
 
@@ -189,13 +200,13 @@ class AccountApiController extends RESTController implements GenericRestApi {
             $account = $em->getRepository('FlashDefaultBundle:Account')->find($id);
 
             if (null != $account) {
-                $response = $this->responce($account, $type, 200);
+                $response = $this->responce($account, 200);
             } else {
-                $response = $this->responce(array('success' => 'false'), $type, 404);
+                $response = $this->responce(array('success' => 'false'), 404);
             }
         } else {
             $accounts = $em->getRepository('FlashDefaultBundle:Account')->findAll();
-            $response = $this->responce($accounts, $type, 200);
+            $response = $this->responce($accounts, 200);
         }
 
         return $response;
