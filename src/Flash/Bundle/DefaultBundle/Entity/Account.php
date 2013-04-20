@@ -37,7 +37,8 @@ class Account implements AdvancedUserInterface {
      * @var string
      * @Type("string")
      * @ORM\Column(name="username", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message = "Поле username не может быть пустым")
+     * @Assert\MinLength(limit=4, message = "Поле username не может иметь менее 4 символов")
      * @Expose
      */
     private $username;
@@ -50,8 +51,8 @@ class Account implements AdvancedUserInterface {
     /**
      * @ORM\Column(type="string", length=60)
      * @Expose
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\NotBlank(message = "Поле email не может быть пустым")
+     * @Assert\Email(message = "Введите корректный email")
      */
     private $email;
 
@@ -80,7 +81,6 @@ class Account implements AdvancedUserInterface {
     private $about;
 
     /**
-     *
      * @ManyToOne(targetEntity="Group", inversedBy="accounts")
      * @Expose
      */
@@ -100,7 +100,7 @@ class Account implements AdvancedUserInterface {
     public function __construct($email) {
 
         $this->email = $email;
-        $this->username = $email;
+//        $this->username = $email;
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();

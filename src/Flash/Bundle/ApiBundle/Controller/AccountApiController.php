@@ -45,14 +45,16 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/request")
+     * @Route("/validator")
      * @Method({"GET", "POST"})
      */
     public function requestAction() {
-        
-        print_r($this->getRequest()->headers->get('content-type'));
-//        /echo "request";
-        exit();
+
+        $acc = new Account('emailmail.ru');
+        $acc->setPassword('pass');
+        $acc->setUsername('Iliass');
+
+        return $this->responce($acc, 202);
     }
 
     /**
