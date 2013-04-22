@@ -9,13 +9,9 @@
     
     <script src="{{ asset('bundles/acmedemo/js/utils.js') }}"></script>
     <script src="{{ asset('bundles/acmedemo/js/models/accountmodel.js') }}"></script>
-    
-    
-    
-    <script src="{{ asset('bundles/acmedemo/js/views/header.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/views/winelist.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/views/winedetails.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/main.js') }}"></script>
+
+    <script src="{{ asset('bundles/acmedemo/js/views/form.js') }}"></script>
+    <script src="{{ asset('bundles/acmedemo/js/base.js') }}"></script>
 
     <style>
         #loading {
@@ -40,10 +36,7 @@
             {% block content_header_more %}
                 <li><a href="{{ path('_demo') }}">Demo Home</a></li>
                 <div id='loading'>Loading</div>
-                <div class="container" id="pjax-container">
-                    <a href="{{ path('_demo_json2') }}" data-pjax='#main'>next page</a>.
-                    <a href="{{ path('_demo_route') }}" data-pjax='#main'>index page</a>.
-                 </div>
+
             {% endblock %}
         </ul>
 
@@ -54,12 +47,6 @@
         {% block content %}{% endblock %}
     </div>
 
-    {% if code is defined %}
-        <h2>Code behind this page</h2>
-        <div class="block">
-            <div class="symfony-content">{{ code|raw }}</div>
-        </div>
-    {% endif %}
         
         
 

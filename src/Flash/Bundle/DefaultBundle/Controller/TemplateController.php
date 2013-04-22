@@ -19,6 +19,14 @@ class TemplateController extends Controller {
     }
     
     /**
+     * @Route("/form")
+     */
+    public function formAction() {
+        return ($this->render(
+        'FlashDefaultBundle:Default:js/form.html.twig'));
+    }
+    
+    /**
      * @Route("/wine-list-item", name="_template_list")
      */
     public function listItemAction() {

@@ -83,49 +83,6 @@ class AccountApiController extends RESTController implements GenericRestApi {
         return array($acc->getId() => 'deleted');
     }
 
-
-    private function processForm($acc) {
-
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new AccountType(), $acc);
-        $form->bind($this->getFromRequest(array('username', 'email', 'password', 'about')));
-        $view = View::create();
-
-        if ($form->isValid()) {
-
-            if ($request->getMethod() == 'PUT' || true != $em->getRepository('FlashDefaultBundle:Account')
-                            ->exists($request->get('username'))) {
-
-                $factory = $this->get('security.encoder_factory');
-                $encoder = $factory->getEncoder($acc);
-                $password = $encoder->encodePassword($request->get('password'), $acc->getSalt());
-
-                $acc->setUsername($request->get('username'));
-                $acc->setPassword($password);
-                $acc->setEmail($request->get('email'));
-                $acc->setAbout($request->get('about'));
-
-                if ($request->getMethod() == 'POST') {
-
-                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
-                    $acc->addRole($role);
-                    $em->persist($role);
-                }
-                $em->persist($acc);
-                $em->flush();
-            } else {
-
-                $view->setStatusCode(400);
-                return $view->setData(array('success' => 'false'));
-            }
-        } else {
-            $view->setStatusCode(400);
-            return $view->setData($this->getErrorMessages($form));
-        }
-        return $acc;
-    }
-
     /**
      * @Route("/byname/{name}")
      * @Method({"GET"})
@@ -142,7 +99,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
         } else {
             $view = View::create();
             $view->setStatusCode(404);
-            $response = $view->setData(array('success'=>'false'));
+            $response = $view->setData(array('success' => 'false'));
         }
 
         return $response;
@@ -164,7 +121,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
         } else {
             $view = View::create();
             $view->setStatusCode(404);
-            $response = $view->setData(array('success'=>'false'));
+            $response = $view->setData(array('success' => 'false'));
         }
 
         return $response;
@@ -186,7 +143,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
         } else {
             $view = View::create();
             $view->setStatusCode(404);
-            $response = $view->setData(array('success'=>'false'));
+            $response = $view->setData(array('success' => 'false'));
         }
 
         return $response;
@@ -238,6 +195,48 @@ class AccountApiController extends RESTController implements GenericRestApi {
         $em->flush();
 
         return $account;
+    }
+
+    private function processForm($acc) {
+
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new AccountType(), $acc);
+        $form->bind($this->getFromRequest(array('username', 'email', 'password', 'about')));
+        $view = View::create();
+
+        if ($form->isValid()) {
+
+            if ($request->getMethod() == 'PUT' || true != $em->getRepository('FlashDefaultBundle:Account')
+                            ->exists($request->get('username'))) {
+
+                $factory = $this->get('security.encoder_factory');
+                $encoder = $factory->getEncoder($acc);
+                $password = $encoder->encodePassword($request->get('password'), $acc->getSalt());
+
+                $acc->setUsername($request->get('username'));
+                $acc->setPassword($password);
+                $acc->setEmail($request->get('email'));
+                $acc->setAbout($request->get('about'));
+
+                if ($request->getMethod() == 'POST') {
+
+                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
+                    $acc->addRole($role);
+                    $em->persist($role);
+                }
+                $em->persist($acc);
+                $em->flush();
+            } else {
+
+                $view->setStatusCode(400);
+                return $view->setData(array('success' => 'false'));
+            }
+        } else {
+            $view->setStatusCode(400);
+            return $view->setData($this->getErrorMessages($form));
+        }
+        return $acc;
     }
 
 }

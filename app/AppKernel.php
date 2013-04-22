@@ -26,10 +26,11 @@ class AppKernel extends Kernel
             new Flash\Bundle\ApiBundle\FlashApiBundle(),
             new Acme\Bundle\TestBundle\AcmeTestBundle(),
             new Acme\Bundle\BlogBundle\AcmeBlogBundle(),
+            new Acme\DemoBundle\AcmeDemoBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new Acme\DemoBundle\AcmeDemoBundle();
+//            $bundles[] = new Acme\DemoBundle\AcmeDemoBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
