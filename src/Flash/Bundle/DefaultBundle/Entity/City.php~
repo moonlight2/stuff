@@ -37,6 +37,11 @@ class City {
     private $groups;
     
     /**
+     * @OneToMany(targetEntity="Account", mappedBy="city")
+     */
+    private $accounts;
+    
+    /**
      * @OneToMany(targetEntity="Event", mappedBy="city")
      */
     private $events;
@@ -135,8 +140,6 @@ class City {
     {
         return $this->country;
     }
-
-
 
     /**
      * Add events

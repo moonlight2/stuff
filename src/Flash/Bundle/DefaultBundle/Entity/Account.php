@@ -7,7 +7,6 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
-
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
@@ -63,6 +62,12 @@ class Account implements AdvancedUserInterface {
     private $roles;
 
     /**
+     *
+     * @ManyToOne(targetEntity="City", inversedBy="groups")
+     */
+    private $city;
+
+    /**
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
@@ -77,6 +82,7 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ORM\Column(type="text")
+     * @Expose
      */
     private $about;
 
@@ -88,10 +94,9 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="account")
-     * @Expose
      */
     private $photos;
-    
+
     /**
      * @OneToMany(targetEntity="Video", mappedBy="account")
      */
@@ -292,17 +297,15 @@ class Account implements AdvancedUserInterface {
         return $this->about;
     }
 
-
     /**
      * Set group
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Group $group
      * @return Account
      */
-    public function setGroup(\Flash\Bundle\DefaultBundle\Entity\Group $group = null)
-    {
+    public function setGroup(\Flash\Bundle\DefaultBundle\Entity\Group $group = null) {
         $this->group = $group;
-    
+
         return $this;
     }
 
@@ -311,8 +314,7 @@ class Account implements AdvancedUserInterface {
      *
      * @return \Flash\Bundle\DefaultBundle\Entity\Group 
      */
-    public function getGroup()
-    {
+    public function getGroup() {
         return $this->group;
     }
 
@@ -322,10 +324,9 @@ class Account implements AdvancedUserInterface {
      * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photos
      * @return Account
      */
-    public function addPhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos)
-    {
+    public function addPhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos) {
         $this->photos[] = $photos;
-    
+
         return $this;
     }
 
@@ -334,8 +335,7 @@ class Account implements AdvancedUserInterface {
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photos
      */
-    public function removePhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos)
-    {
+    public function removePhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos) {
         $this->photos->removeElement($photos);
     }
 
@@ -344,8 +344,7 @@ class Account implements AdvancedUserInterface {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPhotos()
-    {
+    public function getPhotos() {
         return $this->photos;
     }
 
@@ -355,10 +354,9 @@ class Account implements AdvancedUserInterface {
      * @param \Flash\Bundle\DefaultBundle\Entity\Video $videos
      * @return Account
      */
-    public function addVideo(\Flash\Bundle\DefaultBundle\Entity\Video $videos)
-    {
+    public function addVideo(\Flash\Bundle\DefaultBundle\Entity\Video $videos) {
         $this->videos[] = $videos;
-    
+
         return $this;
     }
 
@@ -367,8 +365,7 @@ class Account implements AdvancedUserInterface {
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Video $videos
      */
-    public function removeVideo(\Flash\Bundle\DefaultBundle\Entity\Video $videos)
-    {
+    public function removeVideo(\Flash\Bundle\DefaultBundle\Entity\Video $videos) {
         $this->videos->removeElement($videos);
     }
 
@@ -377,8 +374,31 @@ class Account implements AdvancedUserInterface {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getVideos()
-    {
+    public function getVideos() {
         return $this->videos;
+    }
+
+
+    /**
+     * Set city
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\City $city
+     * @return Account
+     */
+    public function setCity(\Flash\Bundle\DefaultBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+    
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\City 
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 }

@@ -14,24 +14,13 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
  */
 class EventApiController extends RESTController implements GenericRestApi {
 
-    private $respAction = 'FlashApiBundle:EventApi:responseDataType';
 
-    /**
-     * @Route("/test")
-     * @Method({"GET"})
-     * @return single Account data
-     */
-    public function testAction() {
-        $user = sfContext::getInstance()->getUser();
-        echo 'test';
-        exit();
-    }
 
-    public function deleteAction($id, $type) {
+    public function deleteAction($id) {
         
     }
 
-    public function getAction($id, $type = null) {
+    public function getAction($id = null) {
         
     }
 
@@ -40,7 +29,7 @@ class EventApiController extends RESTController implements GenericRestApi {
      * @Method({"POST"})
      * @return single Account data
      */
-    public function postAction(Request $request, $type = null) {
+    public function postAction() {
 
         $em = $this->getDoctrine()->getManager();
 
@@ -70,7 +59,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         ));
     }
 
-    public function putAction(Request $request, $type) {
+    public function putAction($id) {
         
     }
 

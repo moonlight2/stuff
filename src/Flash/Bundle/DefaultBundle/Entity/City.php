@@ -37,6 +37,11 @@ class City {
     private $groups;
     
     /**
+     * @OneToMany(targetEntity="Account", mappedBy="city")
+     */
+    private $accounts;
+    
+    /**
      * @OneToMany(targetEntity="Event", mappedBy="city")
      */
     private $events;
@@ -50,6 +55,7 @@ class City {
     public function __construct() {
         $this->groups = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->accounts = new ArrayCollection();
     }
 
     /**
@@ -167,5 +173,38 @@ class City {
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Add accounts
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Account $accounts
+     * @return City
+     */
+    public function addAccount(\Flash\Bundle\DefaultBundle\Entity\Account $accounts)
+    {
+        $this->accounts[] = $accounts;
+    
+        return $this;
+    }
+
+    /**
+     * Remove accounts
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Account $accounts
+     */
+    public function removeAccount(\Flash\Bundle\DefaultBundle\Entity\Account $accounts)
+    {
+        $this->accounts->removeElement($accounts);
+    }
+
+    /**
+     * Get accounts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAccounts()
+    {
+        return $this->accounts;
     }
 }
