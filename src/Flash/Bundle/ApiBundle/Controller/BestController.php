@@ -15,41 +15,97 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
+use Flash\Bundle\DefaultBundle\Form\AccountType;
 
 /**
  * @Route("/best")
  */
-class BestController extends RESTController implements ClassResourceInterface {
+class BestController extends RESTController {
 
     /**
-     * @Route("/get")
-     * @Method({"GET", "POST"})
-     * @Rest\View()
+     * @Route("/users/{id}", name="_get_account")
+     * @Method({"GET"})
+     * @param Integer $id
+     * @return single Account data or array of accounts
      */
-    public function getAction() {
+    public function getNewAction($id = null) {
 
         $em = $this->getDoctrine()->getManager();
 
-        $account = $em->getRepository('FlashDefaultBundle:Account')->find(17);
-        $group = $em->getRepository('FlashDefaultBundle:Group')->find(1);
+        if (null != $id) {
+            $account = $em->getRepository('FlashDefaultBundle:Account')->find($id);
 
-//        $acc = new Account('email2');
-//        $acc->setUsername('boris2');
-//        $acc->setPassword('pass');
-//        $acc->setAbout('sss');
-//        $acc->setGroup($group);
-//        $em->persist($group);
-//        $em->persist($acc);
-//        $em->flush();
-//
-//        $serializer = $this->container->get('serializer');
-//        $data = $serializer->serialize($acc, 'xml');
-        return array('account' => $account);
+            if (null != $account) {
+                $response = array('user' => $account);
+            } else {
+                $response = array('success' => 'false');
+            }
+        } else {
+            $accounts = $em->getRepository('FlashDefaultBundle:Account')->findAll();
+            $response = array('users' => $accounts);
+        }
 
-//        return View::create()->setData($name)
-//                ->setTemplate(new TemplateReference('AcmeTestBundle', 'Default', 'index'))
-//                ->setStatusCode('202')
-//                ->setHeader('Content-Type', 'text/html  ');
+        return $response;
+    }
+
+    /**
+     * @Route("/users/add")
+     * @Method({"POST"})
+     * @Rest\View()
+     */
+    public function addAction() {
+
+        $acc = new Account();
+        return $this->processForm($acc);
+    }
+
+    private function getFromRequest($data) {
+
+        $request = $this->getRequest();
+
+        foreach ($data as $el) {
+            $resp[$el] = $request->get($el);
+        }
+        return $resp;
+    }
+
+    private function processForm($acc) {
+
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new AccountType(), $acc);
+        $form->bind($this->getFromRequest(array('username', 'email', 'password', 'about')));
+
+        if ($form->isValid()) {
+
+            if (true != $em->getRepository('FlashDefaultBundle:Account')
+                            ->exists($request->get('username'))) {
+
+                $factory = $this->get('security.encoder_factory');
+                $encoder = $factory->getEncoder($acc);
+                $password = $encoder->encodePassword($request->get('password'), $acc->getSalt());
+
+                $acc->setUsername($request->get('username'));
+                $acc->setPassword($password);
+                $acc->setEmail($request->get('email'));
+                $acc->setAbout($request->get('about'));
+
+                $role = $em->getRepository('FlashDefaultBundle:Role')->findBy(
+                        array('name' => 'ROLE_USER'));
+
+                $acc->addRole($role[0]);
+
+                $em->persist($acc);
+                $em->persist($role[0]);
+
+                $em->flush();
+            } else {
+                return array('success' => 'false', 'error'=>'Пользователь с таким именем уже существует');
+            }
+        } else {
+            return array('success' => 'false');
+        }
+        return $acc;
     }
 
     /**
@@ -57,13 +113,13 @@ class BestController extends RESTController implements ClassResourceInterface {
      * @Method({"GET", "POST"})
      */
     public function getAllAction() {
-        
+
         $em = $this->getDoctrine()->getManager();
-        
+
         $account = $em->getRepository('FlashDefaultBundle:Account')->find(17);
-        
-        $res = array('success'=>true);
-        
+
+        $res = array('success' => true);
+
         return $this->responce($account, '.yml', 201);
     }
 

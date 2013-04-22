@@ -45,10 +45,48 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/validator")
+     * @Route("/form", name="new")
      * @Method({"GET", "POST"})
      */
-    public function requestAction() {
+    public function requestAction(Request $request) {
+
+        $acc = new Account();
+//        $acc->setPassword('pass');
+//        $acc->setUsername('Iliass');
+
+        $form = $this->createFormBuilder($acc)
+                ->add('username', 'text')
+                ->add('email', 'email')
+                ->add('password', 'text')
+                ->getForm();
+
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $form->bindRequest($this->getRequest());
+            if ($form->isValid()) {
+                return $this->redirect($this->generateUrl('task_success'));
+            }
+        }
+
+        return $this->render('FlashApiBundle:Default:new.html.twig', array(
+                    'form' => $form->createView(),
+        ));
+    }
+
+
+    /**
+     * @Route("/success", name="task_success")
+     * @Method({"GET", "POST"})
+     */
+    public function successtAction() {
+       // exit('OKAYYYY');
+        return new Response('OKAYYYY');
+    }
+
+    /**
+     * @Route("/validator", name="validator")
+     * @Method({"GET", "POST"})
+     */
+    public function formAction() {
 
         $acc = new Account('emailmail.ru');
         $acc->setPassword('pass');
@@ -64,6 +102,10 @@ class AccountApiController extends RESTController implements GenericRestApi {
      */
     public function addAccountAction(Request $request, $type = null) {
 
+        
+        print_r($request);
+        exit();
+        
         $em = $this->getDoctrine()->getManager();
 
         $factory = $this->get('security.encoder_factory');

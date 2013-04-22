@@ -6,15 +6,42 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Flash\Bundle\DefaultBundle\Lib\Array2XML;
 use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Routing\ClassResourceInterface;
 
-abstract class RESTController extends Controller {
+abstract class RESTController extends FOSRestController implements ClassResourceInterface {
+
+    protected function getData() {
+
+
+        $cType = $this->getRequest()->headers->get('content-type');
+
+        switch ($cType) {
+            case 'text/xml':
+                $data = json_decode($this->getRequest()->getContent(), true);
+                break;
+            case 'application/xml':
+                $data = json_decode($this->getRequest()->getContent(), true);
+                break;
+            case 'application/json':
+                $data = json_decode($this->getRequest()->getContent(), true);
+                break;
+            case 'text/x-yaml':
+                $data = json_decode($this->getRequest()->getContent(), true);
+                break;
+            default:
+                $data = json_decode($this->getRequest()->getContent(), true);
+        }
+        return $data;
+    }
 
     protected function responce($obj, $status = 200) {
 
         $cType = $this->getRequest()->headers->get('content-type');
 
         $serializer = $this->get('jms_serializer');
-        
+
         $obj = $this->validate($obj);
 
         switch ($cType) {

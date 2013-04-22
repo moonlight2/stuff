@@ -38,7 +38,7 @@ class Account implements AdvancedUserInterface {
      * @Type("string")
      * @ORM\Column(name="username", type="string", length=255)
      * @Assert\NotBlank(message = "Поле username не может быть пустым")
-     * @Assert\MinLength(limit=4, message = "Поле username не может иметь менее 4 символов")
+     * @Assert\MinLength(limit=4, message = "Поле username не может иметь менее 5 символов")
      * @Expose
      */
     private $username;
@@ -97,10 +97,8 @@ class Account implements AdvancedUserInterface {
      */
     private $videos;
 
-    public function __construct($email) {
+    public function __construct() {
 
-        $this->email = $email;
-//        $this->username = $email;
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();
