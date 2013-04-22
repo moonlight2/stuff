@@ -32,7 +32,6 @@ var AppRouter = Backbone.Router.extend({
         this.account = new Account();
         var form = new FormView({model: this.account});
         $('#form').html(form.render().el);
-  //      app.showView('#main-content', new FormView({model: this.account}));
         
     },
                 

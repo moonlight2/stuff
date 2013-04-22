@@ -1,7 +1,7 @@
 window.FormView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template(tpl.get('form'));
-        
+
     },
     render: function(eventName) {
         $(this.el).html(this.template());
@@ -18,14 +18,17 @@ window.FormView = Backbone.View.extend({
     },
     saveAccount: function() {
         this.model.set({
-            name: $('#name').val(),
+            username: $('#username').val(),
             email: $('#email').val(),
             about: $('#about').val(),
             password: $('#password').val(),
         });
-        this.model.save({
-            success: function() {
-                alert('Model ' + this.model.name + 'updated');
+        this.model.save(null, {
+            success: function(model, response) {
+                console.log(response);
+            },
+            error: function(model, response) {
+                console.log(response);
             }
         });
         return false;
