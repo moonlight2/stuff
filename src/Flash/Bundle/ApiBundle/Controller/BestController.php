@@ -51,7 +51,6 @@ class BestController extends RESTController {
     /**
      * @Route("/users/add")
      * @Method({"POST"})
-     * @Rest\View()
      */
     public function addAction() {
 
@@ -59,15 +58,7 @@ class BestController extends RESTController {
         return $this->processForm($acc);
     }
 
-    private function getFromRequest($data) {
 
-        $request = $this->getRequest();
-
-        foreach ($data as $el) {
-            $resp[$el] = $request->get($el);
-        }
-        return $resp;
-    }
 
     private function processForm($acc) {
 
@@ -75,6 +66,7 @@ class BestController extends RESTController {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new AccountType(), $acc);
         $form->bind($this->getFromRequest(array('username', 'email', 'password', 'about')));
+        $view = View::create();
 
         if ($form->isValid()) {
 
@@ -90,20 +82,22 @@ class BestController extends RESTController {
                 $acc->setEmail($request->get('email'));
                 $acc->setAbout($request->get('about'));
 
-                $role = $em->getRepository('FlashDefaultBundle:Role')->findBy(
-                        array('name' => 'ROLE_USER'));
+                $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
 
-                $acc->addRole($role[0]);
+                $acc->addRole($role);
 
                 $em->persist($acc);
-                $em->persist($role[0]);
+                $em->persist($role);
 
                 $em->flush();
             } else {
-                return array('success' => 'false', 'error'=>'Пользователь с таким именем уже существует');
+                
+                $view->setStatusCode(400);
+                return $view->setData(array('success'=>'false'));
             }
         } else {
-            return array('success' => 'false');
+            $view->setStatusCode(400);
+            return $view->setData($this->getErrorMessages($form));
         }
         return $acc;
     }
