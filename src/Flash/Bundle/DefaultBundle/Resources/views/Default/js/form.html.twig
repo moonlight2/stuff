@@ -2,23 +2,40 @@
     <div id='errors'>
 
     </div>
-    <p>
-        <label>Name:</label>
+    <div class="clear-fix">
+        <label>Имя:</label>
         <input type="text" id="username" name="username" required/>
-    </p>
-    <p>
+   </div>
+    <div class="clear-fix">
         <label>Email:</label>
         <input type="text" id="email" name="email" />
-    </p>
-    <p>
-        <label>About:</label>
-        <input type="text" id="about" name="about"  />
-    </p>
-    <p>
-        <label>Password:</label>
+    </div>
+    <div class="clear-fix">
+        <label>Cтрана:</label>
+        <select id="country" name="country">
+            <option disabled>Выберите страну</option>
+        </select>
+    </div>
+    <div class="clear-fix" id='city-block'>
+        <label>Город:</label>
+        <div class='selector'>
+            <input type="text" id="city-input" name="city" />
+            <div class="selector-dropdown"></div>
+        </div>
+        
+        <ul id="city" name="city">
+            <li>Выберите город</li>
+        </ul>
+    </div>
+    <div class="clear-fix">
+        <label>О себе:</label>
+        <input type="textarea" id="about" name="about"  />
+    </div>
+    <div class="clear-fix">
+        <label>Пароль:</label>
         <input type="text" id="password" name="password"  />
-    </p>
+    </div>
     <div>
         <button class='send'>Send</button>
     </div>
-</div>
+    </div>
