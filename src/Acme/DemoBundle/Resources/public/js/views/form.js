@@ -11,23 +11,31 @@ window.FormView = Backbone.View.extend({
     events: {
         "click .send": "saveAccount",
         "input #city-input": "getSimilarCities",
-        "change #country": "getCities",
+        "input #country-input": "getCities",
         "click .selector-dropdown": "switchDropdown",
         "click": "hideDropdown",
-        "click #city li": "fillInput",
+        "click #country li": "fillCountryInput",
+        "click #city li": "fillCityInput",
         "mouseover #city li": "changeListBackground",
-        "blur #city-input": "prepareCityInfoToSend"
+        "blur #city-input": "prepareCityInfoToSend",
+        "click #last-option": "getAllCountries"
     },
     checkData: function() {
         alert('Check data');
         return false;
     },
-    changeListBackground: function(event) {
-        $(event.target).css("background-color", "#FFCC00");
-        $(event.target).siblings("li").css("background", "#fff");
+    changeListBackground: function(e) {
+        $(e.target).removeClass('deselected').addClass('selected');
+        $(e.target).siblings("li").removeClass('selected').addClass('deselected');
     },
-    fillInput: function(event) {
-        $('#city-input').val($(event.target).html());
+    fillCountryInput: function(e) {
+        $(e.target).parent().parent().find('input').val($(e.target).html());
+        $('#send-country').val($(e.target).val());
+        this.getCities();
+    }, 
+    fillCityInput: function(e) {
+        $(e.target).parent().parent().find('input').val($(e.target).html());
+        $('#send-city').val($(e.target).val());
         this.prepareCityInfoToSend();
     },
     clearInput: function() {
@@ -39,28 +47,42 @@ window.FormView = Backbone.View.extend({
     showList: function() {
         $('#city').show();
     },
-    switchDropdown: function() {
-        $('#city').css('display', (($('#city').css('display') == 'block') ? 'none' : 'block'));
+    switchDropdown: function(e) {
+        $(e.target).next().css('display', (($(e.target).next().css('display') == 'block') ? 'none' : 'block'));
         return false;
     },
     hideDropdown: function() {
-        $('#city').hide();
+        $('.dropdown-menu').hide();
         return false;
     },
     getCountries: function() {
         var self = this;
         $.getJSON("api/countries/1",
                 function(data) {
+                    $('#country-input').val(data.countries[0][1]);
+                    $('#send-country').val(data.countries[0][0]);
                     $.each(data.countries, function(item, val) {
-                        $("#country").append('<option value="' + val[0] + '">' + val[1] + '</option>');
+                        $("#country").append('<li value="' + val[0] + '">' + val[1] + '</li>');
                     });
+                    $("#country").append('<li><div id="last-option" ><b>Другие страны</b></div></li>');
                     self.getCities();
+                });
+    },
+    getAllCountries: function() {
+        alert('click');
+        this.clearList();
+        $.getJSON("api/countries/0",
+                function(data) {
+                    console.log(data);
+                    $.each(data.countries, function(item, val) {
+                        $("#country").append('<li value="' + val[0] + '">' + val[1] + '</li>');
+                    });
                 });
     },
     getSimilarCities: function() {
 
         var self = this;
-        var url = "api/country/" + $('#country').val() + "/city/" + $('#city-input').val();
+        var url = "api/country/" + $('#send-country').val() + "/city/" + $('#city-input').val();
 
         self.clearList();
         self.showList();
@@ -82,7 +104,7 @@ window.FormView = Backbone.View.extend({
         });
     },
     prepareCityInfoToSend: function() {
-        var url = "api/country/" + $('#country').val() + "/city/" + $('#city-input').val();
+        var url = "api/country/" + $('#send-country').val() + "/city/" + $('#send-city').val();
         $.get(url, function(data) {
             var obj = jQuery.parseJSON((data.replace(/'/g, "\"")));
             $.each(obj, function(item, val) {
@@ -90,15 +112,16 @@ window.FormView = Backbone.View.extend({
                     $('#send-city').val(val[0]);
                     return false;
                 }
-                $('#send-city').val(0);
+                //$('#send-city').val(0);
             });
         });
     },
     getCities: function() {
 
-        var url = "api/country/" + $("#country").val();
+        var url = "api/country/" + $("#send-country").val();
         this.clearInput();
         this.clearList();
+        //$('#send-city').val(0);
 
         $.getJSON(url,
                 function(data) {
@@ -115,7 +138,7 @@ window.FormView = Backbone.View.extend({
             email: $('#email').val(),
             about: $('#about').val(),
             password: $('#password').val(),
-            country: $('#country').val(),
+            country: $('#send-country').val(),
             city: $('#send-city').val(),
         });
         this.model.save(null, {

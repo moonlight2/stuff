@@ -30,7 +30,7 @@ security:
             security: false
 
         secured_area:
-            pattern:    ^/api
+            pattern:    ^/
             form_login:
                 check_path: _security_check
                 login_path: _demo_login
@@ -39,7 +39,7 @@ security:
                 target: _demo
 
     access_control:
-         - { path: ^/rest, roles: [ ROLE_CUSTOMER ] }
+         - { path: ^/rest, roles: [ ROLE_USER ] }
          #- { path: ^/demo, roles: [ ROLE_ADMIN, ROLE_USER ] }
          - { path: ^/admin/, role: ROLE_ADMIN }
          - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

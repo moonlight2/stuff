@@ -1,29 +1,34 @@
 <div class="form-register">
-    
+
     <div id='errors'></div>
     <div class="clear-fix">
         <label>Имя:</label>
         <input type="text" id="username" name="username" required/>
-   </div>
+    </div>
     <div class="clear-fix">
         <label>Email:</label>
         <input type="text" id="email" name="email" />
     </div>
     <div class="clear-fix">
         <label>Cтрана:</label>
-        <select id="country" name="country">
-        </select>
+        <div class='selector'>
+            <input type="text" id="country-input" readonly placeholder='Выберите страну' />
+            <div class="selector-dropdown"></div>
+            <ul id="country" class='dropdown-menu'>
+            </ul>
+        </div>
+        <input type='hidden' name='country' id='send-country' />
     </div>
+    
     <div class="clear-fix" id='city-block'>
         <label>Город:</label>
         <div class='selector'>
             <input type="text" id="city-input" placeholder='Выберите город'/>
             <div class="selector-dropdown"></div>
+            <ul id="city" class='dropdown-menu'>
+                <li>Выберите город</li>
+            </ul>
         </div>
-        
-        <ul id="city">
-            <li>Выберите город</li>
-        </ul>
         <input type='hidden' name='city' id='send-city' />
     </div>
     <div class="clear-fix">
@@ -37,4 +42,4 @@
     <div>
         <button class='send'>Send</button>
     </div>
-    </div>
+</div>

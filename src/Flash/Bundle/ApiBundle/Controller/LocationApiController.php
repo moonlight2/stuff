@@ -88,10 +88,8 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
      * @param Integer $id
      * @return single Account data or array of accounts
      */
-    public function getCountries($all = 1) {
+    public function getCountries($all) {
 
-        if (1 != $all) $all = 0;
-        
         header("Content-Type: text/html; charset=windows-1251");
         $url = 'http://vk.com/select_ajax.php';
         $ch = curl_init();
