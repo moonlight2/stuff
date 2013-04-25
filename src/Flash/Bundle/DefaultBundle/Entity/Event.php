@@ -37,10 +37,14 @@ class Event {
     private $description;
 
     /**
-     *
-     * @ManyToOne(targetEntity="City", inversedBy="events")
+     * @ORM\Column(name="city_id", type="integer")
      */
     private $city;
+    
+    /**
+     * @ORM\Column(name="country_id", type="integer")
+     */
+    private $country;
     
     /**
      *
@@ -105,28 +109,6 @@ class Event {
         return $this->description;
     }
 
-    /**
-     * Set city
-     *
-     * @param \Flash\Bundle\DefaultBundle\Entity\City $city
-     * @return Event
-     */
-    public function setCity(\Flash\Bundle\DefaultBundle\Entity\City $city = null)
-    {
-        $this->city = $city;
-    
-        return $this;
-    }
-
-    /**
-     * Get city
-     *
-     * @return \Flash\Bundle\DefaultBundle\Entity\City 
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
 
     /**
      * Set group
@@ -149,5 +131,51 @@ class Event {
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * Set city
+     *
+     * @param integer $city
+     * @return Event
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return integer 
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set country
+     *
+     * @param integer $country
+     * @return Event
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return integer 
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

@@ -62,10 +62,14 @@ class Account implements AdvancedUserInterface {
     private $roles;
 
     /**
-     *
-     * @ManyToOne(targetEntity="City", inversedBy="groups")
+     * @ORM\Column(name="city_id", type="integer", nullable=true)
      */
     private $city;
+    
+    /**
+     * @ORM\Column(name="country_id", type="integer", nullable=true)
+     */
+    private $country;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -81,7 +85,7 @@ class Account implements AdvancedUserInterface {
     private $password;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @Expose
      */
     private $about;
@@ -379,13 +383,14 @@ class Account implements AdvancedUserInterface {
     }
 
 
+
     /**
      * Set city
      *
-     * @param \Flash\Bundle\DefaultBundle\Entity\City $city
+     * @param integer $city
      * @return Account
      */
-    public function setCity(\Flash\Bundle\DefaultBundle\Entity\City $city = null)
+    public function setCity($city)
     {
         $this->city = $city;
     
@@ -395,10 +400,33 @@ class Account implements AdvancedUserInterface {
     /**
      * Get city
      *
-     * @return \Flash\Bundle\DefaultBundle\Entity\City 
+     * @return integer 
      */
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Set country
+     *
+     * @param integer $country
+     * @return Account
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return integer 
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

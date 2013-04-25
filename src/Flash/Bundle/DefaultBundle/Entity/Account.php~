@@ -62,10 +62,14 @@ class Account implements AdvancedUserInterface {
     private $roles;
 
     /**
-     *
-     * @ManyToOne(targetEntity="City", inversedBy="groups")
+     * @ORM\Column(name="city_id", type="integer")
      */
     private $city;
+    
+    /**
+     * @ORM\Column(name="country_id", type="integer")
+     */
+    private $country;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -82,6 +86,7 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ORM\Column(type="text")
+     * @Expose
      */
     private $about;
 
@@ -93,7 +98,6 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="account")
-     * @Expose
      */
     private $photos;
 
@@ -377,5 +381,6 @@ class Account implements AdvancedUserInterface {
     public function getVideos() {
         return $this->videos;
     }
+
 
 }

@@ -48,10 +48,14 @@ class Group {
     private $rating;
 
     /**
-     *
-     * @ManyToOne(targetEntity="City", inversedBy="groups")
+     * @ORM\Column(name="city_id", type="integer")
      */
     private $city;
+    
+    /**
+     * @ORM\Column(name="country_id", type="integer")
+     */
+    private $country;
 
     public function __construct() {
 
@@ -144,29 +148,6 @@ class Group {
     }
 
     /**
-     * Set city
-     *
-     * @param \Flash\Bundle\DefaultBundle\Entity\City $city
-     * @return Group
-     */
-    public function setCity(\Flash\Bundle\DefaultBundle\Entity\City $city = null)
-    {
-        $this->city = $city;
-    
-        return $this;
-    }
-
-    /**
-     * Get city
-     *
-     * @return \Flash\Bundle\DefaultBundle\Entity\City 
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
      * Add events
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
@@ -197,5 +178,51 @@ class Group {
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Set city
+     *
+     * @param integer $city
+     * @return Group
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return integer 
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set country
+     *
+     * @param integer $country
+     * @return Group
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return integer 
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

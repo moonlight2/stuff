@@ -218,6 +218,8 @@ class AccountApiController extends RESTController implements GenericRestApi {
                 $acc->setPassword($password);
                 $acc->setEmail($request->get('email'));
                 $acc->setAbout($request->get('about'));
+                $acc->setCity($request->get('city'));
+                $acc->setCountry($request->get('country'));
 
                 if ($request->getMethod() == 'POST') {
 

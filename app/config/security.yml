@@ -12,6 +12,8 @@ security:
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
+        ROLE_CUSTOMER:    ROLE_USER
+        ROLE_PARTICIPANT: ROLE_USER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
 
     providers:
@@ -28,7 +30,7 @@ security:
             security: false
 
         secured_area:
-            pattern:    ^/
+            pattern:    ^/api
             form_login:
                 check_path: _security_check
                 login_path: _demo_login

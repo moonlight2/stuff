@@ -1,7 +1,7 @@
 window.FormView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template(tpl.get('form'));
-        _.bindAll(this, 'showDropdown', 'hideDropdown');
+        _.bindAll(this, 'switchDropdown', 'hideDropdown');
 
     },
     render: function() {
@@ -12,28 +12,35 @@ window.FormView = Backbone.View.extend({
         "click .send": "saveAccount",
         "input #city-input": "getSimilarCities",
         "change #country": "getCities",
-        "click .selector-dropdown": "showDropdown",
+        "click .selector-dropdown": "switchDropdown",
         "click": "hideDropdown",
         "click #city li": "fillInput",
         "mouseover #city li": "changeListBackground",
+        "blur #city-input": "prepareCityInfoToSend"
     },
     checkData: function() {
         alert('Check data');
         return false;
     },
     changeListBackground: function(event) {
-        el = event.target;
-        $(el).css("background-color", "#FFCC00");
-        $(el).children().css("background-color", "#FFCC00");
-        $(el).siblings("li").css("background", "#fff");
-        $(el).siblings("li").children().css("background", "#fff");
+        $(event.target).css("background-color", "#FFCC00");
+        $(event.target).siblings("li").css("background", "#fff");
     },
     fillInput: function(event) {
-        el = event.target;
-        $('#city-input').val($(el).html());
+        $('#city-input').val($(event.target).html());
+        this.prepareCityInfoToSend();
     },
-    showDropdown: function() {
+    clearInput: function() {
+        $('#city-input').val('');
+    },
+    clearList: function() {
+        $("#city").html('');
+    },
+    showList: function() {
         $('#city').show();
+    },
+    switchDropdown: function() {
+        $('#city').css('display', (($('#city').css('display') == 'block') ? 'none' : 'block'));
         return false;
     },
     hideDropdown: function() {
@@ -41,32 +48,57 @@ window.FormView = Backbone.View.extend({
         return false;
     },
     getCountries: function() {
-        $.getJSON("api/countries",
+        var self = this;
+        $.getJSON("api/countries/1",
                 function(data) {
                     $.each(data.countries, function(item, val) {
                         $("#country").append('<option value="' + val[0] + '">' + val[1] + '</option>');
                     });
+                    self.getCities();
                 });
     },
     getSimilarCities: function() {
+
+        var self = this;
         var url = "api/country/" + $('#country').val() + "/city/" + $('#city-input').val();
-        $('#city').show();
 
-        $("#city").html("");
+        self.clearList();
+        self.showList();
+
         $.get(url, function(data) {
-            self.obj = jQuery.parseJSON((data.replace(/'/g, "\"")));
+            var obj = jQuery.parseJSON((data.replace(/'/g, "\"")));
 
-            $.each(self.obj, function(item, val) {
-                $("#city").append('<li value="' + val[0] + '">' + val[1] + '</li>');
-            });
-
+            if (obj.length < 1) {
+                self.clearInput();
+                self.clearList();
+                $("#city").append('<li value="0">Город не найден</li>');
+                return false;
+            } else {
+                self.clearList();
+                $.each(obj, function(item, val) {
+                    $("#city").append('<li value="' + val[0] + '">' + val[1] + '</li>');
+                });
+            }
         });
-        
+    },
+    prepareCityInfoToSend: function() {
+        var url = "api/country/" + $('#country').val() + "/city/" + $('#city-input').val();
+        $.get(url, function(data) {
+            var obj = jQuery.parseJSON((data.replace(/'/g, "\"")));
+            $.each(obj, function(item, val) {
+                if (val[1] == $('#city-input').val()) {
+                    $('#send-city').val(val[0]);
+                    return false;
+                }
+                $('#send-city').val(0);
+            });
+        });
     },
     getCities: function() {
+
         var url = "api/country/" + $("#country").val();
-        $("#city").html("");
-        $('#city-input').val('');
+        this.clearInput();
+        this.clearList();
 
         $.getJSON(url,
                 function(data) {
@@ -83,6 +115,8 @@ window.FormView = Backbone.View.extend({
             email: $('#email').val(),
             about: $('#about').val(),
             password: $('#password').val(),
+            country: $('#country').val(),
+            city: $('#send-city').val(),
         });
         this.model.save(null, {
             success: function(model, response) {

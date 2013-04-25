@@ -48,10 +48,14 @@ class Group {
     private $rating;
 
     /**
-     *
-     * @ManyToOne(targetEntity="City", inversedBy="groups")
+     * @ORM\Column(name="city_id", type="integer")
      */
     private $city;
+    
+    /**
+     * @ORM\Column(name="country_id", type="integer")
+     */
+    private $country;
 
     public function __construct() {
 
@@ -144,25 +148,35 @@ class Group {
     }
 
     /**
-     * Set city
+     * Add events
      *
-     * @param \Flash\Bundle\DefaultBundle\Entity\City $city
+     * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
      * @return Group
      */
-    public function setCity(\Flash\Bundle\DefaultBundle\Entity\City $city = null)
+    public function addEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events)
     {
-        $this->city = $city;
+        $this->events[] = $events;
     
         return $this;
     }
 
     /**
-     * Get city
+     * Remove events
      *
-     * @return \Flash\Bundle\DefaultBundle\Entity\City 
+     * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
      */
-    public function getCity()
+    public function removeEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events)
     {
-        return $this->city;
+        $this->events->removeElement($events);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

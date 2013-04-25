@@ -8,6 +8,7 @@ window.Account = Backbone.Model.extend({
         "roles": "",
         "about": "",
         "group": "",
+        "country": "",
         "city": "",
         "password": ""
     }

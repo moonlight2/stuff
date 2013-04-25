@@ -1,7 +1,6 @@
 <div class="form-register">
-    <div id='errors'>
-
-    </div>
+    
+    <div id='errors'></div>
     <div class="clear-fix">
         <label>Имя:</label>
         <input type="text" id="username" name="username" required/>
@@ -13,19 +12,19 @@
     <div class="clear-fix">
         <label>Cтрана:</label>
         <select id="country" name="country">
-            <option disabled>Выберите страну</option>
         </select>
     </div>
     <div class="clear-fix" id='city-block'>
         <label>Город:</label>
         <div class='selector'>
-            <input type="text" id="city-input" name="city" />
+            <input type="text" id="city-input" placeholder='Выберите город'/>
             <div class="selector-dropdown"></div>
         </div>
         
-        <ul id="city" name="city">
+        <ul id="city">
             <li>Выберите город</li>
         </ul>
+        <input type='hidden' name='city' id='send-city' />
     </div>
     <div class="clear-fix">
         <label>О себе:</label>

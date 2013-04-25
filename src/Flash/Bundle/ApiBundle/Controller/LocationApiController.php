@@ -19,6 +19,16 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
      */
 
     /**
+     * @Route("/ip")
+     * @Method({"GET"})
+     */
+    public function getIp() {
+        
+        $ip = $this->get('request')->server->get("REMOTE_ADDR");
+        return new \Symfony\Component\HttpFoundation\Response($ip);
+    }
+
+    /**
      * @Route("/country/{country_id}")
      * @Method({"GET"})
      * @param Integer $country_id
@@ -53,7 +63,7 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     public function getSimilarCityAction($id, $name) {
 
         header("Content-Type: text/html; charset=UTF-8");
-        $url = $this->vkUrl.'?act=a_get_cities&country=' . $id . '&str=' . $name;
+        $url = $this->vkUrl . '?act=a_get_cities&country=' . $id . '&str=' . $name;
 
         $ch = curl_init();
 
@@ -73,13 +83,15 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     }
 
     /**
-     * @Route("/countries")
+     * @Route("/countries/{all}")
      * @Method({"GET"})
      * @param Integer $id
      * @return single Account data or array of accounts
      */
-    public function getCountries() {
+    public function getCountries($all = 1) {
 
+        if (1 != $all) $all = 0;
+        
         header("Content-Type: text/html; charset=windows-1251");
         $url = 'http://vk.com/select_ajax.php';
         $ch = curl_init();
@@ -91,7 +103,7 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
             'Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4',
             'Accept-Charset: windows-1251,utf-8;q=0.7,*;q=0.3'
         ));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'act=a_get_countries&basic=0');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'act=a_get_countries&basic='.$all);
 
         $result = curl_exec($ch);
         $data = substr($result, 0, -1);
