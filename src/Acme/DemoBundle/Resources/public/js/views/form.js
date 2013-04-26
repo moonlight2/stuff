@@ -94,6 +94,7 @@ window.FormView = Backbone.View.extend({
                 self.clearInput();
                 self.clearList();
                 $("#city").append('<li value="0">Город не найден</li>');
+                $('#send-city').val(0);
                 return false;
             } else {
                 self.clearList();
@@ -121,7 +122,7 @@ window.FormView = Backbone.View.extend({
         var url = "api/country/" + $("#send-country").val();
         this.clearInput();
         this.clearList();
-        //$('#send-city').val(0);
+        
 
         $.getJSON(url,
                 function(data) {
@@ -131,6 +132,7 @@ window.FormView = Backbone.View.extend({
                     });
                 });
         $('#city-block').show();
+        $('#send-city').val(0);
     },
     saveAccount: function() {
         this.model.set({
