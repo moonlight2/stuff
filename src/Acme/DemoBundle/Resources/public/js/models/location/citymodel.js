@@ -1,9 +1,8 @@
-
-window.Account = Backbone.Model.extend({
+window.City = Backbone.Model.extend({
     urlRoot: 'rest/api/accounts',
     defaults: {
         "id": null,
-        "username": "Enter youur name",
+        "username": "",
         "email": "",
         "roles": "",
         "about": "",
