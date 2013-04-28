@@ -8,15 +8,11 @@
 <div>
         
         
-    <script type="text/template" id="city"> 
-        <%= name %><br> 
-        <%= area %> 
-    </script>
+    <script type="text/template" id="city-tpl"><%= name %></script>
     
-    <script type="text/template" id="country"><%= name %></script>
+    <script type="text/template" id="country-tpl"><%= name %></script>
         
-        
-    <script type="text/template" id="form-register"> 
+    <script type="text/template" id="form-tpl"> 
         <div class="form-register">
             <div id='errors'></div>
             <div class="clear-fix">
@@ -29,22 +25,17 @@
             </div>
             <div class="clear-fix">
                 <label>Cтрана:</label>
-                <div class='selector'>
+                <div class='selector' id="country">
                     <input type="text" id="country-input" readonly placeholder='Выберите страну' />
                     <div class="selector-dropdown"></div>
-                    <ul id="country" class='dropdown-menu'>
-                    </ul>
                 </div>
                 <input type='hidden' name='country' id='send-country' />
             </div>
             <div class="clear-fix" id='city-block'>
                 <label>Город:</label>
-                <div class='selector'>
+                <div class='selector' id='city'>
                     <input type="text" id="city-input" placeholder='Выберите город'/>
                     <div class="selector-dropdown"></div>
-                    <ul id="city" class='dropdown-menu'>
-                        <li>Выберите город</li>
-                    </ul>
                 </div>
                 <input type='hidden' name='city' id='send-city' />
             </div>

@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 
-/*=============================== CITIES =====================================*/
+    /*=============================== CITIES =====================================*/
 
     var CityModel = Backbone.Model.extend({
         defaults: {
@@ -13,7 +13,7 @@ $(document).ready(function() {
             return response;
         }
     });
-    
+
     var CityCollection = Backbone.Collection.extend({
         model: CityModel,
         url: 'api/country',
@@ -30,11 +30,15 @@ $(document).ready(function() {
     window.CityListView = Backbone.View.extend({
         tagName: 'ul',
         initialize: function() {
-            this.model.bind('reset', this.render, this);
+            this.model.bind('reset', this.test, this);
+            this.model.bind('change', this.test, this);
+        },
+        test: function() {
+            alert('test');
         },
         render: function() {
             _.each(this.model.models, function(city) {
-                $(this.el).append(new CityListItemView({model: city}).render().el);
+                $(this.el).attr('class', 'dropdown-menu').append(new CityListItemView({model: city}).render().el);
             }, this);
             return this;
         }
@@ -42,18 +46,21 @@ $(document).ready(function() {
 
     window.CityListItemView = Backbone.View.extend({
         tagName: 'li',
-        template: _.template($('#city').html()),
+        template: _.template($('#city-tpl').html()),
         render: function() {
             $(this.el).attr('value', this.model.get('id')).html(this.template(this.model.toJSON()));
             return this;
         },
         initialize: function() {
-            this.model.bind('change', this.render, this);
+            this.model.bind('change', this.test, this);
+        },
+        test: function() {
+            alert('test');
         },
     });
-    
-    
-/*=============================== COUNTRIES ==================================*/   
+
+
+    /*=============================== COUNTRIES ==================================*/
 
     var CountryModel = Backbone.Model.extend({
         defaults: {
@@ -64,7 +71,7 @@ $(document).ready(function() {
             return response;
         }
     });
-    
+
     var CountryCollection = Backbone.Collection.extend({
         model: CountryModel,
         url: 'api/countries/1',
@@ -85,15 +92,15 @@ $(document).ready(function() {
         },
         render: function() {
             _.each(this.model.models, function(country) {
-                $(this.el).append(new CountryListItemView({model: country}).render().el);
+                $(this.el).attr('class', 'dropdown-menu').append(new CountryListItemView({model: country}).render().el);
             }, this);
             return this;
-        }
+        },
     });
 
     window.CountryListItemView = Backbone.View.extend({
         tagName: 'li',
-        template: _.template($('#country').html()),
+        template: _.template($('#country-tpl').html()),
         render: function() {
             $(this.el).attr('value', this.model.get('id')).html(this.template(this.model.toJSON()));
             return this;
@@ -103,24 +110,150 @@ $(document).ready(function() {
         },
     });
 
-/*=============================== COUNTRIES ==================================*/ 
-
-    
-
-    var self = this;
-    this.cities = new CityCollection({url: '/some/other/url'});
-    this.cities.url = 'api/country/2';
-
-    this.cities.fetch({success: function() {
-            $('#city-list').html(new CityListView({model: self.cities}).render().el);
-        }});
-    
-    this.countries = new CountryCollection();
-    this.countries.fetch({success: function() {
-            $('#country-list').html(new CountryListView({model: self.countries}).render().el);
-        }});
+    /*=============================== USERS ======================================*/
 
 
+    window.Account = Backbone.Model.extend({
+        urlRoot: 'rest/api/accounts',
+        defaults: {
+            "id": null,
+            "username": "Enter youur name",
+            "email": "",
+            "roles": "",
+            "about": "",
+            "group": "",
+            "country": "",
+            "city": "",
+            "password": ""
+        }
+    });
+
+    window.AccountList = Backbone.Collection.extend({
+        model: Account,
+        url: 'rest/api/accounts'
+    });
+
+    /*=============================== FORM =======================================*/
+
+    window.FormView = Backbone.View.extend({
+        initialize: function() {
+            this.template = _.template($('#form-tpl').html()),
+                    _.bindAll(this, 'switchDropdown', 'hideDropdown');
+            this.model.bind('change', this.render, this);
+        },
+        render: function() {
+            $(this.el).html(this.template(this.model.toJSON()));
+            return this;
+        },
+        events: {
+            "click .selector-dropdown": "switchDropdown",
+            "click": "hideDropdown",
+            "click .send": "saveAccount",
+            "click #country li": "changeCountryInput",
+            "click #city li": "changeCityInput",
+        },
+        switchDropdown: function(e) {
+            $(e.target).next().css('display', (($(e.target).next().css('display') == 'block') ? 'none' : 'block'));
+            return false;
+        },
+        hideDropdown: function() {
+            $('.dropdown-menu').hide();
+            return false;
+        },
+        getCountries: function() {
+            console.log('Get Countries');
+            var self = this;
+            this.countries = new CountryCollection();
+            this.countries.fetch({success: function(data) {
+                    self.fillContryInput(data.models[0]); // set input value to first country name
+                    $('#country').append(new CountryListView({model: self.countries}).render().el);
+                    self.getCities();
+                }});
+        },
+        fillContryInput: function(model) {
+            console.log('Console log fill input');
+            $('#country-input').val(model.get('name'));
+            $('#send-country').val(model.get('id'));
+        },
+        changeCountryInput: function(e) {
+            $(e.target).parent().parent().find('input').val($(e.target).html());
+            $('#send-country').val($(e.target).val());
+            this.getCities();
+        },
+        changeCityInput: function(e) {
+            $(e.target).parent().parent().find('input').val($(e.target).html());
+            $('#send-city').val($(e.target).val());
+            this.prepareCityInfoToSend();
+        },
+        clearCityInput: function() {
+            $('#city-input').val('');
+        },
+        clearCityList: function() {
+            $("#city").html('');
+        },
+        getCities: function() {
+            console.log('Get Cities');
+            var self = this;
+            this.cities = new CityCollection();
+            this.cities.url = "api/country/" + $("#send-country").val();
+            this.clearCityInput();
+            this.cities.fetch({success: function() {
+                    $('#city .dropdown-menu').remove();
+                    $('#city').append(new CityListView({model: self.cities}).render().el);
+                }});
+        },
+        prepareCityInfoToSend: function() {
+            console.log('prepare city to send');
+            var url = "api/country/" + $('#send-country').val() + "/city/" + $('#send-city').val();
+        },
+        saveAccount: function() {
+            this.model.set({
+                username: $('#username').val(),
+                email: $('#email').val(),
+                about: $('#about').val(),
+                password: $('#password').val(),
+                country: $('#send-country').val(),
+                city: $('#send-city').val(),
+            });
+            if (this.model.isNew()) {
+                this.model.save(null, {
+                    success: function(model, response) {
+                        console.log(response);
+                        alert('Account saved');
+                    },
+                    error: function(model, response) {
+                        console.log(response);
+                        alert('Error!');
+                    }
+                });
+            }
+            return false;
+        },
+    });
+
+    /*=============================== ROUTER =====================================*/
+
+    window.AppRouter = Backbone.Router.extend({
+        routes: {
+            "": "formView",
+        },
+        initialize: function() {
+            var form = new FormView({model: new Account()});
+            this.showView('#form', form);
+            form.getCountries();
+        },
+        showView: function(selector, view) {
+            if (this.currentView)
+                this.currentView.close();
+            $(selector).html(view.render().el);
+            this.currentView = view;
+            return view;
+        },
+    });
+
+
+    app = new AppRouter();
+    Backbone.history.start();
 
 
 });
