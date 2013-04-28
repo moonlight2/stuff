@@ -1,0 +1,36 @@
+{% extends "TwigBundle::layout.html.twig" %}
+
+{% block head %}
+    <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/acmedemo/css/demo.css') }}" />
+    <script src="{{ asset('bundles/acmedemo/js/lib/jquery-1.7.1.min.js') }}"></script>
+    <script src="{{ asset('bundles/acmedemo/js/lib/underscore-min.js') }}"></script>
+    <script src="{{ asset('bundles/acmedemo/js/lib/backbone-min.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/script.js') }}"></script>
+{% endblock %}
+
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        <div class="flash-message">
+            <em>Notice</em>: {{ flashMessage }}
+        </div>
+    {% endfor %}
+
+    {% block content_header %}
+        <ul id="menu">
+            {% block content_header_more %}
+                <li><a href="{{ path('_demo') }}">Demo Home</a></li>
+                <div id='loading'>Loading</div>
+
+            {% endblock %}
+        </ul>
+
+        <div style="clear: both"></div>
+    {% endblock %}
+
+    <div class="block" id='main'>
+        {% block content %}{% endblock %}
+    </div>
+      
+{% endblock %}

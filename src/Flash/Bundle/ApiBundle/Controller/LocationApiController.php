@@ -23,7 +23,7 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
      * @Method({"GET"})
      */
     public function getIp() {
-        
+
         $ip = $this->get('request')->server->get("REMOTE_ADDR");
         return new \Symfony\Component\HttpFoundation\Response($ip);
     }
@@ -61,14 +61,15 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
      * @return single Account data or array of accounts
      */
     public function getSimilarCityAction($id, $name) {
-
-        header("Content-Type: text/html; charset=UTF-8");
+//
+        header("Content-Type: text/plain; charset=UTF-8");
         $url = $this->vkUrl . '?act=a_get_cities&country=' . $id . '&str=' . $name;
 
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Accept: */*',
             'Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4',
@@ -76,9 +77,12 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         ));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $url);
 
-        $result = curl_exec($ch);
-        $data = substr($result, 0, -1);
-        echo $data;
+        echo str_replace("'", '"', curl_exec($ch));
+//        foreach ($new as $k => $v) {
+//            $last[] = array_combine($b, $v);
+//        }
+//
+//        echo(json_encode($last));
         exit();
     }
 
@@ -90,7 +94,7 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
      */
     public function getCountries($all) {
 
-        header("Content-Type: text/html; charset=windows-1251");
+        header("Content-Type: text/plain; charset=windows-1251");
         $url = 'http://vk.com/select_ajax.php';
         $ch = curl_init();
 
@@ -101,7 +105,7 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
             'Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4',
             'Accept-Charset: windows-1251,utf-8;q=0.7,*;q=0.3'
         ));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'act=a_get_countries&basic='.$all);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'act=a_get_countries&basic=' . $all);
 
         $result = curl_exec($ch);
         $data = substr($result, 0, -1);

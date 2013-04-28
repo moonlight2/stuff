@@ -55,7 +55,7 @@ var AppRouter = Backbone.Router.extend({
 });
 
 
-tpl.loadTemplates(['form'], function () {
+tpl.loadTemplates(['form', 'city-item', 'country-item'], function () {
     app = new AppRouter();
     Backbone.history.start();
 });

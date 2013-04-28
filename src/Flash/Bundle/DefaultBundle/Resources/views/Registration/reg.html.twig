@@ -1,0 +1,66 @@
+{% extends "FlashDefaultBundle::form.html.twig" %}
+
+{% block content %}
+<h2>Here is registration form</h2>
+<div id='form'>
+    <div id='city-list'></div>
+    <div id='country-list'></div>
+<div>
+        
+        
+    <script type="text/template" id="city"> 
+        <%= name %><br> 
+        <%= area %> 
+    </script>
+    
+    <script type="text/template" id="country"><%= name %></script>
+        
+        
+    <script type="text/template" id="form-register"> 
+        <div class="form-register">
+            <div id='errors'></div>
+            <div class="clear-fix">
+                <label>Имя:</label>
+                <input type="text" id="username" name="username" value="<%= username %>" required />
+            </div>
+            <div class="clear-fix">
+                <label>Email:</label>
+                <input type="text" id="email" name="email" />
+            </div>
+            <div class="clear-fix">
+                <label>Cтрана:</label>
+                <div class='selector'>
+                    <input type="text" id="country-input" readonly placeholder='Выберите страну' />
+                    <div class="selector-dropdown"></div>
+                    <ul id="country" class='dropdown-menu'>
+                    </ul>
+                </div>
+                <input type='hidden' name='country' id='send-country' />
+            </div>
+            <div class="clear-fix" id='city-block'>
+                <label>Город:</label>
+                <div class='selector'>
+                    <input type="text" id="city-input" placeholder='Выберите город'/>
+                    <div class="selector-dropdown"></div>
+                    <ul id="city" class='dropdown-menu'>
+                        <li>Выберите город</li>
+                    </ul>
+                </div>
+                <input type='hidden' name='city' id='send-city' />
+            </div>
+            <div class="clear-fix">
+                <label>О себе:</label>
+                <input type="textarea" id="about" name="about"  />
+            </div>
+            <div class="clear-fix">
+                <label>Пароль:</label>
+                <input type="text" id="password" name="password"  />
+            </div>
+            <div>
+                <button class='send'>Send</button>
+            </div>
+        </div>
+    </script>
+
+
+{% endblock %}
