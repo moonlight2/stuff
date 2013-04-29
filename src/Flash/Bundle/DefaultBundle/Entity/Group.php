@@ -7,12 +7,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Flash\Bundle\DefaultBundle\Entity\Account;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 
 /**
  * Group
  *
  * @ORM\Table(name="mygroup")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\GroupRepository")
+ * @ExclusionPolicy("all")
  */
 class Group {
 
@@ -22,6 +26,7 @@ class Group {
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     private $id;
 
@@ -29,6 +34,7 @@ class Group {
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Expose
      */
     private $name;
 
@@ -36,24 +42,36 @@ class Group {
      * @OneToMany(targetEntity="Account", mappedBy="group")
      */
     private $accounts;
-    
+
     /**
      * @OneToMany(targetEntity="Event", mappedBy="group")
+     * @Expose
      */
     private $events;
-    
+
     /**
-     * @ORM\Column(name="rating", type="integer")
+     * @ORM\Column(name="rating", type="integer", nullable=true)
+     * @Expose
      */
     private $rating;
 
     /**
+     * @var date
+     *
+     * @ORM\Column(name="registered", type="datetime")
+     * @Expose
+     */
+    private $dateRegist;
+
+    /**
      * @ORM\Column(name="city_id", type="integer")
+     * @Expose
      */
     private $city;
-    
+
     /**
      * @ORM\Column(name="country_id", type="integer")
+     * @Expose
      */
     private $country;
 
@@ -123,17 +141,15 @@ class Group {
         return $this->accounts;
     }
 
-
     /**
      * Set rating
      *
      * @param integer $rating
      * @return Group
      */
-    public function setRating($rating)
-    {
+    public function setRating($rating) {
         $this->rating = $rating;
-    
+
         return $this;
     }
 
@@ -142,8 +158,7 @@ class Group {
      *
      * @return integer 
      */
-    public function getRating()
-    {
+    public function getRating() {
         return $this->rating;
     }
 
@@ -153,10 +168,9 @@ class Group {
      * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
      * @return Group
      */
-    public function addEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events)
-    {
+    public function addEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events) {
         $this->events[] = $events;
-    
+
         return $this;
     }
 
@@ -165,8 +179,7 @@ class Group {
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
      */
-    public function removeEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events)
-    {
+    public function removeEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events) {
         $this->events->removeElement($events);
     }
 
@@ -175,8 +188,7 @@ class Group {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getEvents()
-    {
+    public function getEvents() {
         return $this->events;
     }
 
@@ -186,10 +198,9 @@ class Group {
      * @param integer $city
      * @return Group
      */
-    public function setCity($city)
-    {
+    public function setCity($city) {
         $this->city = $city;
-    
+
         return $this;
     }
 
@@ -198,8 +209,7 @@ class Group {
      *
      * @return integer 
      */
-    public function getCity()
-    {
+    public function getCity() {
         return $this->city;
     }
 
@@ -209,10 +219,9 @@ class Group {
      * @param integer $country
      * @return Group
      */
-    public function setCountry($country)
-    {
+    public function setCountry($country) {
         $this->country = $country;
-    
+
         return $this;
     }
 
@@ -221,8 +230,31 @@ class Group {
      *
      * @return integer 
      */
-    public function getCountry()
-    {
+    public function getCountry() {
         return $this->country;
+    }
+
+
+    /**
+     * Set dateRegist
+     *
+     * @param \DateTime $dateRegist
+     * @return Group
+     */
+    public function setDateRegist($dateRegist)
+    {
+        $this->dateRegist = $dateRegist;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateRegist
+     *
+     * @return \DateTime 
+     */
+    public function getDateRegist()
+    {
+        return $this->dateRegist;
     }
 }

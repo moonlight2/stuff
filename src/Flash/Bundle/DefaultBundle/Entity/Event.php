@@ -178,7 +178,7 @@ class Event {
     public function setUpdated()
     {
         // will NOT be saved in the database
-//        $this->updated->modify("now");
+        $this->updated->modify("now");
     }
 
     /**

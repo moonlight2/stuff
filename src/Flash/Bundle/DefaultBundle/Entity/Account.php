@@ -63,11 +63,13 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ORM\Column(name="city_id", type="integer", nullable=true)
+     * @Expose
      */
     private $city;
 
     /**
      * @ORM\Column(name="country_id", type="integer", nullable=true)
+     * @Expose
      */
     private $country;
 
@@ -75,6 +77,7 @@ class Account implements AdvancedUserInterface {
      * @var date
      *
      * @ORM\Column(name="registered", type="datetime")
+     * @Expose
      */
     private $dateRegist;
 

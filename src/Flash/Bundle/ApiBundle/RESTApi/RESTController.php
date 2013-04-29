@@ -2,12 +2,7 @@
 
 namespace Flash\Bundle\ApiBundle\RESTApi;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Flash\Bundle\DefaultBundle\Lib\Array2XML;
-use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
 abstract class RESTController extends FOSRestController implements ClassResourceInterface {
@@ -20,6 +15,23 @@ abstract class RESTController extends FOSRestController implements ClassResource
             $resp[$el] = $request->get($el);
         }
         return $resp;
+    }
+
+    protected function handle($view) {
+        return $this->get('fos_rest.view_handler')
+                        ->createResponse($view, $this->getRequest(), $this->getContentType());
+    }
+
+    private function getContentType() {
+
+        $formats = $this->getRequest()->getAcceptableContentTypes();
+
+        foreach ($formats as $format) {
+            if ($format = 'application/json') {
+                return 'json';
+            }
+        }
+        return null;
     }
 
     protected function getErrorMessages(\Symfony\Component\Form\Form $form) {
@@ -36,7 +48,6 @@ abstract class RESTController extends FOSRestController implements ClassResource
                 $errors[] = $error->getMessage();
             }
         }
-//        $errors['success'] ='false';
         return $errors;
     }
 

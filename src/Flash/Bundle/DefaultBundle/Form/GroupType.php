@@ -6,25 +6,25 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class GroupType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+class GroupType extends AbstractType {
+
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add('name')
+                ->add('name')
+                ->add('city')
+                ->add('country')
         ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'Flash\Bundle\DefaultBundle\Entity\Group',
             'csrf_protection' => false,
         ));
     }
 
-    public function getName()
-    {
+    public function getName() {
         return 'group';
     }
+
 }

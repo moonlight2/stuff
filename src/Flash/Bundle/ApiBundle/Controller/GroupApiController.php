@@ -5,24 +5,38 @@ namespace Flash\Bundle\ApiBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\View\View;
 use Flash\Bundle\DefaultBundle\Entity\Account;
-use Flash\Bundle\DefaultBundle\Entity\Event;
+use Flash\Bundle\DefaultBundle\Entity\Group;
 use Flash\Bundle\ApiBundle\RESTApi\RESTController;
 use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 
 /**
- * @Route("/rest/api/events")
+ * @Route("/rest/api/groups")
  */
-class EventApiController extends RESTController implements GenericRestApi {
+class GroupApiController extends RESTController implements GenericRestApi {
 
     /**
      * @Route("/country/{country_id}/city/{city_id}")
      * @Method({"GET"})
-     * @return single Account data
      */
-    public function getEventsByLocation($country_id, $city_id) {
-        
+    public function getGroupsByLocationAction($country_id, $city_id) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $groups = $em->getRepository('FlashDefaultBundle:Group')->getByLocation($country_id, $city_id);
+        $view = View::create();
+        if (null != $groups) {
+            $view->setData($groups);
+        } else {
+            $view->setStatusCode(404);
+            $view->setData(array('success' => 'false'));
+        }
+
+        return $this->handle($view);
     }
+
+
 
     public function deleteAction($id) {
         

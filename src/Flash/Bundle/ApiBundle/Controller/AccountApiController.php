@@ -17,7 +17,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
     /**
      * @Route("/{id}")
-     * @Method({"GET"})
+     * @Method({"POST"})
      * @param Integer $id
      * @return single Account data or array of accounts
      */
