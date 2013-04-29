@@ -65,11 +65,18 @@ class Account implements AdvancedUserInterface {
      * @ORM\Column(name="city_id", type="integer", nullable=true)
      */
     private $city;
-    
+
     /**
      * @ORM\Column(name="country_id", type="integer", nullable=true)
      */
     private $country;
+
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="registered", type="datetime")
+     */
+    private $dateRegist;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -97,6 +104,12 @@ class Account implements AdvancedUserInterface {
     private $group;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Event", inversedBy="Account")
+     * @Expose
+     */
+    private $events;
+
+    /**
      * @OneToMany(targetEntity="Photo", mappedBy="account")
      */
     private $photos;
@@ -111,6 +124,7 @@ class Account implements AdvancedUserInterface {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();
+        $this->events = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->videos = new ArrayCollection();
     }
@@ -382,18 +396,15 @@ class Account implements AdvancedUserInterface {
         return $this->videos;
     }
 
-
-
     /**
      * Set city
      *
      * @param integer $city
      * @return Account
      */
-    public function setCity($city)
-    {
+    public function setCity($city) {
         $this->city = $city;
-    
+
         return $this;
     }
 
@@ -402,8 +413,7 @@ class Account implements AdvancedUserInterface {
      *
      * @return integer 
      */
-    public function getCity()
-    {
+    public function getCity() {
         return $this->city;
     }
 
@@ -413,10 +423,9 @@ class Account implements AdvancedUserInterface {
      * @param integer $country
      * @return Account
      */
-    public function setCountry($country)
-    {
+    public function setCountry($country) {
         $this->country = $country;
-    
+
         return $this;
     }
 
@@ -425,8 +434,61 @@ class Account implements AdvancedUserInterface {
      *
      * @return integer 
      */
-    public function getCountry()
-    {
+    public function getCountry() {
         return $this->country;
+    }
+
+    /**
+     * Add events
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
+     * @return Account
+     */
+    public function addEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events) {
+        $this->events[] = $events;
+
+        return $this;
+    }
+
+    /**
+     * Remove events
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Event $events
+     */
+    public function removeEvent(\Flash\Bundle\DefaultBundle\Entity\Event $events) {
+        $this->events->removeElement($events);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvents() {
+        return $this->events;
+    }
+
+
+    /**
+     * Set dateRegist
+     *
+     * @param \DateTime $dateRegist
+     * @return Account
+     */
+    public function setDateRegistration($dateRegist)
+    {
+        $this->dateRegist = $dateRegist;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateRegist
+     *
+     * @return \DateTime 
+     */
+    public function getDateRegistration()
+    {
+        return $this->dateRegist;
     }
 }

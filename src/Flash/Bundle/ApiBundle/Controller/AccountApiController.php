@@ -220,6 +220,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
                 $acc->setAbout($request->get('about'));
                 $acc->setCity($request->get('city'));
                 $acc->setCountry($request->get('country'));
+                $acc->setDateRegistration(new \DateTime("now"));
 
                 if ($request->getMethod() == 'POST') {
 

@@ -14,7 +14,14 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
  */
 class EventApiController extends RESTController implements GenericRestApi {
 
-
+    /**
+     * @Route("/country/{country_id}/city/{city_id}")
+     * @Method({"POST"})
+     * @return single Account data
+     */
+    public function getEventsByLocation($country_id, $city_id) {
+        
+    }
 
     public function deleteAction($id) {
         
@@ -30,33 +37,7 @@ class EventApiController extends RESTController implements GenericRestApi {
      * @return single Account data
      */
     public function postAction() {
-
-        $em = $this->getDoctrine()->getManager();
-
-        $data = json_decode($request->getContent(), true);
-
-
-
-        $role = $em->getRepository('FlashDefaultBundle:Role')->findBy(
-                array('name' => 'ROLE_USER'));
-
-        $encoder = $factory->getEncoder($account);
-        $password = $encoder->encodePassword($data['password'], $account->getSalt());
-
-        $account->setPassword($password);
-        $account->addRole($role[0]);
-
-        $em->persist($role[0]);
-        $em->persist($account);
-
-        $em->flush();
-
-        $response = $this->setResponse($account);
-
-        return $this->forward($this->respAction, array(
-                    'data' => $response,
-                    'type' => $type,
-        ));
+        
     }
 
     public function putAction($id) {

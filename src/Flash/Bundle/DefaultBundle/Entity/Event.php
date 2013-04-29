@@ -37,29 +37,35 @@ class Event {
     private $description;
 
     /**
+     * @var date
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+    
+
+    /**
      * @ORM\Column(name="city_id", type="integer")
      */
     private $city;
-    
+
     /**
      * @ORM\Column(name="country_id", type="integer")
      */
     private $country;
-    
+
     /**
      *
      * @ManyToOne(targetEntity="Group", inversedBy="events")
      */
     private $group;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -69,10 +75,9 @@ class Event {
      * @param string $name
      * @return Event
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -81,8 +86,7 @@ class Event {
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -92,10 +96,9 @@ class Event {
      * @param string $description
      * @return Event
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -104,11 +107,9 @@ class Event {
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
-
 
     /**
      * Set group
@@ -116,10 +117,9 @@ class Event {
      * @param \Flash\Bundle\DefaultBundle\Entity\Group $group
      * @return Event
      */
-    public function setGroup(\Flash\Bundle\DefaultBundle\Entity\Group $group = null)
-    {
+    public function setGroup(\Flash\Bundle\DefaultBundle\Entity\Group $group = null) {
         $this->group = $group;
-    
+
         return $this;
     }
 
@@ -128,8 +128,7 @@ class Event {
      *
      * @return \Flash\Bundle\DefaultBundle\Entity\Group 
      */
-    public function getGroup()
-    {
+    public function getGroup() {
         return $this->group;
     }
 
@@ -139,10 +138,9 @@ class Event {
      * @param integer $city
      * @return Event
      */
-    public function setCity($city)
-    {
+    public function setCity($city) {
         $this->city = $city;
-    
+
         return $this;
     }
 
@@ -151,8 +149,7 @@ class Event {
      *
      * @return integer 
      */
-    public function getCity()
-    {
+    public function getCity() {
         return $this->city;
     }
 
@@ -162,10 +159,9 @@ class Event {
      * @param integer $country
      * @return Event
      */
-    public function setCountry($country)
-    {
+    public function setCountry($country) {
         $this->country = $country;
-    
+
         return $this;
     }
 
@@ -174,8 +170,37 @@ class Event {
      *
      * @return integer 
      */
-    public function getCountry()
-    {
+    public function getCountry() {
         return $this->country;
+    }
+
+
+    public function setUpdated()
+    {
+        // will NOT be saved in the database
+//        $this->updated->modify("now");
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Event
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }

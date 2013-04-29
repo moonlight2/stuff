@@ -30,11 +30,8 @@ $(document).ready(function() {
     window.CityListView = Backbone.View.extend({
         tagName: 'ul',
         initialize: function() {
-            this.model.bind('reset', this.test, this);
-            this.model.bind('change', this.test, this);
-        },
-        test: function() {
-            alert('test');
+            this.model.bind('reset', this.render, this);
+            this.model.bind('change', this.render, this);
         },
         render: function() {
             _.each(this.model.models, function(city) {
@@ -52,10 +49,7 @@ $(document).ready(function() {
             return this;
         },
         initialize: function() {
-            this.model.bind('change', this.test, this);
-        },
-        test: function() {
-            alert('test');
+            this.model.bind('change', this.render, this);
         },
     });
 
@@ -117,7 +111,7 @@ $(document).ready(function() {
         urlRoot: 'rest/api/accounts',
         defaults: {
             "id": null,
-            "username": "Enter youur name",
+            "username": "",
             "email": "",
             "roles": "",
             "about": "",
@@ -151,6 +145,51 @@ $(document).ready(function() {
             "click .send": "saveAccount",
             "click #country li": "changeCountryInput",
             "click #city li": "changeCityInput",
+            "input #city-input": "getSimilarCities",
+            "mouseover .dropdown-menu li": "changeListBackground",
+        },
+        getCountries: function() {
+            var self = this;
+            this.countries = new CountryCollection();
+            this.countries.fetch({success: function(data) {
+                    self.fillContryInput(data.models[0]); // set input value to first country name
+                    $('#country').append(new CountryListView({model: self.countries}).render().el);
+                    self.getCities();
+                }});
+        },
+        getCities: function() {
+            var self = this;
+            this.cities = new CityCollection();
+            this.cities.url = "api/country/" + $("#send-country").val();
+            this.clearCityInput();
+            this.cities.fetch({success: function() {
+                    self.clearCityList();
+                    $('#city').append(new CityListView({model: self.cities}).render().el);
+                }});
+        },
+        getSimilarCities: function() {
+            var self = this;
+            this.cities = new CityCollection();
+            this.cities.url = "api/country/" + $('#send-country').val() + "/city/" + $('#city-input').val();
+            this.cities.parse = function(response) {
+                var resp = Array();
+                for (var i = 0; i < response.length; i++) {
+                    var model = {id: response[i][0], name: response[i][1]};
+                    resp[i] = model;
+                }
+                return resp;
+            };
+            self.showCityList();
+
+            this.cities.fetch({success: function() {
+                    self.clearCityList();
+                    $('#city').append(new CityListView({model: self.cities}).render().el);
+                    self.showCityList();
+                }});
+            return false;
+        },
+        prepareCityInfoToSend: function() {
+            console.log('prepare city to send');
         },
         switchDropdown: function(e) {
             $(e.target).next().css('display', (($(e.target).next().css('display') == 'block') ? 'none' : 'block'));
@@ -160,18 +199,7 @@ $(document).ready(function() {
             $('.dropdown-menu').hide();
             return false;
         },
-        getCountries: function() {
-            console.log('Get Countries');
-            var self = this;
-            this.countries = new CountryCollection();
-            this.countries.fetch({success: function(data) {
-                    self.fillContryInput(data.models[0]); // set input value to first country name
-                    $('#country').append(new CountryListView({model: self.countries}).render().el);
-                    self.getCities();
-                }});
-        },
         fillContryInput: function(model) {
-            console.log('Console log fill input');
             $('#country-input').val(model.get('name'));
             $('#send-country').val(model.get('id'));
         },
@@ -189,22 +217,14 @@ $(document).ready(function() {
             $('#city-input').val('');
         },
         clearCityList: function() {
-            $("#city").html('');
+            $('#city ul').remove();
         },
-        getCities: function() {
-            console.log('Get Cities');
-            var self = this;
-            this.cities = new CityCollection();
-            this.cities.url = "api/country/" + $("#send-country").val();
-            this.clearCityInput();
-            this.cities.fetch({success: function() {
-                    $('#city .dropdown-menu').remove();
-                    $('#city').append(new CityListView({model: self.cities}).render().el);
-                }});
+        showCityList: function() {
+            $('#city .dropdown-menu').show();
         },
-        prepareCityInfoToSend: function() {
-            console.log('prepare city to send');
-            var url = "api/country/" + $('#send-country').val() + "/city/" + $('#send-city').val();
+        changeListBackground: function(e) {
+            $(e.target).removeClass('deselected').addClass('selected');
+            $(e.target).siblings("li").removeClass('selected').addClass('deselected');
         },
         saveAccount: function() {
             this.model.set({
