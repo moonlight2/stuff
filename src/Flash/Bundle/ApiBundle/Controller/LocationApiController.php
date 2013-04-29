@@ -39,18 +39,16 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         header("Content-Type: text/plain; charset=windows-1251");
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $this->vkUrl);
-        curl_setopt($ch, CURLOPT_POST, 1);
+        $url = $this->vkUrl . '?act=a_get_country_info&country=' . $country_id . '&fields=9';
+
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Accept: */*',
             'Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4',
             'Accept-Charset: windows-1251,utf-8;q=0.7,*;q=0.3'
         ));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'act=a_get_country_info&country=' . $country_id . '&fields=9');
 
-        $result = curl_exec($ch);
-        $data = substr($result, 0, -1);
-        echo $data;
+        curl_exec($ch);
         exit();
     }
 
@@ -68,21 +66,13 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Accept: */*',
             'Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4',
             'Accept-Charset: windows-1251,utf-8;q=0.7,*;q=0.3'
         ));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $url);
-
         echo str_replace("'", '"', curl_exec($ch));
-//        foreach ($new as $k => $v) {
-//            $last[] = array_combine($b, $v);
-//        }
-//
-//        echo(json_encode($last));
         exit();
     }
 
@@ -107,9 +97,7 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         ));
         curl_setopt($ch, CURLOPT_POSTFIELDS, 'act=a_get_countries&basic=' . $all);
 
-        $result = curl_exec($ch);
-        $data = substr($result, 0, -1);
-        echo $data;
+        curl_exec($ch);
         exit();
     }
 

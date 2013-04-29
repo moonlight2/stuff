@@ -17,7 +17,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
     /**
      * @Route("/{id}")
-     * @Method({"POST"})
+     * @Method({"GET"})
      * @param Integer $id
      * @return single Account data or array of accounts
      */
@@ -61,7 +61,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     public function postAction() {
 
         $acc = new Account();
-
+        
         return $this->processForm($acc);
     }
 
@@ -224,9 +224,14 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
                 if ($request->getMethod() == 'POST') {
 
+                    $group = $em->getRepository('FlashDefaultBundle:Group')->find($request->get('group'));
+                    
                     $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
+                    
+                    $acc->setGroup($group);
                     $acc->addRole($role);
                     $em->persist($role);
+                    $em->persist($group);
                 }
                 $em->persist($acc);
                 $em->flush();

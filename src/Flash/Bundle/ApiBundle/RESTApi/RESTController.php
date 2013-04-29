@@ -18,6 +18,7 @@ abstract class RESTController extends FOSRestController implements ClassResource
     }
 
     protected function handle($view) {
+        
         return $this->get('fos_rest.view_handler')
                         ->createResponse($view, $this->getRequest(), $this->getContentType());
     }
@@ -26,9 +27,11 @@ abstract class RESTController extends FOSRestController implements ClassResource
 
         $formats = $this->getRequest()->getAcceptableContentTypes();
 
-        foreach ($formats as $format) {
-            if ($format = 'application/json') {
+        foreach ($formats as $val=>$format) {
+            if ($format == 'application/json') {
                 return 'json';
+            } else {
+                return 'xml';
             }
         }
         return null;

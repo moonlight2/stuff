@@ -106,7 +106,6 @@ $(document).ready(function() {
 
     /*=============================== USERS ======================================*/
 
-
     window.Account = Backbone.Model.extend({
         urlRoot: 'rest/api/accounts',
         defaults: {
@@ -125,6 +124,49 @@ $(document).ready(function() {
     window.AccountList = Backbone.Collection.extend({
         model: Account,
         url: 'rest/api/accounts'
+    });
+
+
+    /*=============================== GROUPS ======================================*/
+
+    window.GroupModel = Backbone.Model.extend({
+        urlRoot: 'rest/api/groups',
+        defaults: {
+            "id": null,
+            "name": "",
+            "rating": "",
+        }
+    });
+
+    window.GroupCollection = Backbone.Collection.extend({
+        model: GroupModel,
+        url: 'rest/api/groups'
+    });
+
+
+    window.GroupListView = Backbone.View.extend({
+        tagName: 'select',
+        initialize: function() {
+            this.model.bind('reset', this.render, this);
+        },
+        render: function() {
+            _.each(this.model.models, function(country) {
+                $(this.el).attr('name', 'group').append(new GroupListItemView({model: country}).render().el);
+            }, this);
+            return this;
+        },
+    });
+
+    window.GroupListItemView = Backbone.View.extend({
+        tagName: 'option',
+        template: _.template($('#group-tpl').html()),
+        render: function() {
+            $(this.el).attr('value', this.model.get('id')).html(this.template(this.model.toJSON()));
+            return this;
+        },
+        initialize: function() {
+            this.model.bind('change', this.render, this);
+        },
     });
 
     /*=============================== FORM =======================================*/
@@ -166,6 +208,17 @@ $(document).ready(function() {
                     self.clearCityList();
                     $('#city').append(new CityListView({model: self.cities}).render().el);
                 }});
+
+        },
+        getGroups: function() {
+            console.log('Get groups');
+            var self = this;
+            this.groups = new GroupCollection();
+            this.groups.url = "rest/api/groups/country/" + $("#send-country").val() + "/city/" + $("#send-city").val();
+            this.groups.fetch({success: function() {
+                    self.clearGroupList();
+                    $('#group').append(new GroupListView({model: self.groups}).render().el);
+                }});
         },
         getSimilarCities: function() {
             var self = this;
@@ -190,6 +243,7 @@ $(document).ready(function() {
         },
         prepareCityInfoToSend: function() {
             console.log('prepare city to send');
+            this.getGroups();
         },
         switchDropdown: function(e) {
             $(e.target).next().css('display', (($(e.target).next().css('display') == 'block') ? 'none' : 'block'));
@@ -219,6 +273,9 @@ $(document).ready(function() {
         clearCityList: function() {
             $('#city ul').remove();
         },
+        clearGroupList: function() {
+            $('#group select').remove();
+        },
         showCityList: function() {
             $('#city .dropdown-menu').show();
         },
@@ -234,6 +291,7 @@ $(document).ready(function() {
                 password: $('#password').val(),
                 country: $('#send-country').val(),
                 city: $('#send-city').val(),
+                group: $('#group select').val()
             });
             if (this.model.isNew()) {
                 this.model.save(null, {
