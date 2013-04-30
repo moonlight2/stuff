@@ -1,0 +1,1 @@
+extension=memcache.so /etc/php5/conf.d/memcache.ini

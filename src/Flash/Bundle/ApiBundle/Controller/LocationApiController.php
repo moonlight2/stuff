@@ -63,16 +63,28 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         header("Content-Type: text/plain; charset=UTF-8");
         $url = $this->vkUrl . '?act=a_get_cities&country=' . $id . '&str=' . $name;
 
-        $ch = curl_init();
+        $meminstance = new Memcache();
+        $meminstance->pconnect('localhost', 11211);
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Accept: */*',
-            'Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4',
-            'Accept-Charset: windows-1251,utf-8;q=0.7,*;q=0.3'
-        ));
-        echo str_replace("'", '"', curl_exec($ch));
+        $query = $url;
+        $querykey = "KEY" . md5($query);
+
+        $result = $meminstance->get($querykey);
+
+        if (!$result) {
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Accept: */*',
+                'Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4',
+                'Accept-Charset: windows-1251,utf-8;q=0.7,*;q=0.3'
+            ));
+            $result = str_replace("'", '"', curl_exec($ch));
+            $meminstance->set($querykey, $result, 0, 600);
+        }
+        echo $result;
         exit();
     }
 

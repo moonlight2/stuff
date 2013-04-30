@@ -24,7 +24,7 @@
             </div>
             <div class="clear-fix">
                 <label>Email:</label>
-                <input type="text" id="email" name="email" />
+                <input type="text" id="email" name="email" value="<%= email %>"/>
             </div>
             <div class="clear-fix">
                 <label>Cтрана:</label>
@@ -49,14 +49,14 @@
             </div>
             <div class="clear-fix">
                 <label>О себе:</label>
-                <input type="textarea" id="about" name="about"  />
+                <input type="textarea" id="about" name="about"  value="<%= about %>"/>
             </div>
             <div class="clear-fix">
                 <label>Пароль:</label>
-                <input type="text" id="password" name="password"  />
+                <input type="password" id="password" name="password"  value="<%= password %>"/>
             </div>
             <div>
-                <button class='send'>Send</button>
+                <button id='send'>Send</button>
             </div>
         </div>
     </script>

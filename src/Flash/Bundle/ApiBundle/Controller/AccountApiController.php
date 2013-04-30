@@ -61,7 +61,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     public function postAction() {
 
         $acc = new Account();
-        
+
         return $this->processForm($acc);
     }
 
@@ -221,13 +221,20 @@ class AccountApiController extends RESTController implements GenericRestApi {
                 $acc->setCity($request->get('city'));
                 $acc->setCountry($request->get('country'));
                 $acc->setDateRegistration(new \DateTime("now"));
+                $acc->setIsActive(false);
 
                 if ($request->getMethod() == 'POST') {
 
+                    $this->sendEmain($request->get('email'));
+                    
                     $group = $em->getRepository('FlashDefaultBundle:Group')->find($request->get('group'));
-                    
+                    if (!$group) {
+                        throw $this->createNotFoundException(
+                                'No group found for id ' . $id
+                        );
+                    }
                     $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
-                    
+
                     $acc->setGroup($group);
                     $acc->addRole($role);
                     $em->persist($role);
@@ -245,6 +252,16 @@ class AccountApiController extends RESTController implements GenericRestApi {
             return $view->setData($this->getErrorMessages($form));
         }
         return $acc;
+    }
+
+    private function sendEmain($email) {
+        
+        $message = \Swift_Message::newInstance()
+                ->setSubject('Подтверждение регистрации')
+                ->setFrom('yakov.the.smart@gmail.com')
+                ->setTo($email)
+                ->setBody('Будьте добры, подтвердите регистрацию на сайте');
+        $this->get('mailer')->send($message);
     }
 
 }

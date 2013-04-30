@@ -82,7 +82,7 @@ $(document).ready(function() {
     window.CountryListView = Backbone.View.extend({
         tagName: 'ul',
         initialize: function() {
-            this.model.bind('reset', this.render, this);
+            //this.model.bind('reset', this.render, this);
         },
         render: function() {
             _.each(this.model.models, function(country) {
@@ -175,7 +175,6 @@ $(document).ready(function() {
         initialize: function() {
             this.template = _.template($('#form-tpl').html()),
                     _.bindAll(this, 'switchDropdown', 'hideDropdown');
-            this.model.bind('change', this.render, this);
         },
         render: function() {
             $(this.el).html(this.template(this.model.toJSON()));
@@ -184,7 +183,7 @@ $(document).ready(function() {
         events: {
             "click .selector-dropdown": "switchDropdown",
             "click": "hideDropdown",
-            "click .send": "saveAccount",
+            "click #send": "saveAccount",
             "click #country li": "changeCountryInput",
             "click #city li": "changeCityInput",
             "input #city-input": "getSimilarCities",
@@ -215,9 +214,13 @@ $(document).ready(function() {
             var self = this;
             this.groups = new GroupCollection();
             this.groups.url = "rest/api/groups/country/" + $("#send-country").val() + "/city/" + $("#send-city").val();
-            this.groups.fetch({success: function() {
+            this.groups.fetch({processData: true,
+                success: function(data) {
                     self.clearGroupList();
                     $('#group').append(new GroupListView({model: self.groups}).render().el);
+                    $('#group-block').show();
+                }, error: function() {
+                    $('#group-block').hide();
                 }});
         },
         getSimilarCities: function() {
@@ -284,6 +287,7 @@ $(document).ready(function() {
             $(e.target).siblings("li").removeClass('selected').addClass('deselected');
         },
         saveAccount: function() {
+            var self = this;
             this.model.set({
                 username: $('#username').val(),
                 email: $('#email').val(),
@@ -296,16 +300,15 @@ $(document).ready(function() {
             if (this.model.isNew()) {
                 this.model.save(null, {
                     success: function(model, response) {
-                        console.log(response);
+                        $('.form-register').hide();
                         alert('Account saved');
                     },
                     error: function(model, response) {
-                        console.log(response);
+                        self.getCountries();
                         alert('Error!');
                     }
                 });
             }
-            return false;
         },
     });
 

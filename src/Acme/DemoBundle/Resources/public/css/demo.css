@@ -159,6 +159,14 @@ li.deselected {
     width: 250px;
 }
 
+.selector b {
+    font-weight: normal;
+}
+
+#group-block {
+    display: none
+}
+
 .selector-dropdown {
     background: green;
     float: right;
