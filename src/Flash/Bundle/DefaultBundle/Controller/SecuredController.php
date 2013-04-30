@@ -11,14 +11,21 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 /**
  * @Route("/secured")
  */
-class SecuredController extends Controller
-{
+class SecuredController extends Controller {
+
+    /**
+     * @Route("/redirect", name="login")
+     * @Template()
+     */
+    public function redirectAction() {
+        return $this->redirect($this->generateUrl('_demo_login'));
+    }
+
     /**
      * @Route("/login", name="_demo_login")
      * @Template()
      */
-    public function loginAction()
-    {
+    public function loginAction() {
         if ($this->get('request')->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $this->get('request')->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
@@ -27,24 +34,22 @@ class SecuredController extends Controller
 
         return array(
             'last_username' => $this->get('request')->getSession()->get(SecurityContext::LAST_USERNAME),
-            'error'         => $error,
+            'error' => $error,
         );
     }
 
     /**
      * @Route("/login_check", name="_security_check")
      */
-    public function securityCheckAction()
-    {
+    public function securityCheckAction() {
         // The security layer will intercept this request
     }
 
     /**
      * @Route("/logout", name="_demo_logout")
      */
-    public function logoutAction()
-    {
-        // The security layer will intercept this request
+    public function logoutAction() {
+        return array();
     }
 
     /**
@@ -52,8 +57,7 @@ class SecuredController extends Controller
      * @Route("/hello/{name}", name="_demo_secured_hello")
      * @Template()
      */
-    public function helloAction($name)
-    {
+    public function helloAction($name) {
         return array('name' => $name);
     }
 
@@ -62,8 +66,8 @@ class SecuredController extends Controller
      * @Secure(roles="ROLE_ADMIN")
      * @Template()
      */
-    public function helloadminAction($name)
-    {
+    public function helloadminAction($name) {
         return array('name' => $name);
     }
+
 }

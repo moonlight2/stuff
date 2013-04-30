@@ -30,7 +30,7 @@ class Account implements AdvancedUserInterface {
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -40,12 +40,12 @@ class Account implements AdvancedUserInterface {
      * @Assert\MinLength(limit=4, message = "Поле username не может иметь менее 5 символов")
      * @Expose
      */
-    private $username;
+    protected $username;
 
     /**
      * @ORM\Column(type="string", length=32)
      */
-    private $salt;
+    protected $salt;
 
     /**
      * @ORM\Column(type="string", length=60)
@@ -53,25 +53,25 @@ class Account implements AdvancedUserInterface {
      * @Assert\NotBlank(message = "Поле email не может быть пустым")
      * @Assert\Email(message = "Введите корректный email")
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="Account")
      * @Expose
      */
-    private $roles;
+    protected $roles;
 
     /**
      * @ORM\Column(name="city_id", type="integer", nullable=true)
      * @Expose
      */
-    private $city;
+    protected $city;
 
     /**
      * @ORM\Column(name="country_id", type="integer", nullable=true)
      * @Expose
      */
-    private $country;
+    protected $country;
 
     /**
      * @var date
@@ -79,12 +79,12 @@ class Account implements AdvancedUserInterface {
      * @ORM\Column(name="registered", type="datetime")
      * @Expose
      */
-    private $dateRegist;
+    protected $dateRegist;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
      */
-    private $isActive;
+    protected $isActive;
 
     /**
      * @var string
@@ -92,35 +92,35 @@ class Account implements AdvancedUserInterface {
      * @ORM\Column(name="password", type="string", length=255)
      * @Assert\NotBlank()
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Expose
      */
-    private $about;
+    protected $about;
 
     /**
      * @ManyToOne(targetEntity="Group", inversedBy="accounts")
      * @Expose
      */
-    private $group;
+    protected $group;
 
     /**
      * @ORM\ManyToMany(targetEntity="Event", inversedBy="Account")
      * @Expose
      */
-    private $events;
+    protected $events;
 
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="account")
      */
-    private $photos;
+    protected $photos;
 
     /**
      * @OneToMany(targetEntity="Video", mappedBy="account")
      */
-    private $videos;
+    protected $videos;
 
     public function __construct() {
 

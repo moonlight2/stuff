@@ -221,11 +221,11 @@ class AccountApiController extends RESTController implements GenericRestApi {
                 $acc->setCity($request->get('city'));
                 $acc->setCountry($request->get('country'));
                 $acc->setDateRegistration(new \DateTime("now"));
-                $acc->setIsActive(false);
+//                $acc->setIsActive(false);
 
                 if ($request->getMethod() == 'POST') {
 
-                    $this->sendEmain($request->get('email'));
+//                    $this->sendEmain($request->get('email'));
                     
                     $group = $em->getRepository('FlashDefaultBundle:Group')->find($request->get('group'));
                     if (!$group) {

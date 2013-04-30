@@ -28,7 +28,7 @@ class Group {
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -36,24 +36,24 @@ class Group {
      * @ORM\Column(name="name", type="string", length=255)
      * @Expose
      */
-    private $name;
+    protected $name;
 
     /**
      * @OneToMany(targetEntity="Account", mappedBy="group")
      */
-    private $accounts;
+    protected $accounts;
 
     /**
      * @OneToMany(targetEntity="Event", mappedBy="group")
      * @Expose
      */
-    private $events;
+    protected $events;
 
     /**
      * @ORM\Column(name="rating", type="integer", nullable=true)
      * @Expose
      */
-    private $rating;
+    protected $rating;
 
     /**
      * @var date
@@ -61,19 +61,19 @@ class Group {
      * @ORM\Column(name="registered", type="datetime")
      * @Expose
      */
-    private $dateRegist;
+    protected $dateRegist;
 
     /**
      * @ORM\Column(name="city_id", type="integer")
      * @Expose
      */
-    private $city;
+    protected $city;
 
     /**
      * @ORM\Column(name="country_id", type="integer")
      * @Expose
      */
-    private $country;
+    protected $country;
 
     public function __construct() {
 

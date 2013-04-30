@@ -174,7 +174,7 @@ $(document).ready(function() {
     window.FormView = Backbone.View.extend({
         initialize: function() {
             this.template = _.template($('#form-tpl').html()),
-                    _.bindAll(this, 'switchDropdown', 'hideDropdown');
+                    _.bindAll(this, 'switchDropdown', 'hideDropdown', 'removeElements');
         },
         render: function() {
             $(this.el).html(this.template(this.model.toJSON()));
@@ -196,6 +196,7 @@ $(document).ready(function() {
                     self.fillContryInput(data.models[0]); // set input value to first country name
                     $('#country').append(new CountryListView({model: self.countries}).render().el);
                     self.getCities();
+
                 }});
         },
         getCities: function() {
@@ -205,6 +206,8 @@ $(document).ready(function() {
             this.clearCityInput();
             this.cities.fetch({success: function() {
                     self.clearCityList();
+                    $('#group-block').hide();
+
                     $('#city').append(new CityListView({model: self.cities}).render().el);
                 }});
 
@@ -257,7 +260,7 @@ $(document).ready(function() {
             return false;
         },
         fillContryInput: function(model) {
-            $('#country-input').val(model.get('name'));
+            $('#country-input').val(this.removeElements(model.get('name'), 'b'));
             $('#send-country').val(model.get('id'));
         },
         changeCountryInput: function(e) {
@@ -266,7 +269,7 @@ $(document).ready(function() {
             this.getCities();
         },
         changeCityInput: function(e) {
-            $(e.target).parent().parent().find('input').val($(e.target).html());
+            $(e.target).parent().parent().find('input').val(this.removeElements($(e.target).html(),'b'));
             $('#send-city').val($(e.target).val());
             this.prepareCityInfoToSend();
         },
@@ -286,6 +289,14 @@ $(document).ready(function() {
             $(e.target).removeClass('deselected').addClass('selected');
             $(e.target).siblings("li").removeClass('selected').addClass('deselected');
         },
+        removeElements: function(text, selector) {
+            var wrapped = $("<div>" + text + "</div>");
+            wrapped.find(selector).each(function(index) {
+                var text = $(this).text();//get span content
+                $(this).replaceWith(text);//replace all span with just content
+            });
+            return wrapped.html();
+        },
         saveAccount: function() {
             var self = this;
             this.model.set({
@@ -301,7 +312,9 @@ $(document).ready(function() {
                 this.model.save(null, {
                     success: function(model, response) {
                         $('.form-register').hide();
-                        alert('Account saved');
+//                        alert('Account saved');
+                        location.href = 'secured/login';
+                        return false;
                     },
                     error: function(model, response) {
                         self.getCountries();
