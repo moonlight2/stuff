@@ -13,16 +13,9 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
  */
 class SecuredController extends Controller {
 
-    /**
-     * @Route("/redirect", name="login")
-     * @Template()
-     */
-    public function redirectAction() {
-        return $this->redirect($this->generateUrl('_demo_login'));
-    }
 
     /**
-     * @Route("/login", name="_demo_login")
+     * @Route("/login", name="_flash_login")
      * @Template()
      */
     public function loginAction() {
@@ -46,28 +39,11 @@ class SecuredController extends Controller {
     }
 
     /**
-     * @Route("/logout", name="_demo_logout")
+     * @Route("/logout", name="_flash_logout")
      */
     public function logoutAction() {
         return array();
     }
 
-    /**
-     * @Route("/hello", defaults={"name"="World"}),
-     * @Route("/hello/{name}", name="_demo_secured_hello")
-     * @Template()
-     */
-    public function helloAction($name) {
-        return array('name' => $name);
-    }
-
-    /**
-     * @Route("/hello/admin/{name}", name="_demo_secured_hello_admin")
-     * @Secure(roles="ROLE_ADMIN")
-     * @Template()
-     */
-    public function helloadminAction($name) {
-        return array('name' => $name);
-    }
 
 }

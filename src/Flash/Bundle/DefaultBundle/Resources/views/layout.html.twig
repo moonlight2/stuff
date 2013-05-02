@@ -6,27 +6,11 @@
     <script src="{{ asset('bundles/acmedemo/js/lib/jquery-1.7.1.min.js') }}"></script>
     <script src="{{ asset('bundles/acmedemo/js/lib/underscore-min.js') }}"></script>
     <script src="{{ asset('bundles/acmedemo/js/lib/backbone-min.js') }}"></script>
-    
-    <script src="{{ asset('bundles/acmedemo/js/utils.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/models/accountmodel.js') }}"></script>
-    
-    
-    
-    <script src="{{ asset('bundles/acmedemo/js/views/header.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/views/winelist.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/views/winedetails.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/main.js') }}"></script>
-
-    <style>
-        #loading {
-            display: none;
-        }
-     </style>
 {% endblock %}
     
 
 
-{% block title 'Demo Bundle' %}
+{% block title 'Account Bundle' %}
 
 {% block body %}
     {% for flashMessage in app.session.flashbag.get('notice') %}
@@ -38,12 +22,7 @@
     {% block content_header %}
         <ul id="menu">
             {% block content_header_more %}
-                <li><a href="{{ path('_demo') }}">Demo Home</a></li>
-                <div id='loading'>Loading</div>
-                <div class="container" id="pjax-container">
-                    <a href="{{ path('_demo_json2') }}" data-pjax='#main'>next page</a>.
-                    <a href="{{ path('_demo_route') }}" data-pjax='#main'>index page</a>.
-                 </div>
+                <li><a href="{{ path('_flash_logout') }}">Logout</a></li>
             {% endblock %}
         </ul>
 

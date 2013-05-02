@@ -2,7 +2,7 @@
 
 {% block head %}
     <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
-    <link rel="stylesheet" href="{{ asset('bundles/acmedemo/css/demo.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/style.css') }}" />
     <link rel="stylesheet" href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" />
    
     <script src="{{ asset('bundles/acmedemo/js/lib/jquery-1.7.1.min.js') }}"></script>
@@ -22,12 +22,9 @@
     {% block content_header %}
         <ul id="menu">
             {% block content_header_more %}
-                <li><a href="{{ path('_demo') }}">Demo Home</a></li>
-                <div id='loading'>Loading</div>
 
             {% endblock %}
         </ul>
-
         <div style="clear: both"></div>
     {% endblock %}
 

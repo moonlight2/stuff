@@ -11,6 +11,17 @@ use Flash\Bundle\DefaultBundle\Entity\Account;
 class DefaultController extends Controller {
 
     /**
+     * @Route("/main", name="main_page")
+     * @Template()
+     */
+    public function mainAction($id = null) {
+
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        return array('name' => $user->getUsername());
+    }
+    
+    /**
      * @Route("/rest/{id}", name="_default_rest")
      * @Template()
      */

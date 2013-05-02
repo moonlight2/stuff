@@ -1,64 +1,92 @@
 {% extends "FlashDefaultBundle::form.html.twig" %}
 
 {% block content %}
-<h2>Here is registration form</h2>
-<div id='form'>
-    <div id='city-list'></div>
-    <div id='country-list'></div>
-<div>
-    
-        
-    <script type="text/template" id="city-tpl"><%= name %></script>
-    
-    <script type="text/template" id="country-tpl"><%= name %></script>
-    
-    <script type="text/template" id="group-tpl"><%= name %></script>
-        
-    <script type="text/template" id="form-tpl"> 
-        <div class="form-register">
-        
-            <div id='errors'></div>
-            <div class="clear-fix">
-                <label>Имя:</label>
-                <input type="text" id="username" name="username" value="<%= username %>" required />
+
+
+<div id='success' class="alert alert-success">
+    <p>Спасибо за регистрацию!</p>
+    <p>Теперь Вы можете зайти на сайт, используя свой логин и пароль.</p>
+</div>
+<div id='form'></div>
+
+
+        <script type="text/template" id="city-tpl"><%= name %></script>
+
+        <script type="text/template" id="country-tpl"><%= name %></script>
+
+        <script type="text/template" id="group-tpl"><%= name %></script>
+
+        <script type="text/template" id="form-tpl"> 
+        <div class="form-register bs-docs-example form-horizontal">
+            <h2>Here is registration form</h2>
+            <div class="control-group">
+                <label class='control-label' >Имя:</label>
+                <div class='controls'>
+                    <input type="text" id="username" name="username" value="<%= username %>" />
+                </div>
+                <span class="help-inline" id='error-username'></span>
             </div>
-            <div class="clear-fix">
-                <label>Email:</label>
-                <input type="text" id="email" name="email" value="<%= email %>"/>
+
+            <div class="control-group">
+                <label class='control-label'>Email:</label>
+                <div class='controls'>
+                    <input type="text" id="email" name="email" value="<%= email %>"/>
+                </div>
+                <span class="help-inline" id='error-email'></span>
             </div>
-            <div class="clear-fix">
-                <label>Cтрана:</label>
-                <div class='selector' id="country">
+            
+            <div class="control-group">
+                <label class='control-label'>Cтрана:</label>
+                <div class='controls selector input-append' style='display:block' id="country">
                     <input type="text" id="country-input" readonly placeholder='Выберите страну' />
-                    <div class="selector-dropdown"></div>
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                            <span class="caret"></span>
+                        </button>
+                    </div>
                 </div>
                 <input type='hidden' name='country' id='send-country' />
+                <span class="help-inline" id='error-country'></span>
             </div>
-            <div class="clear-fix" id='city-block'>
-                <label>Город:</label>
-                <div class='selector' id='city'>
+            
+            <div class="control-group" id='city-block'>
+                <label class='control-label'>Город:</label>
+                <div class='controls selector input-append' style='display:block' id='city'>
                     <input type="text" id="city-input" placeholder='Выберите город'/>
-                    <div class="selector-dropdown"></div>
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                            <span class="caret"></span>
+                        </button>
+                    </div>
                 </div>
                 <input type='hidden' name='city' id='send-city' />
+                <span class="help-inline" id='error-city'></span>
             </div>
-            <div class="clear-fix" id='group-block'>
-                <label>Группы:</label>
-                <div class='selector' id='group'>
+            
+            <div class="control-group" id='group-block'>
+                <label class='control-label'>Группы:</label>
+                <div class='controls'>
+                    <div class='selector' id='group'>
+                    </div>
+                </div>
+                <span class="help-inline" id='error-group'></span>
+            </div>
+            
+            <div class="control-group">
+                <label class='control-label'>Пароль:</label>
+                <div class='controls'>
+                    <input type="password" id="password" name="password"  value="<%= password %>"/>
+                </div>
+                <span class="help-inline" id='error-password'></span>
+            </div>
+            
+            <div class="control-group">
+                <div class="controls">
+                  <button id='send' class="btn">Sign up</button>
                 </div>
             </div>
-            <div class="clear-fix">
-                <label>О себе:</label>
-                <input type="textarea" id="about" name="about"  value="<%= about %>"/>
-            </div>
-            <div class="clear-fix">
-                <label>Пароль:</label>
-                <input type="password" id="password" name="password"  value="<%= password %>"/>
-            </div>
-            <div>
-                <button id='send'>Send</button>
-            </div>
         </div>
+    </div>
     </script>
 
 

@@ -168,12 +168,14 @@ li.deselected {
 }
 
 .selector-dropdown {
-    background: green;
+/*    background: green;
     float: right;
     height: 20px;
     width: 20px;
-    cursor: pointer;
+    cursor: pointer;*/
 }
+
+
 
 .selector {
     float: left;

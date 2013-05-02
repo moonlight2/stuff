@@ -37,7 +37,7 @@ class Account implements AdvancedUserInterface {
      * @Type("string")
      * @ORM\Column(name="username", type="string", length=255)
      * @Assert\NotBlank(message = "Поле username не может быть пустым")
-     * @Assert\MinLength(limit=4, message = "Поле username не может иметь менее 5 символов")
+     * @Assert\MinLength(limit=4, message = "Поле username не может иметь менее 4 символов")
      * @Expose
      */
     protected $username;
@@ -90,7 +90,7 @@ class Account implements AdvancedUserInterface {
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message = "Поле password не может быть пустым")
      */
     protected $password;
 

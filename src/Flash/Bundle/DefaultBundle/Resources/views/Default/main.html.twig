@@ -1,0 +1,14 @@
+{% extends "FlashDefaultBundle::layout.html.twig" %}
+
+{% block title "Hello " ~ name %}
+
+{% block content %}
+    <h1>Hello <b>{{ name }}</b>! This is Your private page.</h1>
+    
+    <h2>This is your photo:</h2>
+    
+    <p>
+        <img src='http://ote4estvo.ru/uploads/1292601261_f7c54a418ec361b955e75597299ac125c1687563669309.jpg' />
+    </p>
+{% endblock %}
+

@@ -1,0 +1,47 @@
+
+
+root { 
+    display: block;
+}
+
+.block {
+    min-height: 600px;
+}
+
+.selector input {
+    width: 173px;
+}
+
+.error {
+
+}
+
+#success {
+    display: none;
+}
+.alert-success {
+    padding: 15px !important;
+}
+
+#form .control-group .help-inline {
+    display: none;
+    margin-left: 174px;
+}
+
+.selected {
+    background: #cee5e3;
+}
+
+.deselected {
+    background: none;
+}
+
+.dropdown-menu {
+    padding: 5px !important;
+    width: 208px;
+    left: -186px !important;
+}
+
+#group-block {
+    display: none;
+}

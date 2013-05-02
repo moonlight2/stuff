@@ -114,7 +114,7 @@ $(document).ready(function() {
             "email": "",
             "roles": "",
             "about": "",
-            "group": "",
+            "group": 0,
             "country": "",
             "city": "",
             "password": ""
@@ -181,7 +181,7 @@ $(document).ready(function() {
             return this;
         },
         events: {
-            "click .selector-dropdown": "switchDropdown",
+            "click .dropdown-toggle": "switchDropdown",
             "click": "hideDropdown",
             "click #send": "saveAccount",
             "click #country li": "changeCountryInput",
@@ -194,7 +194,7 @@ $(document).ready(function() {
             this.countries = new CountryCollection();
             this.countries.fetch({success: function(data) {
                     self.fillContryInput(data.models[0]); // set input value to first country name
-                    $('#country').append(new CountryListView({model: self.countries}).render().el);
+                    $('#country .btn-group').append(new CountryListView({model: self.countries}).render().el);
                     self.getCities();
 
                 }});
@@ -208,7 +208,7 @@ $(document).ready(function() {
                     self.clearCityList();
                     $('#group-block').hide();
 
-                    $('#city').append(new CityListView({model: self.cities}).render().el);
+                    $('#city .btn-group').append(new CityListView({model: self.cities}).render().el);
                 }});
 
         },
@@ -242,7 +242,7 @@ $(document).ready(function() {
 
             this.cities.fetch({success: function() {
                     self.clearCityList();
-                    $('#city').append(new CityListView({model: self.cities}).render().el);
+                    $('#city .btn-group').append(new CityListView({model: self.cities}).render().el);
                     self.showCityList();
                 }});
             return false;
@@ -252,24 +252,26 @@ $(document).ready(function() {
             this.getGroups();
         },
         switchDropdown: function(e) {
+            console.log('Switch');
             $(e.target).next().css('display', (($(e.target).next().css('display') == 'block') ? 'none' : 'block'));
             return false;
         },
         hideDropdown: function() {
             $('.dropdown-menu').hide();
-            return false;
         },
         fillContryInput: function(model) {
             $('#country-input').val(this.removeElements(model.get('name'), 'b'));
             $('#send-country').val(model.get('id'));
         },
         changeCountryInput: function(e) {
-            $(e.target).parent().parent().find('input').val($(e.target).html());
+            console.log('Change country');
+            $(e.target).parent().parent().parent().find('input').val($(e.target).html());
             $('#send-country').val($(e.target).val());
             this.getCities();
         },
         changeCityInput: function(e) {
-            $(e.target).parent().parent().find('input').val(this.removeElements($(e.target).html(),'b'));
+            console.log('Change city');
+            $(e.target).parent().parent().parent().find('input').val(this.removeElements($(e.target).html(), 'b'));
             $('#send-city').val($(e.target).val());
             this.prepareCityInfoToSend();
         },
@@ -297,28 +299,37 @@ $(document).ready(function() {
             });
             return wrapped.html();
         },
+        showErrors: function(data) {
+            var resp = $.parseJSON(data);
+            $('.help-inline').hide();
+            $('.control-group').removeClass('error'); 
+            $.each(resp, function(i, e) {
+                var el = $('#error-' + i).html(e[0]);
+                $(el).parent().addClass('error');
+                $(el).show();
+            });
+        },
         saveAccount: function() {
             var self = this;
             this.model.set({
                 username: $('#username').val(),
                 email: $('#email').val(),
-                about: $('#about').val(),
+//                about: $('#about').val(),
                 password: $('#password').val(),
                 country: $('#send-country').val(),
                 city: $('#send-city').val(),
                 group: $('#group select').val()
             });
+            
             if (this.model.isNew()) {
+                
                 this.model.save(null, {
                     success: function(model, response) {
-                        $('.form-register').hide();
-//                        alert('Account saved');
-                        location.href = 'secured/login';
-                        return false;
+                        app.navigate('success', true);
                     },
                     error: function(model, response) {
-                        self.getCountries();
-                        alert('Error!');
+                        self.showErrors(response.responseText);
+                        app.navigate('error', true);
                     }
                 });
             }
@@ -330,11 +341,20 @@ $(document).ready(function() {
     window.AppRouter = Backbone.Router.extend({
         routes: {
             "": "formView",
+            "success": "showSuccess",
+            "error": "showErrors",
         },
         initialize: function() {
             var form = new FormView({model: new Account()});
             this.showView('#form', form);
             form.getCountries();
+        },
+        showSuccess: function() {
+            $('#form').hide();
+            $('#success').show();
+        },
+        showErrors: function() {
+            console.log('Error!');
         },
         showView: function(selector, view) {
             if (this.currentView)
