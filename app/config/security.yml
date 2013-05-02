@@ -21,6 +21,19 @@ security:
             entity: { class: Flash\Bundle\DefaultBundle\Entity\Account, property: username }
 
     firewalls:
+      
+        registration_firewall:
+            pattern:    ^/regist$
+            anonymous:  ~
+            
+        api_firewall:
+            pattern:    ^/api/*
+            anonymous:  ~
+            
+        rest_api_firewall:
+            pattern:    ^/rest/*
+            anonymous:  ~
+      
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -41,7 +54,7 @@ security:
                 target: _demo
 
     access_control:
-#         - { path: ^/rest, roles: [ ROLE_USER ] }
+         - { path: ^/regist, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          #- { path: ^/demo, roles: [ ROLE_ADMIN, ROLE_USER ] }
 #         - { path: ^/admin/, role: ROLE_ADMIN }
 #         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

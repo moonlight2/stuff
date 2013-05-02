@@ -22,7 +22,8 @@
     {% block content_header %}
         <ul id="menu">
             {% block content_header_more %}
-
+                <li><a href="{{ path('_flash_login') }}">Login</a></li>
+                <li><a href="{{ path('_flash_registration') }}">Registration</a></li>
             {% endblock %}
         </ul>
         <div style="clear: both"></div>

@@ -32,7 +32,7 @@ class SecuredController extends Controller {
     }
 
     /**
-     * @Route("/login_check", name="_security_check")
+     * @Route("/login_check", name="_flash_security_check")
      */
     public function securityCheckAction() {
         // The security layer will intercept this request

@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class RegistrationController extends Controller {
 
     /**
-     * @Route("/regist")
+     * @Route("/regist", name="_flash_registration")
      * @Template()
      */
     public function regAction($id = null) {
