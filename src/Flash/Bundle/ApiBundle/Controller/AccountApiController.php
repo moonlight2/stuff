@@ -245,7 +245,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
             } else {
 
                 $view->setStatusCode(400);
-                return $view->setData(array('success' => 'false'));
+                return $view->setData(array('username' => array('Такой пользователь уже существует')));
             }
         } else {
             $view->setStatusCode(400);

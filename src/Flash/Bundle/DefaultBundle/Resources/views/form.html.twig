@@ -1,14 +1,12 @@
 {% extends "TwigBundle::layout.html.twig" %}
 
 {% block head %}
-    <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
-    <link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/style.css') }}" />
-    <link rel="stylesheet" href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" />
-   
-    <script src="{{ asset('bundles/acmedemo/js/lib/jquery-1.7.1.min.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/lib/underscore-min.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/lib/backbone-min.js') }}"></script>
-    <script src="{{ asset('bundles/flashdefault/js/script.js') }}"></script>
+<link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/style.css') }}" />
+<link rel="stylesheet" href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" />
+<script src="{{ asset('bundles/acmedemo/js/lib/jquery-1.7.1.min.js') }}"></script>
+<script src="{{ asset('bundles/acmedemo/js/lib/underscore-min.js') }}"></script>
+<script src="{{ asset('bundles/acmedemo/js/lib/backbone-min.js') }}"></script>
 {% endblock %}
 
 
@@ -30,7 +28,20 @@
     {% endblock %}
 
     <div class="block" id='main'>
-        {% block content %}{% endblock %}
+         {% block content %}{% endblock %}
     </div>
-      
+
+    <script src="{{ asset('bundles/flashdefault/js/model/AccountModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/CityModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/CountryModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/GroupModel.js') }}"></script>
+
+    <script src="{{ asset('bundles/flashdefault/js/views/CityListView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/GroupListView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/CountryListView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/FormView.js') }}"></script>
+
+    <script src="{{ asset('bundles/flashdefault/js/controller/AppRouter.js') }}"></script>    
+
+
 {% endblock %}

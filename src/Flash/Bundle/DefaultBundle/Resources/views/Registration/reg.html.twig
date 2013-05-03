@@ -36,6 +36,14 @@
             </div>
             
             <div class="control-group">
+                <label class='control-label'>Пароль:</label>
+                <div class='controls'>
+                    <input type="password" id="password" name="password"  value="<%= password %>"/>
+                </div>
+                <span class="help-inline" id='error-password'></span>
+            </div>
+            
+            <div class="control-group">
                 <label class='control-label'>Cтрана:</label>
                 <div class='controls selector input-append' style='display:block' id="country">
                     <input type="text" id="country-input" readonly placeholder='Выберите страну' />
@@ -64,7 +72,7 @@
             </div>
             
             <div class="control-group" id='group-block'>
-                <label class='control-label'>Группы:</label>
+                <label class='control-label'>В Вашем городе есть команды:</label>
                 <div class='controls'>
                     <div class='selector' id='group'>
                     </div>
@@ -73,11 +81,14 @@
             </div>
             
             <div class="control-group">
-                <label class='control-label'>Пароль:</label>
-                <div class='controls'>
-                    <input type="password" id="password" name="password"  value="<%= password %>"/>
+                <div class="controls">
+                    <label class="checkbox">
+                        <input type="checkbox"> Я могу быть оператором
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox"> Получать новости по email
+                    </label>
                 </div>
-                <span class="help-inline" id='error-password'></span>
             </div>
             
             <div class="control-group">
