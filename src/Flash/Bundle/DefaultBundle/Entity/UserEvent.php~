@@ -1,0 +1,57 @@
+<?php
+
+namespace Flash\Bundle\DefaultBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
+
+/**
+ * Photo
+ *
+ * @ORM\Table(name="user_event")
+ * @ORM\Entity
+ */
+class UserEvent {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text")
+     */
+    private $description;
+
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
+     *
+     * @ManyToOne(targetEntity="Account", inversedBy="userEvents")
+     */
+    private $account;
+
+    
+    public function __construct() {
+        $this->setDate(new \DateTime("now"));
+    }
+
+}

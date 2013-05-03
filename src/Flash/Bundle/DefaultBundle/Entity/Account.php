@@ -116,6 +116,11 @@ class Account implements AdvancedUserInterface {
      * @OneToMany(targetEntity="Photo", mappedBy="account")
      */
     protected $photos;
+    
+    /**
+     * @OneToMany(targetEntity="UserEvent", mappedBy="account")
+     */
+    protected $userEvents;
 
     /**
      * @OneToMany(targetEntity="Video", mappedBy="account")
@@ -128,6 +133,7 @@ class Account implements AdvancedUserInterface {
         $this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->userEvents = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->videos = new ArrayCollection();
     }
@@ -493,5 +499,61 @@ class Account implements AdvancedUserInterface {
     public function getDateRegistration()
     {
         return $this->dateRegist;
+    }
+
+    /**
+     * Set dateRegist
+     *
+     * @param \DateTime $dateRegist
+     * @return Account
+     */
+    public function setDateRegist($dateRegist)
+    {
+        $this->dateRegist = $dateRegist;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateRegist
+     *
+     * @return \DateTime 
+     */
+    public function getDateRegist()
+    {
+        return $this->dateRegist;
+    }
+
+    /**
+     * Add userEvents
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\UserEvent $userEvents
+     * @return Account
+     */
+    public function addUserEvent(\Flash\Bundle\DefaultBundle\Entity\UserEvent $userEvents)
+    {
+        $this->userEvents[] = $userEvents;
+    
+        return $this;
+    }
+
+    /**
+     * Remove userEvents
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\UserEvent $userEvents
+     */
+    public function removeUserEvent(\Flash\Bundle\DefaultBundle\Entity\UserEvent $userEvents)
+    {
+        $this->userEvents->removeElement($userEvents);
+    }
+
+    /**
+     * Get userEvents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserEvents()
+    {
+        return $this->userEvents;
     }
 }

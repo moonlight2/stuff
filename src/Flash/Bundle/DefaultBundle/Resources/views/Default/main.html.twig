@@ -1,14 +1,23 @@
-{% extends "FlashDefaultBundle::layout.html.twig" %}
+{% extends "FlashDefaultBundle::logged.html.twig" %}
 
-{% block title "Hello " ~ name %}
+{% block title "Inside page" %}
 
 {% block content %}
-    <h1>Hello <b>{{ name }}</b>! This is Your private page.</h1>
-    
-    <h2>This is your photo:</h2>
-    
-    <p>
-        <img src='http://ote4estvo.ru/uploads/1292601261_f7c54a418ec361b955e75597299ac125c1687563669309.jpg' />
-    </p>
+    <script type="text/template" id="user-event-list-tpl">
+        <p><%= date %></p>
+        <div class='event'>
+        <p class='strong'><%= title %></p>
+        <p><%= description %></p>
+        </div>
+    </script>
+
+    <script type="text/template" id="user-event-tpl">
+        <h3>Список событий:</h3>
+    </script>
+    <h1>Привет <b>{{ name }}</b>! Это твоя персональная страница</h1>
+    <div class='sidebar'></div>
+    <div class='main-content'>
+        <div id='events'></div>
+    </div>
 {% endblock %}
 

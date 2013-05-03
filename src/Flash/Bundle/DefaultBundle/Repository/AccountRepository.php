@@ -18,6 +18,15 @@ class AccountRepository extends EntityRepository implements GenericRepository {
                 ->getResult();
         return sizeof($list) > 0;
     }
+    
+    public function existsEmail($email) {
+        $list = $this->getEntityManager()
+                ->createQuery('SELECT a FROM FlashDefaultBundle:Account a
+                                       WHERE a.email = :email')
+                ->setParameter('email', $email)
+                ->getResult();
+        return sizeof($list) > 0;
+    }
 
     public function getByName($name) {
         $list = $this->getEntityManager()

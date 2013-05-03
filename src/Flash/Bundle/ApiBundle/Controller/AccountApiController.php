@@ -207,8 +207,18 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
         if ($form->isValid()) {
 
-            if ($request->getMethod() == 'PUT' || true != $em->getRepository('FlashDefaultBundle:Account')
+            if (true == $em->getRepository('FlashDefaultBundle:Account')
                             ->exists($request->get('username'))) {
+
+                $view->setStatusCode(400);
+                return $view->setData(array('username' => array('Такой пользователь уже существует')));
+                
+            } elseif (true == $em->getRepository('FlashDefaultBundle:Account')
+                            ->existsEmail($request->get('email'))) {
+
+                $view->setStatusCode(400);
+                return $view->setData(array('email' => array('Такой email уже зарегистрирован')));
+            } else {
 
                 $factory = $this->get('security.encoder_factory');
                 $encoder = $factory->getEncoder($acc);
@@ -221,31 +231,35 @@ class AccountApiController extends RESTController implements GenericRestApi {
                 $acc->setCity($request->get('city'));
                 $acc->setCountry($request->get('country'));
                 $acc->setDateRegistration(new \DateTime("now"));
-//                $acc->setIsActive(false);
 
                 if ($request->getMethod() == 'POST') {
 
-//                    $this->sendEmain($request->get('email'));
+                    $group = $request->get('group');
                     
-                    $group = $em->getRepository('FlashDefaultBundle:Group')->find($request->get('group'));
-                    if (!$group) {
-                        throw $this->createNotFoundException(
-                                'No group found for id ' . $id
-                        );
+                    if (null != $group) {
+                        $group = $em->getRepository('FlashDefaultBundle:Group')->find($request->get('group'));
+                        if (!$group) {
+                            throw $this->createNotFoundException('No group found for id ' . $id);
+                        }
+                        $acc->setGroup($group);
+                        $em->persist($group);
                     }
-                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
 
-                    $acc->setGroup($group);
+                    $userEvent = new \Flash\Bundle\DefaultBundle\Entity\UserEvent();
+                    $userEvent->setTitle($acc->getUsername() . ' только что присоеденился к ресурсу.');
+                    $userEvent->setDescription('Поздравляем с регистрацией!');
+
+                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
+                    
                     $acc->addRole($role);
+                    $userEvent->setAccount($acc);
+
+                    $em->persist($userEvent);
                     $em->persist($role);
-                    $em->persist($group);
                 }
+                
                 $em->persist($acc);
                 $em->flush();
-            } else {
-
-                $view->setStatusCode(400);
-                return $view->setData(array('username' => array('Такой пользователь уже существует')));
             }
         } else {
             $view->setStatusCode(400);
@@ -255,7 +269,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     private function sendEmain($email) {
-        
+
         $message = \Swift_Message::newInstance()
                 ->setSubject('Подтверждение регистрации')
                 ->setFrom('yakov.the.smart@gmail.com')
