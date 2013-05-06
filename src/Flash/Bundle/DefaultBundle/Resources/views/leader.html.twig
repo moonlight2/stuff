@@ -13,15 +13,8 @@
 {% block body %}
     {% block content_header %}
         <ul id="menu">
-            
-                {% if is_granted('ROLE_ADMIN') %}
-                    <p>Your role is rolw admin</p>
-                {% elseif is_granted('ROLE_USER')%}
-                    <p>Your role is role user</p>
-                {% endif %}
-                
             {% block content_header_more %}
-
+                <h2>Leader page</h2>
                 <li><a href="{{ path('_flash_logout') }}">Logout</a></li>
             {% endblock %}
         </ul>

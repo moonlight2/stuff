@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Flash\Bundle\DefaultBundle\Entity\Account;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 
@@ -34,6 +35,7 @@ class Group {
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank(message = "Поле name не может быть пустым")
      * @Expose
      */
     protected $name;
@@ -65,18 +67,21 @@ class Group {
 
     /**
      * @ORM\Column(name="city_id", type="integer")
+     * @Assert\NotBlank(message = "Поле city не может быть пустым")
      * @Expose
      */
     protected $city;
 
     /**
      * @ORM\Column(name="country_id", type="integer")
+     * @Assert\NotBlank(message = "Поле country не может быть пустым")
      * @Expose
      */
     protected $country;
 
     public function __construct() {
 
+        $this->setDateRegist(new \DateTime("now"));
         $this->accounts = new ArrayCollection();
         $this->events = new ArrayCollection();
     }

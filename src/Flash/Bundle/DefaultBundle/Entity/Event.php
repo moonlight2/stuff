@@ -4,12 +4,16 @@ namespace Flash\Bundle\DefaultBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Photo
  *
  * @ORM\Table(name="event")
  * @ORM\Entity
+ * @ExclusionPolicy("all")
  */
 class Event {
 
@@ -19,6 +23,7 @@ class Event {
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     private $id;
 
@@ -26,6 +31,8 @@ class Event {
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Expose
+     * @Assert\NotBlank(message = "Поле name не может быть пустым")
      */
     private $name;
 
@@ -33,6 +40,7 @@ class Event {
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     * @Expose
      */
     private $description;
 
@@ -40,23 +48,30 @@ class Event {
      * @var date
      *
      * @ORM\Column(name="date", type="datetime")
+     * @Assert\DateTime(message = "Неверные данные date")
+     * @Expose
      */
     private $date;
     
 
     /**
      * @ORM\Column(name="city_id", type="integer")
+     * @Assert\NotBlank(message = "Поле city не может быть пустым")
+     * @Expose
      */
     private $city;
 
     /**
      * @ORM\Column(name="country_id", type="integer")
+     * @Expose
+     * @Assert\NotBlank(message = "Поле country не может быть пустым")
      */
     private $country;
 
     /**
      *
      * @ManyToOne(targetEntity="Group", inversedBy="events")
+     * @Expose
      */
     private $group;
 
@@ -189,7 +204,7 @@ class Event {
      */
     public function setDate($date)
     {
-        $this->date = $date;
+        $this->date = new \DateTime($date);
     
         return $this;
     }

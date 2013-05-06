@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use Flash\Bundle\DefaultBundle\Entity\Account;
 use Flash\Bundle\DefaultBundle\Entity\Group;
+use Flash\Bundle\DefaultBundle\Form\GroupType;
 use Flash\Bundle\ApiBundle\RESTApi\RESTController;
 use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 
@@ -42,69 +43,66 @@ class GroupApiController extends RESTController implements GenericRestApi {
         
     }
 
+    /**
+     * @Route("/{id}")
+     * @Method({"GET"})
+     * @return single Account data
+     */
     public function getAction($id = null) {
         
+        $em = $this->getDoctrine()->getManager();
+        $view = View::create();
+
+        if (null != $id) {
+//            $event = $em->getRepository('FlashDefaultBundle:UserEvent')->findByCurentUser($id);
+//
+//            if (null != $event) {
+//                $response = $event;
+//            } else {
+//                $response = array('success' => 'false');
+//            }
+        } else {
+
+            $groups = $em->getRepository('FlashDefaultBundle:Group')->findAll();
+
+            $view->setData($groups);
+        }
+
+        return $this->handle($view);
     }
 
     /**
-     * @Route("/{type}")
+     * @Route("")
      * @Method({"POST"})
      * @return single Account data
      */
     public function postAction() {
 
-        $event = new Event();
+        $group = new Group();
 
-        return $this->processForm($acc);
+        return $this->processForm($group);
     }
 
     public function putAction($id) {
         
     }
 
-    private function processForm($acc) {
+    private function processForm($group) {
 
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new AccountType(), $acc);
-        $form->bind($this->getFromRequest(array('username', 'email', 'password', 'about')));
+        $form = $this->createForm(new GroupType(), $group);
+        $form->bind($this->getFromRequest(array('name', 'city', 'country')));
         $view = View::create();
 
         if ($form->isValid()) {
-
-            if ($request->getMethod() == 'PUT' || true != $em->getRepository('FlashDefaultBundle:Account')
-                            ->exists($request->get('username'))) {
-
-                $factory = $this->get('security.encoder_factory');
-                $encoder = $factory->getEncoder($acc);
-                $password = $encoder->encodePassword($request->get('password'), $acc->getSalt());
-
-                $acc->setUsername($request->get('username'));
-                $acc->setPassword($password);
-                $acc->setEmail($request->get('email'));
-                $acc->setAbout($request->get('about'));
-                $acc->setCity($request->get('city'));
-                $acc->setCountry($request->get('country'));
-                $acc->setDateRegistration(new \DateTime("now"));
-
-                if ($request->getMethod() == 'POST') {
-
-                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
-                    $acc->addRole($role);
-                    $em->persist($role);
-                }
-                $em->persist($acc);
-                $em->flush();
-            } else {
-
-                $view->setStatusCode(400);
-                return $view->setData(array('success' => 'false'));
-            }
+            $em->persist($group);
+            $em->flush();
         } else {
             $view->setStatusCode(400);
             return $view->setData($this->getErrorMessages($form));
         }
-        return $acc;
+        return $group;
     }
 
 }
