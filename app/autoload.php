@@ -7,6 +7,8 @@ $loader->add('FOS', __DIR__.'/../vendor/bundles');
 $loader->add('FOS\\Rest',  __DIR__.'/../vendor/fos');
 $loader->add('JMS',  __DIR__.'/../vendor/jms');
 $loader->add('Metadata',  __DIR__.'/../vendor/metadata/src');
+$loader->add('Knp\Bundle',  __DIR__.'/../vendor/bundles');
+$loader->add('Knp\Menu',  __DIR__.'/../vendor/KnpMenu/src');
 
 
 // intl

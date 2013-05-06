@@ -7,17 +7,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 
-class DefaultController extends Controller {
+class AdminController extends Controller {
 
     /**
-     * @Route("/main", name="main_page")
+     * @Route("/admin", name="_flash_admin")
      * @Template()
      */
     public function mainAction($id = null) {
 
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        return array('name' => $user->getUsername());
+        return new \Symfony\Component\HttpFoundation\Response("This is admin page");
     }
     
 }
