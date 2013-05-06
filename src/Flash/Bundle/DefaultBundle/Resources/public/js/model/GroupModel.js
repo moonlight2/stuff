@@ -3,6 +3,7 @@ window.GroupModel = Backbone.Model.extend({
     defaults: {
         "id": null,
         "name": "",
+        "about": "",
         "rating": "",
     }
 });

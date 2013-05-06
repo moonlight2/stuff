@@ -32,7 +32,7 @@ class Builder extends ContainerAware
     {
         $menu = $factory->createItem('root');
 
-        $menu->addChild('Home', array('route' => 'main_page'));        
+        $menu->addChild('Home', array('uri' => '#'));        
         $menu->addChild('Create group', array('uri' => '#new_group'));
         $menu->addChild('Create event', array('uri' => '#new_event'));
         $menu->addChild('Logout', array('route' => '_flash_logout'));

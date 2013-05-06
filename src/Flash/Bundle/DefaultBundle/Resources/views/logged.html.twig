@@ -32,9 +32,12 @@
          {% block content %}{% endblock %}
     </div>
 
-    <script src="{{ asset('bundles/flashdefault/js/model/UserEventModel.js') }}"></script>   
+    <script src="{{ asset('bundles/flashdefault/js/model/UserEventModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/GroupModel.js') }}"></script>
+
     <script src="{{ asset('bundles/flashdefault/js/views/UserEventView.js') }}"></script>   
     <script src="{{ asset('bundles/flashdefault/js/views/UserEventListView.js') }}"></script>   
+    <script src="{{ asset('bundles/flashdefault/js/views/GroupDetails.js') }}"></script>   
     <script src="{{ asset('bundles/flashdefault/js/controller/LoggedRouter.js') }}"></script>   
 
 {% endblock %}
