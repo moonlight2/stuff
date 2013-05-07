@@ -4,8 +4,6 @@ namespace Flash\Bundle\ApiBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Request;
-use Flash\Bundle\DefaultBundle\Entity\Account;
 use Flash\Bundle\DefaultBundle\Entity\Event;
 use Flash\Bundle\DefaultBundle\Form\EventType;
 use Flash\Bundle\ApiBundle\RESTApi\RESTController;
@@ -13,7 +11,7 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use FOS\RestBundle\View\View;
 
 /**
- * @Route("/rest/api/events")
+ * @Route("/logged/rest/api/events")
  */
 class EventApiController extends RESTController implements GenericRestApi {
 
@@ -80,12 +78,12 @@ class EventApiController extends RESTController implements GenericRestApi {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new EventType(), $event);
         $form->bind($this->getFromRequest(array('name', 'description', 'city', 'country', 'date')));
-        $user = $this->get('security.context')->getToken()->getUser();
         $view = View::create();
 
+        
         if ($form->isValid()) {
 
-            $group = $user->getGroup();
+            $group = $this->get('security.context')->getToken()->getUser()->getGroup();
 
             $event->setGroup($group);
 

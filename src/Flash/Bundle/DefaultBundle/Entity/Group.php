@@ -47,7 +47,6 @@ class Group {
 
     /**
      * @OneToMany(targetEntity="Event", mappedBy="group")
-     * @Expose
      */
     protected $events;
 

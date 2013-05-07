@@ -27,15 +27,16 @@ class UserEventApiController extends RESTController implements GenericRestApi {
         $view = View::create();
 
         if (null != $id) {
-            $event = $em->getRepository('FlashDefaultBundle:UserEvent')->findByCurentUser($id);
-
-            if (null != $event) {
-                $response = $event;
-            } else {
-                $response = array('success' => 'false');
-            }
+//            $event = $em->getRepository('FlashDefaultBundle:UserEvent')->findByCurentUser($id);
+//
+//            if (null != $event) {
+//                $response = $event;
+//            } else {
+//                $response = array('success' => 'false');
+//            }
         } else {
             
+
             $events = $em->getRepository('FlashDefaultBundle:UserEvent')
                     ->findAllByCurentUser($this->get('security.context')->getToken()->getUser());
             
