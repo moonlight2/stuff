@@ -2,11 +2,9 @@
 
 namespace Flash\Bundle\DefaultBundle\Services;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 class UserEventFactory {
 
-    public static function get($eventName, $acc) {
+    public static function get($eventName, $acc, $obj=null) {
 
         $userEvent = new \Flash\Bundle\DefaultBundle\Entity\UserEvent();
 
@@ -19,6 +17,11 @@ class UserEventFactory {
             case 'add_event':
                 $userEvent->setTitle($acc->getUsername() . ' создал в группе новое событие.');
                 $userEvent->setDescription('Парам-пам-пам!');
+                $userEvent->setAccount($acc);
+                break;
+            case 'new_group':
+                $userEvent->setTitle($acc->getUsername() . ' создал группу '. $obj->getName());
+                $userEvent->setDescription('Поздравляем с новой группой!');
                 $userEvent->setAccount($acc);
                 break;
             default :

@@ -5,6 +5,8 @@ window.GroupModel = Backbone.Model.extend({
         "name": "",
         "about": "",
         "rating": "",
+        "city": "",
+        "country": ""
     }
 });
 

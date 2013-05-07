@@ -80,7 +80,6 @@ class EventApiController extends RESTController implements GenericRestApi {
         $form->bind($this->getFromRequest(array('name', 'description', 'city', 'country', 'date')));
         $view = View::create();
 
-
         if ($form->isValid()) {
 
             $acc = $this->get('security.context')->getToken()->getUser();

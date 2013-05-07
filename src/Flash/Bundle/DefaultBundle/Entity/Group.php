@@ -39,6 +39,14 @@ class Group {
      * @Expose
      */
     protected $name;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="about", type="text", nullable=true)
+     * @Expose
+     */
+    protected $about;
 
     /**
      * @OneToMany(targetEntity="Account", mappedBy="group")
@@ -260,5 +268,28 @@ class Group {
     public function getDateRegist()
     {
         return $this->dateRegist;
+    }
+
+    /**
+     * Set about
+     *
+     * @param string $about
+     * @return Group
+     */
+    public function setAbout($about)
+    {
+        $this->about = $about;
+    
+        return $this;
+    }
+
+    /**
+     * Get about
+     *
+     * @return string 
+     */
+    public function getAbout()
+    {
+        return $this->about;
     }
 }

@@ -1,42 +1,44 @@
 
 
 window.GroupView = Backbone.View.extend({
-    
     initialize: function() {
-        this.template =  _.template($('#group-tpl').html()),
-        this.model.bind('change', this.render, this);
+        this.template = _.template($('#new-group-tpl').html());
+//        this.model.bind('change', this.render, this);
     },
     render: function(eventName) {
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
     },
+    getGroups: function() {
+    },
     events: {
-        'click .save': 'saveGroup',
-        'click .delete': 'deleteGroup'
+        'click #create-group': 'saveGroup',
+        "click .dropdown-toggle": "switchDropdown",
+        "click": "hideDropdown",
+        "click #country li": "changeCountryInput",
+        "click #city li": "changeCityInput",
+        "input #city-input": "getSimilarCities",
+        "mouseover .dropdown-menu li": "changeListBackground",
     },
     saveGroup: function() {
-//        this.model.set({
-//            name: $('#name').val(),
-//            grapes: $('#grapes').val(),
-//            country: $('#country').val(),
-//            region: $('#region').val(),
-//            year: $('#year').val(),
-//            description: $('#description').val()
-//        });
-//        if (this.model.isNew()) { // if id of wine = null
-//            var self = this;
-//            app.wines.create(this.model, {
-//                success: function() {
-//                    app.navigate('wines/' + self.model.id, false);
-//                }
-//            });
-//        } else {
-//            this.model.save({
-//                success: function() {
-//                    alert('Model ' + this.model.name + 'updated');
-//                }
-//            });
-//        }
+        var self = this;
+        this.model.set({
+            name: $('#name').val(),
+            about: $('#about').val(),
+            country: $('#send-country').val(),
+            city: $('#send-city').val(),
+        });
+        if (this.model.isNew()) {
+            this.model.save(null, {
+                success: function(model, response) {
+                    app.navigate('new_group/success', true);
+                },
+                error: function(model, response) {
+                    self.showErrors(response.responseText);
+                    app.navigate('new_group/error', true);
+                }
+            });
+        }
         return false;
     },
     deleteGroup: function() {

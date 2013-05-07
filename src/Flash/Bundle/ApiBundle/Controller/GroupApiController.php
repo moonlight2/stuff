@@ -96,7 +96,12 @@ class GroupApiController extends RESTController implements GenericRestApi {
         $view = View::create();
 
         if ($form->isValid()) {
+            
+            $acc = $this->get('security.context')->getToken()->getUser();
+            
+            $userEvent = $this->get('user_event')->get('new_group', $acc, $group);
             $em->persist($group);
+            $em->persist($userEvent);
             $em->flush();
         } else {
             $view->setStatusCode(400);

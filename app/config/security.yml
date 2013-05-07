@@ -32,9 +32,9 @@ security:
             pattern:    ^/api/*
             anonymous:  ~
             
-        rest_api_firewall:
-            pattern:    ^/rest/*
-            anonymous:  ~
+#        rest_api_firewall:
+#            pattern:    ^/rest/*
+#            anonymous:  ~
       
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
