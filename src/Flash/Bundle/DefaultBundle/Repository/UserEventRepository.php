@@ -17,7 +17,7 @@ class UserEventRepository extends EntityRepository  {
                                        WHERE e.account = :account')
                 ->setParameter('account', $user)
                 ->getResult();
-        return (sizeof($list) > 0) ? $list[0] : null;
+        return (sizeof($list) > 0) ? $list : null;
     }
 
 }

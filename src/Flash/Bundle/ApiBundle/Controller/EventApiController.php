@@ -34,7 +34,7 @@ class EventApiController extends RESTController implements GenericRestApi {
      * @return single Account data
      */
     public function getAction($id = null) {
-        
+
         $em = $this->getDoctrine()->getManager();
         $view = View::create();
 
@@ -80,14 +80,19 @@ class EventApiController extends RESTController implements GenericRestApi {
         $form->bind($this->getFromRequest(array('name', 'description', 'city', 'country', 'date')));
         $view = View::create();
 
-        
+
         if ($form->isValid()) {
 
-            $group = $this->get('security.context')->getToken()->getUser()->getGroup();
+            $acc = $this->get('security.context')->getToken()->getUser();
+            
+            $userEvent = $this->get('user_event')->get('add_event', $acc);
+
+            $group = $acc->getGroup();
 
             $event->setGroup($group);
 
             $em->persist($event);
+            $em->persist($userEvent);
             $em->persist($group);
             $em->flush();
         } else {

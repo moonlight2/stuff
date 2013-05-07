@@ -13,7 +13,8 @@
 
 {% block body %}
     {% block content_header %}
-        <ul id="menu">                
+<div class="navbar">
+    <div class="navbar-inner">             
             {% block content_header_more %}
                 {% if is_granted('ROLE_ADMIN') %}
                     {{ knp_menu_render('FlashDefaultBundle:Builder:adminMenu') }}
@@ -21,10 +22,10 @@
                     {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
                 {% elseif is_granted('ROLE_USER')%}
                     {{ knp_menu_render('FlashDefaultBundle:Builder:userMenu') }}
-
                 {% endif %}
             {% endblock %}
-        </ul>
+    </div>
+</div>
         <div style="clear: both"></div>
     {% endblock %}
         

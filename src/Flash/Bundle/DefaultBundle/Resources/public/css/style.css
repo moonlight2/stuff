@@ -16,6 +16,19 @@ root {
 
 }
 
+.navbar-inner ul {
+    position: relative;
+    left: 0;
+    display: block;
+    float: left;
+    margin: 0 10px 0 0;
+}
+
+.navbar-inner li {
+    float: left;
+    padding: 8px 15px;
+}
+
 .sidebar {
     width: 200px;
     float: left;

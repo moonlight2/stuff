@@ -21,6 +21,7 @@ class Builder extends ContainerAware
     {
         $menu = $factory->createItem('root');
 
+        
         $menu->addChild('Home', array('route' => 'main_page'));
         $menu->addChild('Registration', array('route' => '_flash_registration'));
         $menu->addChild('Logout', array('route' => '_flash_logout'));
@@ -32,6 +33,7 @@ class Builder extends ContainerAware
     {
         $menu = $factory->createItem('root');
 
+        
         $menu->addChild('Home', array('uri' => '#'));
         $menu->addChild('Group events', array('uri' => '#feed'));
         $menu->addChild('Create group', array('uri' => '#new_group'));

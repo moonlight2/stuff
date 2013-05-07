@@ -81,3 +81,6 @@ fos_rest:
     view:
         view_response_listener: 'force'
         
+services:
+    user_event:
+        class:        Flash\Bundle\DefaultBundle\Services\UserEventFactory
