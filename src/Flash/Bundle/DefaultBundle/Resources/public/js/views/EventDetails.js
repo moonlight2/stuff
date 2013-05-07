@@ -2,15 +2,23 @@
 
 window.EventView = Backbone.View.extend({
     initialize: function() {
-        this.template = _.template($('#event-tpl').html());
-                //this.model.bind('change', this.render, this);
+        this.template = _.template($('#event-tpl').html()),
+                _.bindAll(this, 'switchDropdown', 'hideDropdown', 'removeElements');
+        //this.model.bind('change', this.render, this);
     },
     render: function(eventName) {
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
     },
+    getGroups: function(){},
     events: {
         'click #create-event': 'saveEvent',
+        "click .dropdown-toggle": "switchDropdown",
+        "click": "hideDropdown",
+        "click #country li": "changeCountryInput",
+        "click #city li": "changeCityInput",
+        "input #city-input": "getSimilarCities",
+        "mouseover .dropdown-menu li": "changeListBackground",
     },
     saveEvent: function() {
         var self = this;
