@@ -6,7 +6,7 @@ window.CountryListView = Backbone.View.extend({
             $(this.el).attr('class', 'dropdown-menu').append(new CountryListItemView({model: country}).render().el);
         }, this);
         return this;
-    },
+    }
 });
 
 window.CountryListItemView = Backbone.View.extend({
@@ -18,5 +18,5 @@ window.CountryListItemView = Backbone.View.extend({
     },
     initialize: function() {
         this.model.bind('change', this.render, this);
-    },
+    }
 });

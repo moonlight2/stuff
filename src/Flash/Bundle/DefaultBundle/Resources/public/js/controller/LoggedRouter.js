@@ -1,20 +1,11 @@
 $(document).ready(function() {
 
-    Backbone.View.prototype.close = function() {
-        console.log('Closing view :');
-        console.log(this);
-        if (this.beforeClose) {
-            this.beforeClose();
-        }
-        this.remove();
-        this.unbind();
-    };
-
     window.LoggedRouter = Backbone.Router.extend({
         routes: {
             "": "showEvents",
             "new_group": "newGroup",
-            "new_event": "newEvent"
+            "new_event": "newEvent",
+            "new_event/error": "showErrors"
         },
         initialize: function() {
             console.log('Starting router');
@@ -31,7 +22,13 @@ $(document).ready(function() {
             console.log('new group');
         },
         newEvent: function() {
+            var event = new EventView({'model': new EventModel()});
+            this.showView('#events', event);
+            event.getCountries();
             console.log('new event');
+        },
+        showErrors: function() {
+            console.log('There is some errors');
         },
         showView: function(selector, view) {
             if (this.currentView)
@@ -42,6 +39,6 @@ $(document).ready(function() {
         },
     });
 
-    loggedRouter = new LoggedRouter();
+    app = new LoggedRouter();
     Backbone.history.start();
 });

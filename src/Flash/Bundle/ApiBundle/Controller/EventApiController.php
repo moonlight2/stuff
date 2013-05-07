@@ -13,7 +13,7 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use FOS\RestBundle\View\View;
 
 /**
- * @Route("/admin/rest/api/events")
+ * @Route("/rest/api/events")
  */
 class EventApiController extends RESTController implements GenericRestApi {
 
