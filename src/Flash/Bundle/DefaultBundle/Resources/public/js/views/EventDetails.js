@@ -10,7 +10,8 @@ window.EventView = Backbone.View.extend({
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
     },
-    getGroups: function(){},
+    getGroups: function() {
+    },
     events: {
         'click #create-event': 'saveEvent',
         "click .dropdown-toggle": "switchDropdown",
@@ -19,6 +20,14 @@ window.EventView = Backbone.View.extend({
         "click #city li": "changeCityInput",
         "input #city-input": "getSimilarCities",
         "mouseover .dropdown-menu li": "changeListBackground",
+    },
+    showEvents: function() {
+        var self = this;
+        var events = new EventListView({'model': new EventCollection()});
+        this.events.fetch({success: function(data) {
+                $('#events').append(new UserEventListView({model: self.events}).render().el);
+            }});
+
     },
     saveEvent: function() {
         var self = this;

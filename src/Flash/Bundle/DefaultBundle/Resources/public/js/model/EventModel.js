@@ -1,5 +1,5 @@
 window.EventModel = Backbone.Model.extend({
-    urlRoot: 'logged/rest/api/events',
+    urlRoot: 'logged/rest/api/events/group',
     defaults: {
         "id": null,
         "name": "",
@@ -12,5 +12,5 @@ window.EventModel = Backbone.Model.extend({
 
 window.EventCollection = Backbone.Collection.extend({
     model: EventModel,
-    url: 'logged/rest/api/events'
+    url: 'logged/rest/api/events/group'
 });

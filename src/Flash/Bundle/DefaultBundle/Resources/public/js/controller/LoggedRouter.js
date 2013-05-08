@@ -7,7 +7,7 @@ $(document).ready(function() {
             "new_event/error": "showErrors",
             "new_event/success": "showEventSuccess",
             "new_group/success": "showGroupSuccess",
-            "events_list": "showGroupEvents"
+            "group_events": "showGroupEvents"
         },
         initialize: function() {
             console.log('Starting router');
@@ -17,9 +17,6 @@ $(document).ready(function() {
             var eventList = new UserEventView();
             this.showView('#events', eventList);
             eventList.getEventList();
-        },
-        showGroupEvents: function(){
-            alert('Show group events');
         },
         showEventSuccess: function(){
             alert('Buuuu');
