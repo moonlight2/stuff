@@ -5,6 +5,7 @@ window.EventListView = Backbone.View.extend({
         this.model.bind('reset', this.render, this);
     },
     render: function() {
+        console.log('Here is EventListView')
         _.each(this.model.models, function(event) {
             $(this.el).attr('class', 'events-list').append(new EventListItemView({model: event}).render().el);
         }, this);

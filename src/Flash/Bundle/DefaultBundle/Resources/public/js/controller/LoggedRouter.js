@@ -1,25 +1,20 @@
 $(document).ready(function() {
+    
     window.LoggedRouter = Backbone.Router.extend({
         routes: {
             "": "showEvents",
             "new_group": "newGroup",
-            "new_event": "newEvent",
             "new_event/error": "showErrors",
             "new_event/success": "showEventSuccess",
-            "new_group/success": "showGroupSuccess",
-            "group_events": "showGroupEvents"
         },
         initialize: function() {
             console.log('Starting router');
             console.log(this);
         },
         showEvents: function() {
+
             var eventList = new UserEventView();
-            this.showView('#events', eventList);
             eventList.getEventList();
-        },
-        showEventSuccess: function(){
-            alert('Buuuu');
         },
         showGroupSuccess: function(){
             alert('Group has been created!!!!');
@@ -29,12 +24,6 @@ $(document).ready(function() {
             this.showView('#events', group);
             group.getCountries();
             console.log('new group:');
-        },
-        newEvent: function() {
-            var event = new EventView({'model': new EventModel()});
-            this.showView('#events', event);
-            event.getCountries();
-            console.log('new event');
         },
         showErrors: function() {
             console.log('There is some errors');

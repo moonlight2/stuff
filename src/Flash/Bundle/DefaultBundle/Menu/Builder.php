@@ -55,6 +55,7 @@ class Builder extends ContainerAware {
 
         
         $menu->addChild('Create event', array('uri' => '#new_event'));
+        $menu->addChild('Group events', array('uri' => '#group_events'));
         $menu->addChild('Users', array('uri' => '#users'));
         $menu->addChild('Administration', array('uri' => '#admin'));
 

@@ -4,7 +4,6 @@ window.EventView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($('#event-tpl').html()),
                 _.bindAll(this, 'switchDropdown', 'hideDropdown', 'removeElements');
-        //this.model.bind('change', this.render, this);
     },
     render: function(eventName) {
         $(this.el).html(this.template(this.model.toJSON()));
@@ -21,11 +20,11 @@ window.EventView = Backbone.View.extend({
         "input #city-input": "getSimilarCities",
         "mouseover .dropdown-menu li": "changeListBackground",
     },
-    showEvents: function() {
+    getEventList: function() {
         var self = this;
-        var events = new EventListView({'model': new EventCollection()});
+        this.events = new EventCollection();
         this.events.fetch({success: function(data) {
-                $('#events').append(new UserEventListView({model: self.events}).render().el);
+                $('#events').append(new EventListView({model: self.events}).render().el);
             }});
 
     },
@@ -36,17 +35,17 @@ window.EventView = Backbone.View.extend({
             description: $('#description').val(),
             country: $('#send-country').val(),
             city: $('#send-city').val(),
-            data: $('#data').val(),
+            date: $('#date').val(),
         });
         if (this.model.isNew()) {
             this.model.save(null, {
                 success: function(model, response) {
                     //alert('Event has been created');
-                    app.navigate('events_list', true);
+                    app.navigate('group_events', true);
                 },
                 error: function(model, response) {
                     self.showErrors(response.responseText);
-                    app.navigate('new_event/error', true);
+                    app.navigate('error', true);
                 }
             });
         }

@@ -29,9 +29,19 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
+     * @Route("/group")
+     * @Method({"POST"})
+     */
+    public function postAction() {
+
+        $event = new Event();
+
+        return $this->processForm($event);
+    }
+
+    /**
      * @Route("/")
      * @Method({"GET"})
-     * @return single Account data
      */
     public function getAction($id = null) {
 
@@ -55,7 +65,7 @@ class EventApiController extends RESTController implements GenericRestApi {
 
         return $this->handle($view);
     }
-    
+
     /**
      * @Route("/group/{id}")
      * @Method({"GET"})
@@ -81,18 +91,6 @@ class EventApiController extends RESTController implements GenericRestApi {
         return $this->handle($view);
     }
 
-    /**
-     * @Route("")
-     * @Method({"POST"})
-     * @return single Account data
-     */
-    public function postAction() {
-
-        $event = new Event();
-
-        return $this->processForm($event);
-    }
-
     public function putAction($id) {
         
     }
@@ -108,7 +106,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         if ($form->isValid()) {
 
             $acc = $this->get('security.context')->getToken()->getUser();
-            
+
             $userEvent = $this->get('user_event')->get('add_event', $acc);
 
             $group = $acc->getGroup();
