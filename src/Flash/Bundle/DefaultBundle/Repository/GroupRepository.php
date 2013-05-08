@@ -8,25 +8,10 @@ use Doctrine\ORM\EntityRepository;
  * AccountRepository
  *
  */
-class GroupRepository extends EntityRepository implements GenericRepository {
+class GroupRepository extends EntityRepository  {
 
-    public function exists($name) {
-        $list = $this->getEntityManager()
-                ->createQuery('SELECT a FROM FlashDefaultBundle:Account a
-                                       WHERE a.username = :name')
-                ->setParameter('name', $name)
-                ->getResult();
-        return sizeof($list) > 0;
-    }
 
-    public function getByName($name) {
-        $list = $this->getEntityManager()
-                ->createQuery('SELECT a FROM FlashDefaultBundle:Account a
-                                       WHERE a.username = :name')
-                ->setParameter('name', $name)
-                ->getResult();
-        return (sizeof($list) > 0) ? $list[0] : null;
-    }
+    
 
     public function getByLocation($country_id, $city_id) {
         $list = $this->getEntityManager()

@@ -37,8 +37,6 @@ class GroupApiController extends RESTController implements GenericRestApi {
         return $this->handle($view);
     }
 
-
-
     public function deleteAction($id) {
         
     }
@@ -49,7 +47,7 @@ class GroupApiController extends RESTController implements GenericRestApi {
      * @return single Account data
      */
     public function getAction($id = null) {
-        
+
         $em = $this->getDoctrine()->getManager();
         $view = View::create();
 
@@ -95,13 +93,14 @@ class GroupApiController extends RESTController implements GenericRestApi {
         $form->bind($this->getFromRequest(array('name', 'city', 'country')));
         $view = View::create();
 
+
         if ($form->isValid()) {
-            
-            $acc = $this->get('security.context')->getToken()->getUser();
-            
-            $userEvent = $this->get('user_event')->get('new_group', $acc, $group);
+
+            //$acc = $this->get('security.context')->getToken()->getUser();
+
+            //$userEvent = $this->get('user_event')->get('new_group', $acc, $group);
             $em->persist($group);
-            $em->persist($userEvent);
+            //$em->persist($userEvent);
             $em->flush();
         } else {
             $view->setStatusCode(400);

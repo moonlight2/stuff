@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="event")
  * @ORM\Entity
  * @ExclusionPolicy("all")
+ * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\EventRepository")
  */
 class Event {
 

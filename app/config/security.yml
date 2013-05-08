@@ -32,9 +32,9 @@ security:
             pattern:    ^/api/*
             anonymous:  ~
             
-#        rest_api_firewall:
-#            pattern:    ^/rest/*
-#            anonymous:  ~
+        rest_api_firewall:
+            pattern:    ^/rest/*
+            anonymous:  ~
       
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -56,7 +56,7 @@ security:
                 target: _demo
 
     access_control:
-         - { path: ^/regist, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         #- { path: ^/demo, roles: [ ROLE_ADMIN, ROLE_USER ] }
+         - { path: ^/main, roles: ROLE_USER }
+         - { path: ^/rest/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
 #         - { path: ^/admin/, role: ROLE_ADMIN }
 #         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

@@ -6,7 +6,8 @@ $(document).ready(function() {
             "new_event": "newEvent",
             "new_event/error": "showErrors",
             "new_event/success": "showEventSuccess",
-            "new_group/success": "showGroupSuccess"
+            "new_group/success": "showGroupSuccess",
+            "events_list": "showGroupEvents"
         },
         initialize: function() {
             console.log('Starting router');
@@ -17,8 +18,11 @@ $(document).ready(function() {
             this.showView('#events', eventList);
             eventList.getEventList();
         },
+        showGroupEvents: function(){
+            alert('Show group events');
+        },
         showEventSuccess: function(){
-            alert('Even has been created!');
+            alert('Buuuu');
         },
         showGroupSuccess: function(){
             alert('Group has been created!!!!');

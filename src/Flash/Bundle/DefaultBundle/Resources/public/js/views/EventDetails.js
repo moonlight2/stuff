@@ -32,7 +32,8 @@ window.EventView = Backbone.View.extend({
         if (this.model.isNew()) {
             this.model.save(null, {
                 success: function(model, response) {
-                    app.navigate('new_event/success', true);
+                    //alert('Event has been created');
+                    app.navigate('events_list', true);
                 },
                 error: function(model, response) {
                     self.showErrors(response.responseText);

@@ -29,7 +29,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/{id}")
+     * @Route("/")
      * @Method({"GET"})
      * @return single Account data
      */
@@ -50,6 +50,31 @@ class EventApiController extends RESTController implements GenericRestApi {
 
             $events = $em->getRepository('FlashDefaultBundle:Event')->findAll();
 
+            $view->setData($events);
+        }
+
+        return $this->handle($view);
+    }
+    
+    /**
+     * @Route("/group/{id}")
+     * @Method({"GET"})
+     */
+    public function getByGroupAction($id = null) {
+
+        $em = $this->getDoctrine()->getManager();
+        $view = View::create();
+        $acc = $this->get('security.context')->getToken()->getUser();
+        if (null != $id) {
+//            $event = $em->getRepository('FlashDefaultBundle:UserEvent')->findByCurentUser($id);
+//
+//            if (null != $event) {
+//                $response = $event;
+//            } else {
+//                $response = array('success' => 'false');
+//            }
+        } else {
+            $events = $em->getRepository('FlashDefaultBundle:Event')->getByGroup($acc->getGroup());
             $view->setData($events);
         }
 
