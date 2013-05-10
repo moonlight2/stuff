@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     window.LoggedRouter = Backbone.Router.extend({
         routes: {
             "": "showEvents",
@@ -9,7 +10,7 @@ $(document).ready(function() {
         },
         initialize: function() {
             console.log('Starting router');
-            console.log(this);
+            
         },
         showEvents: function() {
             console.log('show group events');
@@ -18,10 +19,6 @@ $(document).ready(function() {
             var eventList = new EventView();
             eventList.getEventList();
         },
-        showGroupEvents: function() {
-            console.log('group evebts');
-
-        },
         showEventSuccess: function() {
             alert('Buuuu');
         },
@@ -29,7 +26,9 @@ $(document).ready(function() {
             var event = new EventView({'model': new EventModel()});
             this.showView('#events', event);
             event.getCountries();
-            console.log('new event');
+            
+            console.log('new event!');
+            $("#date").datepicker();
         },
         showErrors: function() {
             console.log('There is some errors');

@@ -12,10 +12,13 @@ class EventType extends AbstractType {
         $builder
                 ->add('name')
                 ->add('description')
-                ->add('date')
                 ->add('city')
                 ->add('country')
         ;
+        $builder->add('date', 'date', array(
+            'widget' => 'single_text',
+            'format' => 'dd-MM-yyyy hh:mm'
+        ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {

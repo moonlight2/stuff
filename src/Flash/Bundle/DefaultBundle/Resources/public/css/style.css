@@ -29,6 +29,10 @@ root {
     padding: 8px 15px;
 }
 
+.main-content {
+    width: 600px;
+}
+
 .sidebar {
     width: 200px;
     float: left;
@@ -68,14 +72,44 @@ root {
     border-radius: 6px 6px 6px 6px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     float: left;
-        padding: 20px !important;
+    padding: 20px !important;
     text-align: left;
     width: 300px;
 
 }
 
+#ui-datepicker-div {
+    width: 150px !important;
+}
+
+.ui-datepicker-header {
+        background-clip: padding-box;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    float: left;
+    padding: 7px 20px !important;
+    text-align: left;
+    width: 150px;
+    display: block;
+}
+
+.ui-datepicker-calendar {
+    background-clip: padding-box;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    float: left;
+    padding: 20px !important;
+    text-align: left;
+    width: 150px;
+    display: block;
+}
+
 .main-content {
-        float: left;
+    float: left;
     padding: 15px;
 }
 

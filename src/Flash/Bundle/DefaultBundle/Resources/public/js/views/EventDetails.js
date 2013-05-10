@@ -19,6 +19,9 @@ window.EventView = Backbone.View.extend({
         "click #city li": "changeCityInput",
         "input #city-input": "getSimilarCities",
         "mouseover .dropdown-menu li": "changeListBackground",
+        "change #date": "prepareDateToSend",
+        "change #hour": "prepareDateToSend",
+        "change #minutes": "prepareDateToSend"
     },
     getEventList: function() {
         var self = this;
@@ -32,10 +35,10 @@ window.EventView = Backbone.View.extend({
         var self = this;
         this.model.set({
             name: $('#name').val(),
-            description: $('#description').val(),
+            description: $('#description').html(),
             country: $('#send-country').val(),
             city: $('#send-city').val(),
-            date: $('#date').val(),
+            date: $('#send-date').val(),
         });
         if (this.model.isNew()) {
             this.model.save(null, {

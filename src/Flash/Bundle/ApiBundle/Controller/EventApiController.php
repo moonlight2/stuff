@@ -24,10 +24,6 @@ class EventApiController extends RESTController implements GenericRestApi {
         
     }
 
-    public function deleteAction($id) {
-        
-    }
-
     /**
      * @Route("/group")
      * @Method({"POST"})
@@ -100,6 +96,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new EventType(), $event);
+        
         $form->bind($this->getFromRequest(array('name', 'description', 'city', 'country', 'date')));
         $view = View::create();
 
@@ -122,6 +119,10 @@ class EventApiController extends RESTController implements GenericRestApi {
             return $view->setData($this->getErrorMessages($form));
         }
         return $event;
+    }
+
+    public function deleteAction($id) {
+        
     }
 
 }

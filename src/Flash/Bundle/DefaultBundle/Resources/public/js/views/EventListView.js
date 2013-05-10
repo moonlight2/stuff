@@ -17,7 +17,7 @@ window.EventListItemView = Backbone.View.extend({
     tagName: 'div',
     template: _.template($('#events-list-tpl').html()),
     render: function() {
-        $(this.el).html(this.template(this.model.toJSON()));
+        $(this.el).attr('class', 'event').html(this.template(this.model.toJSON()));
         return this;
     },
     initialize: function() {

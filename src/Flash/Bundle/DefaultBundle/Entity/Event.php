@@ -40,7 +40,7 @@ class Event {
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      * @Expose
      */
     private $description;
@@ -203,9 +203,9 @@ class Event {
      * @param \DateTime $date
      * @return Event
      */
-    public function setDate($date)
+    public function setDate(\DateTime $date)
     {
-        $this->date = new \DateTime($date);
+        $this->date = $date;
     
         return $this;
     }
