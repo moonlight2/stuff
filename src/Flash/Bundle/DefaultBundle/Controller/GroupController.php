@@ -18,7 +18,7 @@ class GroupController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $group = $em->getRepository('FlashDefaultBundle:Group')->find($id);
 
-        return array('group_name' => $group->getName());
+        return array('group_name' => $group->getName(), 'user' => $user);
     }
 
     /**

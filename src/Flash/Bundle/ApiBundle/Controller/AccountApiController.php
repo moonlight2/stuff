@@ -23,21 +23,22 @@ class AccountApiController extends RESTController implements GenericRestApi {
      */
     public function getAction($id = null) {
 
+        $view = View::create();
         $em = $this->getDoctrine()->getManager();
 
         if (null != $id) {
             $account = $em->getRepository('FlashDefaultBundle:Account')->find($id);
 
             if (null != $account) {
-                $response = $account;
+                $view->setData($account);
             } else {
-                $response = array('success' => 'false');
+                throw \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
             }
         } else {
-            $response = $em->getRepository('FlashDefaultBundle:Account')->findAll();
+            $view->setData($em->getRepository('FlashDefaultBundle:Account')->findAll());
         }
 
-        return $response;
+        return $this->handle($view);
     }
 
     /**
@@ -236,11 +237,15 @@ class AccountApiController extends RESTController implements GenericRestApi {
                         }
                         $acc->setGroup($group);
                         $em->persist($group);
+                        
+                        $cRole = new \Flash\Bundle\DefaultBundle\Entity\CustomRole($acc);
+                        $acc->addCustomRole($cRole);
+                        $em->persist($cRole);
                     }
 
                     $userEvent = $userEvent = $this->get('user_event')->get('new_user', $acc);
 
-                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
+                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_LEADER');
 
                     $acc->addRole($role);
                     $userEvent->setAccount($acc);

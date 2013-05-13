@@ -13,29 +13,35 @@
 
 
 {% block body %}
+
     {% block content_header %}
-<div class="navbar">
-    <div class="navbar-inner">             
-            {% block content_header_more %}
-                {% if is_granted('ROLE_ADMIN') %}
-                    {{ knp_menu_render('FlashDefaultBundle:Builder:adminMenu') }}
-                {% elseif is_granted('ROLE_LEADER')%}
-                    {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
-                {% elseif is_granted('ROLE_USER')%}
-                    {{ knp_menu_render('FlashDefaultBundle:Builder:userMenu') }}
-                {% endif %}
-            {% endblock %}
-    </div>
-</div>
-        <div style="clear: both"></div>
+        <div class="navbar">
+            <div class="navbar-inner">
+                    {% block content_header_more %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            {{ knp_menu_render('FlashDefaultBundle:Builder:adminMenu') }}
+                        {% elseif is_granted('ROLE_LEADER')%}
+                            {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
+                        {% elseif is_granted('ROLE_USER')%}
+                            {{ knp_menu_render('FlashDefaultBundle:Builder:userMenu') }}
+                        {% endif %}
+                    {% endblock %}
+            </div>
+        </div>
     {% endblock %}
         
-
     <div class="block" id='main'>
         <div class='sidebar'>
-            {{ knp_menu_render('FlashDefaultBundle:Builder:groupLeaderMenu') }}
+                {% for role in app.user.getRoles %}
+                    {% for cRole in app.user.getCustomRoles %}
+                            {% if cRole == role %}
+                                {{ knp_menu_render('FlashDefaultBundle:Builder:groupLeaderMenu') }}
+                                <p>Admin: {{ app.user.firstName }} {{ app.user.lastName }}</p>
+                            {% endif %}
+                    {% endfor %}
+                {% endfor %}
         </div>
-         {% block content %}{% endblock %}
+    {% block content %}{% endblock %}
     </div>
 
     <script src="{{ asset('bundles/flashdefault/js/common/BasicViewExtend.js') }}"></script>   

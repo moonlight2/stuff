@@ -33,10 +33,9 @@ class EventApiController extends RESTController implements GenericRestApi {
         if ($this->get('security.context')->isGranted('ROLE_LEADER')) {
             $event = new Event();
             return $this->processForm($event);
+        } else {
+            throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException();
         }
-        $view = View::create();
-        return $view->setStatusCode(400)
-                        ->setData(array('error' => 'permission error'));
     }
 
     /**

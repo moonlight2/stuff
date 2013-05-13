@@ -38,7 +38,7 @@ class Account implements AdvancedUserInterface {
      * @ORM\Column(name="username", type="string", length=255, nullable=true)
      */
     protected $username;
-    
+
     /**
      * @var string
      * @Type("string")
@@ -48,7 +48,7 @@ class Account implements AdvancedUserInterface {
      * @Expose
      */
     protected $firstName;
-    
+
     /**
      * @var string
      * @Type("string")
@@ -137,9 +137,10 @@ class Account implements AdvancedUserInterface {
     protected $photos;
 
     /**
-     * @OneToMany(targetEntity="UserEvent", mappedBy="account")
+     * @OneToMany(targetEntity="CustomRole", mappedBy="account")
+     * @Expose
      */
-    protected $userEvents;
+    protected $customRoles;
 
     /**
      * @OneToMany(targetEntity="Video", mappedBy="account")
@@ -151,6 +152,7 @@ class Account implements AdvancedUserInterface {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();
+        $this->customRoles = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->userEvents = new ArrayCollection();
         $this->photos = new ArrayCollection();
@@ -311,12 +313,23 @@ class Account implements AdvancedUserInterface {
      * @return array
      */
     public function getRoles() {
-        $rolesArray = $this->roles->getValues();
-        foreach ($rolesArray as $role) {
-            $rolesNames[] = $role->getName();
+        
+        $roles = $this->roles->getValues();
+
+        foreach ($roles as $role) {
+            $rolesNames[] = $role->getRole();
+        }
+
+        if (NULL != $this->getCustomRoles()) {
+            $cRoles = $this->customRoles->getValues();
+            foreach ($cRoles as $r) {
+                $rolesNames[] = $r->getRole();
+            }
         }
         return $rolesNames;
     }
+    
+    
 
     public function eraseCredentials() {
         
@@ -576,17 +589,15 @@ class Account implements AdvancedUserInterface {
         return $this->userEvents;
     }
 
-
     /**
      * Set firstName
      *
      * @param string $firstName
      * @return Account
      */
-    public function setFirstName($firstName)
-    {
+    public function setFirstName($firstName) {
         $this->firstName = $firstName;
-    
+
         return $this;
     }
 
@@ -595,8 +606,7 @@ class Account implements AdvancedUserInterface {
      *
      * @return string 
      */
-    public function getFirstName()
-    {
+    public function getFirstName() {
         return $this->firstName;
     }
 
@@ -606,10 +616,9 @@ class Account implements AdvancedUserInterface {
      * @param string $lastName
      * @return Account
      */
-    public function setLastName($lastName)
-    {
+    public function setLastName($lastName) {
         $this->lastName = $lastName;
-    
+
         return $this;
     }
 
@@ -618,8 +627,44 @@ class Account implements AdvancedUserInterface {
      *
      * @return string 
      */
-    public function getLastName()
-    {
+    public function getLastName() {
         return $this->lastName;
     }
+
+    /**
+     * Add customRoles
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\CustomRole $customRoles
+     * @return Account
+     */
+    public function addCustomRole(\Symfony\Component\Security\Core\Role\RoleInterface $customRoles) {
+        $this->customRoles[] = $customRoles;
+
+        return $this;
+    }
+
+    /**
+     * Remove customRoles
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\CustomRole $customRoles
+     */
+    public function removeCustomRole(\Symfony\Component\Security\Core\Role\RoleInterface $customRoles) {
+        $this->customRoles->removeElement($customRoles);
+    }
+
+    /**
+     * Get customRoles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCustomRoles() {
+        
+            $rolesNames = null;
+            $cRoles = $this->customRoles->getValues();
+            foreach ($cRoles as $r) {
+                $rolesNames[] = $r->getRole();
+            }
+            return $rolesNames;
+    }
+
 }
