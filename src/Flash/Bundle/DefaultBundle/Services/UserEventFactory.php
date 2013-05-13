@@ -10,7 +10,7 @@ class UserEventFactory {
 
         switch ($eventName) {
             case 'new_user':
-                $userEvent->setTitle($acc->getUsername() . ' только что присоеденился к ресурсу.');
+                $userEvent->setTitle($acc->getFirstName() . " " . $acc->getLastName() . ' только что присоеденился к ресурсу.');
                 $userEvent->setDescription('Поздравляем с регистрацией!');
                 $userEvent->setAccount($acc);
                 break;

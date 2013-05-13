@@ -19,13 +19,6 @@
         <script type="text/template" id="form-tpl"> 
         <div class="form-register bs-docs-example form-horizontal">
             <h2>Here is registration form</h2>
-            <div class="control-group">
-                <label class='control-label' >Имя:</label>
-                <div class='controls'>
-                    <input type="text" id="username" name="username" value="<%= username %>" />
-                </div>
-                <span class="help-inline" id='error-username'></span>
-            </div>
 
             <div class="control-group">
                 <label class='control-label'>Email:</label>
@@ -33,6 +26,22 @@
                     <input type="text" id="email" name="email" value="<%= email %>"/>
                 </div>
                 <span class="help-inline" id='error-email'></span>
+            </div>
+    
+            <div class="control-group">
+                <label class='control-label'>Имя:</label>
+                <div class='controls'>
+                    <input type="text" id="firstName" name="firstName" value=""/>
+                </div>
+                <span class="help-inline" id='error-firstName'></span>
+            </div>
+    
+            <div class="control-group">
+                <label class='control-label'>Фамилия:</label>
+                <div class='controls'>
+                    <input type="text" id="lastName" name="lastName" value=""/>
+                </div>
+                <span class="help-inline" id='error-lastName'></span>
             </div>
             
             <div class="control-group">

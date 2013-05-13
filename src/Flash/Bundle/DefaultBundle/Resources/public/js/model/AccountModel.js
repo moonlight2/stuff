@@ -3,9 +3,10 @@ window.Account = Backbone.Model.extend({
     defaults: {
         "id": null,
         "username": "",
+        "firstName": "",
+        "lastName": "",
         "email": "",
         "roles": "",
-        "about": "",
         "group": 0,
         "country": "",
         "city": "",

@@ -35,10 +35,7 @@ class Account implements AdvancedUserInterface {
     /**
      * @var string
      * @Type("string")
-     * @ORM\Column(name="username", type="string", length=255)
-     * @Assert\NotBlank(message = "Поле username не может быть пустым")
-     * @Assert\MinLength(limit=4, message = "Поле username не может иметь менее 4 символов")
-     * @Expose
+     * @ORM\Column(name="username", type="string", length=255, nullable=true)
      */
     protected $username;
     
@@ -82,13 +79,15 @@ class Account implements AdvancedUserInterface {
     protected $roles;
 
     /**
-     * @ORM\Column(name="city_id", type="integer", nullable=true)
+     * @ORM\Column(name="city_id", type="integer")
+     * @Assert\NotBlank(message = "Поле не city может быть пустым")
      * @Expose
      */
     protected $city;
 
     /**
-     * @ORM\Column(name="country_id", type="integer", nullable=true)
+     * @ORM\Column(name="country_id", type="integer")
+     * @Assert\NotBlank(message = "Поле country не может быть пустым")
      * @Expose
      */
     protected $country;

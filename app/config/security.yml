@@ -19,7 +19,7 @@ security:
 
     providers:
         administrators:
-            entity: { class: Flash\Bundle\DefaultBundle\Entity\Account, property: username }
+            entity: { class: Flash\Bundle\DefaultBundle\Entity\Account }
 
     firewalls:
         registration_firewall:

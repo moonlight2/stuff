@@ -36,7 +36,8 @@ window.FormView = Backbone.View.extend({
     saveAccount: function() {
         var self = this;
         this.model.set({
-            username: $('#username').val(),
+            firstName: $('#firstName').val(),
+            lastName: $('#lastName').val(),
             email: $('#email').val(),
             password: $('#password').val(),
             country: $('#send-country').val(),

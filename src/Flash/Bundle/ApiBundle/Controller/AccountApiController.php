@@ -202,18 +202,14 @@ class AccountApiController extends RESTController implements GenericRestApi {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new AccountType(), $acc);
-        $form->bind($this->getFromRequest(array('username', 'email', 'password', 'about')));
+        $form->bind($this->getFromRequest(array('city', 'country', 'firstName', 'lastName', 'email', 'password')));
         $view = View::create();
 
         if ($form->isValid()) {
 
+//            return $acc;
+            
             if (true == $em->getRepository('FlashDefaultBundle:Account')
-                            ->exists($request->get('username'))) {
-
-                $view->setStatusCode(400);
-                return $view->setData(array('username' => array('Такой пользователь уже существует')));
-                
-            } elseif (true == $em->getRepository('FlashDefaultBundle:Account')
                             ->existsEmail($request->get('email'))) {
 
                 $view->setStatusCode(400);
@@ -224,19 +220,16 @@ class AccountApiController extends RESTController implements GenericRestApi {
                 $encoder = $factory->getEncoder($acc);
                 $password = $encoder->encodePassword($request->get('password'), $acc->getSalt());
 
-                $acc->setUsername($request->get('username'));
                 $acc->setPassword($password);
-                $acc->setEmail($request->get('email'));
-                $acc->setAbout($request->get('about'));
-                $acc->setCity($request->get('city'));
-                $acc->setCountry($request->get('country'));
+
                 $acc->setDateRegistration(new \DateTime("now"));
 
                 if ($request->getMethod() == 'POST') {
 
+                    $acc->setUsername($request->get('email'));
                     $group = $request->get('group');
-                    
-                    if (null != $group) {
+
+                    if (NULL != $group) {
                         $group = $em->getRepository('FlashDefaultBundle:Group')->find($request->get('group'));
                         if (!$group) {
                             throw $this->createNotFoundException('No group found for id ' . $id);
@@ -245,19 +238,17 @@ class AccountApiController extends RESTController implements GenericRestApi {
                         $em->persist($group);
                     }
 
-                    $userEvent = new \Flash\Bundle\DefaultBundle\Entity\UserEvent();
-                    $userEvent->setTitle($acc->getUsername() . ' только что присоеденился к ресурсу.');
-                    $userEvent->setDescription('Поздравляем с регистрацией!');
+                    $userEvent = $userEvent = $this->get('user_event')->get('new_user', $acc);
 
                     $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
-                    
+
                     $acc->addRole($role);
                     $userEvent->setAccount($acc);
 
                     $em->persist($userEvent);
                     $em->persist($role);
                 }
-                
+
                 $em->persist($acc);
                 $em->flush();
             }
