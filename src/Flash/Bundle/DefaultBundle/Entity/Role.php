@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\RoleRepository")
  */
-class Role {
+class Role implements \Symfony\Component\Security\Core\Role\RoleInterface {
 
     /**
      * @var integer
@@ -29,7 +29,6 @@ class Role {
      */
     protected $name;
 
-    
     public function __construct($name) {
         $this->name = $name;
     }
@@ -62,6 +61,15 @@ class Role {
      */
     public function getName() {
         return $this->name;
+    }
+
+    /**
+     * Get role
+     *
+     * @return string 
+     */
+    public function getRole() {
+        return $this->getName();
     }
 
 }

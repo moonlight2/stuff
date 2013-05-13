@@ -41,6 +41,26 @@ class Account implements AdvancedUserInterface {
      * @Expose
      */
     protected $username;
+    
+    /**
+     * @var string
+     * @Type("string")
+     * @ORM\Column(name="first_name", type="string", length=255)
+     * @Assert\NotBlank(message = "Поле не может быть пустым")
+     * @Assert\MinLength(limit=2, message = "Поле не может иметь менее 2 символов")
+     * @Expose
+     */
+    protected $firstName;
+    
+    /**
+     * @var string
+     * @Type("string")
+     * @ORM\Column(name="last_name", type="string", length=255)
+     * @Assert\NotBlank(message = "Поле не может быть пустым")
+     * @Assert\MinLength(limit=2, message = "Поле не может иметь менее 2 символов")
+     * @Expose
+     */
+    protected $lastName;
 
     /**
      * @ORM\Column(type="string", length=32)
@@ -116,7 +136,7 @@ class Account implements AdvancedUserInterface {
      * @OneToMany(targetEntity="Photo", mappedBy="account")
      */
     protected $photos;
-    
+
     /**
      * @OneToMany(targetEntity="UserEvent", mappedBy="account")
      */
@@ -136,6 +156,14 @@ class Account implements AdvancedUserInterface {
         $this->userEvents = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->videos = new ArrayCollection();
+    }
+
+    public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
+        return $this->getUsername() === $user->getUsername();
+    }
+
+    public function __toString() {
+        echo "Account object:  " . $this->username . " " . $this->email;
     }
 
     /**
@@ -260,10 +288,10 @@ class Account implements AdvancedUserInterface {
     /**
      * Add roles
      *
-     * @param \Flash\Bundle\DemoBundle\Entity\Role $roles
+     * @param \Symfony\Component\Security\Core\Role\RoleInterface $role
      * @return Account
      */
-    public function addRole(\Flash\Bundle\DefaultBundle\Entity\Role $role) {
+    public function addRole(\Symfony\Component\Security\Core\Role\RoleInterface $role) {
         $this->roles[] = $role;
 
         return $this;
@@ -272,16 +300,16 @@ class Account implements AdvancedUserInterface {
     /**
      * Remove roles
      *
-     * @param \Flash\Bundle\DemoBundle\Entity\Role $roles
+     * @param \Symfony\Component\Security\Core\Role\RoleInterface $role
      */
-    public function removeRole(\Flash\Bundle\DefaultBundle\Entity\Role $role) {
+    public function removeRole(\Symfony\Component\Security\Core\Role\RoleInterface $role) {
         $this->roles->removeElement($role);
     }
 
     /**
      * Get roles
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return array
      */
     public function getRoles() {
         $rolesArray = $this->roles->getValues();
@@ -477,17 +505,15 @@ class Account implements AdvancedUserInterface {
         return $this->events;
     }
 
-
     /**
      * Set dateRegist
      *
      * @param \DateTime $dateRegist
      * @return Account
      */
-    public function setDateRegistration($dateRegist)
-    {
+    public function setDateRegistration($dateRegist) {
         $this->dateRegist = $dateRegist;
-    
+
         return $this;
     }
 
@@ -496,8 +522,59 @@ class Account implements AdvancedUserInterface {
      *
      * @return \DateTime 
      */
-    public function getDateRegistration()
-    {
+    public function getDateRegistration() {
         return $this->dateRegist;
     }
+
+    /**
+     * Set dateRegist
+     *
+     * @param \DateTime $dateRegist
+     * @return Account
+     */
+    public function setDateRegist($dateRegist) {
+        $this->dateRegist = $dateRegist;
+
+        return $this;
+    }
+
+    /**
+     * Get dateRegist
+     *
+     * @return \DateTime 
+     */
+    public function getDateRegist() {
+        return $this->dateRegist;
+    }
+
+    /**
+     * Add userEvents
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\UserEvent $userEvents
+     * @return Account
+     */
+    public function addUserEvent(\Flash\Bundle\DefaultBundle\Entity\UserEvent $userEvents) {
+        $this->userEvents[] = $userEvents;
+
+        return $this;
+    }
+
+    /**
+     * Remove userEvents
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\UserEvent $userEvents
+     */
+    public function removeUserEvent(\Flash\Bundle\DefaultBundle\Entity\UserEvent $userEvents) {
+        $this->userEvents->removeElement($userEvents);
+    }
+
+    /**
+     * Get userEvents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserEvents() {
+        return $this->userEvents;
+    }
+
 }

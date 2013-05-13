@@ -30,9 +30,13 @@ class EventApiController extends RESTController implements GenericRestApi {
      */
     public function postAction() {
 
-        $event = new Event();
-
-        return $this->processForm($event);
+        if ($this->get('security.context')->isGranted('ROLE_LEADER')) {
+            $event = new Event();
+            return $this->processForm($event);
+        }
+        $view = View::create();
+        return $view->setStatusCode(400)
+                        ->setData(array('error' => 'permission error'));
     }
 
     /**
@@ -96,7 +100,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new EventType(), $event);
-        
+
         $form->bind($this->getFromRequest(array('name', 'description', 'city', 'country', 'date')));
         $view = View::create();
 
