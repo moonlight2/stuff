@@ -15,6 +15,10 @@ class DefaultController extends Controller {
      */
     public function mainAction() {
 
+//        $request = $this->get('event_service');
+//        $request->getRequest();
+//        exit();
+        
         $user = $this->get('security.context')->getToken()->getUser();
 
         return array(

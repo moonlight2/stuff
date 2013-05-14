@@ -8,7 +8,7 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
-class ACLService extends \Symfony\Bundle\FrameworkBundle\Controller\Controller {
+class ACLService {
 
     private $context;
     private $provider;

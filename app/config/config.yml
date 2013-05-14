@@ -1,9 +1,7 @@
 imports:
-    - { resource: @AcmeDemoBundle/Resources/config/services.yml }
     - { resource: parameters.yml }
     - { resource: security.yml }
-    
-
+    - { resource: @FlashDefaultBundle/Resources/config/services.yml }
 
 framework:
     #esi:             ~
@@ -81,16 +79,25 @@ fos_rest:
     view:
         view_response_listener: 'force'
         
-parameters:
-    # ...
-    acl_service.class: Flash\Bundle\DefaultBundle\Services\ACLService
-    user_event.class:  Flash\Bundle\DefaultBundle\Services\UserEventFactory
-        
-        
-services:
-    user_event:
-        class:        %user_event.class%
-        arguments:    [@security.context]
-    acl_service:
-        class:        %acl_service.class%
-        arguments:    [@security.context, @security.acl.provider]
+#parameters:
+#    # ...
+#    acl_service.class: Flash\Bundle\DefaultBundle\Services\ACLService
+#    user_event.class:  Flash\Bundle\DefaultBundle\Services\UserEventFactory
+#        
+#        
+#services:
+#    user_event:
+#        class:        %user_event.class%
+#        arguments:    [@security.context]
+#    acl_service:
+#        class:        %acl_service.class%
+#        arguments:    [@security.context, @security.acl.provider]
+#        
+#    request_injector:
+#        class: RequestInjector
+#        public: false
+#        arguments: ['@service_container']
+#
+#    some_service:
+#        class: SomeService
+#        arguments: ['@request_injector']

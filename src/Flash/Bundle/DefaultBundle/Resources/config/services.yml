@@ -1,0 +1,22 @@
+parameters:
+    acl_service.class:       Flash\Bundle\DefaultBundle\Services\ACLService
+    user_event.class:        Flash\Bundle\DefaultBundle\Services\UserEventFactory
+    request_injector.class:  Flash\Bundle\DefaultBundle\Services\RequestInjector
+    event_service.class:     Flash\Bundle\DefaultBundle\Services\EventService
+        
+services:
+    user_event:
+        class:        %user_event.class%
+        arguments:    [@security.context]
+    acl_service:
+        class:        %acl_service.class%
+        arguments:    [@security.context, @security.acl.provider]
+        
+    request_injector:
+        class:        %request_injector.class%
+        public:       false
+        arguments:    ['@service_container']
+
+    event_service:
+        class:        %event_service.class%
+        arguments:    [@security.context, @request_injector]
