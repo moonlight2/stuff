@@ -7,7 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Flash\Bundle\DefaultBundle\Entity\Account;
 use Flash\Bundle\ApiBundle\RESTApi\RESTController;
 use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
-use Flash\Bundle\DefaultBundle\Form\AccountType;
 use FOS\RestBundle\View\View;
 
 /**
@@ -62,16 +61,15 @@ class AccountApiController extends RESTController implements GenericRestApi {
      * @return single Account data
      */
     public function postAction() {
-
-        $acc = new Account();
-
-        return $this->processForm($acc);
+        
+        return $this->get('account_service')->processForm(new Account());
     }
 
     /**
      * @Route("/{id}")
      * @Method({"DELETE"})
      * @param Integer $id
+     * @return array
      */
     public function deleteAction($id) {
 
@@ -199,78 +197,4 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
         return $account;
     }
-
-    private function processForm($acc) {
-
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new AccountType(), $acc);
-        $form->bind($this->getFromRequest(array('city', 'country', 'firstName', 'lastName', 'email', 'password')));
-        $view = View::create();
-
-        if ($form->isValid()) {
-
-            if (true == $em->getRepository('FlashDefaultBundle:Account')
-                            ->existsEmail($request->get('email'))) {
-                $view->setStatusCode(400);
-                return $view->setData(array('email' => array('Такой email уже зарегистрирован')));
-            } else {
-
-                $factory = $this->get('security.encoder_factory');
-                $encoder = $factory->getEncoder($acc);
-                $password = $encoder->encodePassword($request->get('password'), $acc->getSalt());
-
-                $acc->setPassword($password);
-
-                $acc->setDateRegistration(new \DateTime("now"));
-
-                if ($request->getMethod() == 'POST') {
-
-                    $acc->setUsername($request->get('email'));
-                    $group = $request->get('group');
-
-                    if (NULL != $group) {
-                        $group = $em->getRepository('FlashDefaultBundle:Group')->find($request->get('group'));
-                        if (!$group) {
-                            throw $this->createNotFoundException('No group found for id ' . $id);
-                        }
-                        $acc->setGroup($group);
-                        $em->persist($group);
-
-                        $cRole = new \Flash\Bundle\DefaultBundle\Entity\CustomRole($acc);
-                        $acc->addCustomRole($cRole);
-                        $em->persist($cRole);
-                    }
-
-                    $userEvent = $userEvent = $this->get('user_event')->get('new_user', $acc);
-
-                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_LEADER');
-
-                    $acc->addRole($role);
-                    $userEvent->setAccount($acc);
-
-                    $em->persist($userEvent);
-                    $em->persist($role);
-                }
-
-                $em->persist($acc);
-                $em->flush();
-            }
-        } else {
-            $view->setStatusCode(400);
-            return $view->setData($this->getErrorMessages($form));
-        }
-        return $acc;
-    }
-
-    private function sendEmain($email) {
-
-        $message = \Swift_Message::newInstance()
-                ->setSubject('Подтверждение регистрации')
-                ->setFrom('yakov.the.smart@gmail.com')
-                ->setTo($email)
-                ->setBody('Будьте добры, подтвердите регистрацию на сайте');
-        $this->get('mailer')->send($message);
-    }
-
 }

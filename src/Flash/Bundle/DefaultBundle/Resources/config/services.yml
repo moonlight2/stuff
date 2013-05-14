@@ -2,21 +2,39 @@ parameters:
     acl_service.class:       Flash\Bundle\DefaultBundle\Services\ACLService
     user_event.class:        Flash\Bundle\DefaultBundle\Services\UserEventFactory
     request_injector.class:  Flash\Bundle\DefaultBundle\Services\RequestInjector
-    event_service.class:     Flash\Bundle\DefaultBundle\Services\EventService
+    common_service.class:    Flash\Bundle\DefaultBundle\Services\CommonService
+    
+    
+    event_service.class:     Flash\Bundle\DefaultBundle\Services\Entity\EventService
+    account_service.class:   Flash\Bundle\DefaultBundle\Services\Entity\AccountService
+    
         
 services:
-    user_event:
-        class:        %user_event.class%
-        arguments:    [@security.context]
-    acl_service:
-        class:        %acl_service.class%
-        arguments:    [@security.context, @security.acl.provider]
-        
+  
     request_injector:
         class:        %request_injector.class%
         public:       false
         arguments:    ['@service_container']
-
+  
+    common_service:
+        abstract: true
+        class:        %user_event.class%
+        arguments:    [@security.context, @request_injector]
+        
     event_service:
         class:        %event_service.class%
-        arguments:    [@security.context, @request_injector]
+        parent:       common_service
+        
+    account_service:
+        class:        %account_service.class%
+        parent:       common_service
+        
+    user_event:
+        class:        %user_event.class%
+        arguments:    [@security.context]
+        
+    acl_service:
+        class:        %acl_service.class%
+        arguments:    [@security.context, @security.acl.provider]
+        
+

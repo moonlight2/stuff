@@ -13,10 +13,6 @@ class RequestInjector {
     public function getRequest() {
         return $this->container->get('request');
     }
-    
-    public function getToken() {
-        return $this->container->get('user');
-    }
 
     public function getDoctrine() {
         return $this->container->get('doctrine');
@@ -30,4 +26,11 @@ class RequestInjector {
         return $this->container->get('acl_service');
     }
 
+    public function getSecurityEncoderFactory() {
+        return $this->container->get('security.encoder_factory');
+    }
+    
+    public function getUserEvent() {
+        return $this->container->get('user_event');
+    }
 }
