@@ -1,0 +1,93 @@
+{% extends "FlashDefaultBundle::logged.html.twig" %}
+
+{% block title "Inside page" %}
+
+{% block content %}
+    <script type="text/template" id="user-event-list-tpl">
+        <p><%= date %></p>
+        <div class='event'>
+        <p class='strong'><%= title %></p>
+        <p><%= description %></p>
+        </div>
+    </script>
+    
+    <script type="text/template" id="city-tpl"><%= name %></script>
+
+    <script type="text/template" id="country-tpl"><%= name %></script>
+
+    <script type="text/template" id="group-tpl"><%= name %></script>
+
+    <script type="text/template" id="user-event-tpl">
+        <h3>Список событий:</h3>
+    </script>
+    
+    <script type="text/template" id="user-event-tpl">
+        <h3>Cоздать новую группу:</h3>
+    </script>
+    
+    <script type="text/template" id="new-group-tpl"> 
+        <div class="form-new bs-docs-example">
+            <h2>Новая группа:</h2>
+            <div class="control-group">
+                <label class='control-label' >Название:</label>
+                <div class='controls'>
+                    <input type="text" id="name" name="name" value="<%= name %>" />
+                </div>
+                <span class="help-inline" id='error-name'></span>
+            </div>
+            
+            <div class="control-group">
+                <label class='control-label'>Описание:</label>
+                <div class='controls'>
+                    <input type="text" id="about" name="about"  value="<%= about %>"/>
+                </div>
+                <span class="help-inline" id='error-about'></span>
+            </div>
+            
+            <div class="control-group">
+                <label class='control-label'>Cтрана:</label>
+                <div class='controls selector input-append' style='display:block' id="country">
+                    <input type="text" id="country-input" readonly placeholder='Выберите страну' />
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                            <span class="caret"></span>
+                        </button>
+                    </div>
+                </div>
+                <input type='hidden' name='country' id='send-country' />
+                <span class="help-inline" id='error-country'></span>
+            </div>
+            
+            <div class="control-group" id='city-block'>
+                <label class='control-label'>Город:</label>
+                <div class='controls selector input-append' style='display:block' id='city'>
+                    <input type="text" id="city-input" placeholder='Выберите город'/>
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                            <span class="caret"></span>
+                        </button>
+                    </div>
+                </div>
+                <input type='hidden' name='city' id='send-city' />
+                <span class="help-inline" id='error-city'></span>
+            </div>
+            
+            <div class="control-group">
+                <div class="controls">
+                  <button id='create-group' class="btn">Создать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </script>
+    
+
+    
+    
+    <h1>Привет <b>{{ firstName }} {{ lastName }}</b>! Это твоя персональная страница</h1>
+    <div class='sidebar'></div>
+    <div class='main-content'>
+        <div id='events'></div>
+    </div>
+{% endblock %}
+
