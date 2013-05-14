@@ -35,7 +35,7 @@ window.EventView = Backbone.View.extend({
         var self = this;
         this.model.set({
             name: $('#name').val(),
-            description: $('#description').html(),
+            description: $('#description').val(),
             country: $('#send-country').val(),
             city: $('#send-city').val(),
             date: $('#send-date').val(),

@@ -3,8 +3,16 @@
 namespace Flash\Bundle\DefaultBundle\Services;
 
 class UserEventFactory {
+    
+    
+    private $context;
+    
 
-    public static function get($eventName, $acc, $obj=null) {
+    public function __construct(\Symfony\Component\Security\Core\SecurityContext $context) {
+        $this->context = $context;
+    }
+
+    public static function get($eventName, $acc, $obj = null) {
 
         $userEvent = new \Flash\Bundle\DefaultBundle\Entity\UserEvent();
 
@@ -20,7 +28,7 @@ class UserEventFactory {
                 $userEvent->setAccount($acc);
                 break;
             case 'new_group':
-                $userEvent->setTitle($acc->getUsername() . ' создал группу '. $obj->getName());
+                $userEvent->setTitle($acc->getUsername() . ' создал группу ' . $obj->getName());
                 $userEvent->setDescription('Поздравляем с новой группой!');
                 $userEvent->setAccount($acc);
                 break;

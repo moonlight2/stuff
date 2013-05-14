@@ -3,6 +3,8 @@ jms_security_extra:
     expressions: true
 
 security:
+    acl:
+        connection: default
     encoders:
         Flash\Bundle\DefaultBundle\Entity\Account:
             algorithm:         sha1

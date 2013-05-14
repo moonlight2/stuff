@@ -81,6 +81,16 @@ fos_rest:
     view:
         view_response_listener: 'force'
         
+parameters:
+    # ...
+    acl_service.class: Flash\Bundle\DefaultBundle\Services\ACLService
+    user_event.class:  Flash\Bundle\DefaultBundle\Services\UserEventFactory
+        
+        
 services:
     user_event:
-        class:        Flash\Bundle\DefaultBundle\Services\UserEventFactory
+        class:        %user_event.class%
+        arguments:    [@security.context]
+    acl_service:
+        class:        %acl_service.class%
+        arguments:    [@security.context, @security.acl.provider]

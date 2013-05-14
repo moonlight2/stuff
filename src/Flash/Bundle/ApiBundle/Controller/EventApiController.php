@@ -90,8 +90,24 @@ class EventApiController extends RESTController implements GenericRestApi {
         return $this->handle($view);
     }
 
+    /**
+     * @Route("/group/{id}")
+     * @Method({"PUT"})
+     */
     public function putAction($id) {
-        
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('FlashDefaultBundle:Event')->find($id);
+        if (NULL === $event)
+            return array('error' => 'Not found');
+
+        $secContext = $this->get('security.context');
+
+        // check for edit access
+        if (FALSE === $secContext->isGranted('EDIT', $event))
+            return array('error'=>'Hey! You don\'t have enought permissions.');
+
+        return $this->processForm($event);
     }
 
     private function processForm($event) {
@@ -101,22 +117,25 @@ class EventApiController extends RESTController implements GenericRestApi {
         $form = $this->createForm(new EventType(), $event);
 
         $form->bind($this->getFromRequest(array('name', 'description', 'city', 'country', 'date')));
+
+
         $view = View::create();
 
         if ($form->isValid()) {
 
             $acc = $this->get('security.context')->getToken()->getUser();
-
             $userEvent = $this->get('user_event')->get('add_event', $acc);
-
             $group = $acc->getGroup();
-
             $event->setGroup($group);
 
             $em->persist($event);
             $em->persist($userEvent);
             $em->persist($group);
             $em->flush();
+
+            if ($request->getMethod() == 'POST') {
+                $this->get('acl_service')->setOwnerForEntity($event); 
+            }
         } else {
             $view->setStatusCode(400);
             return $view->setData($this->getErrorMessages($form));

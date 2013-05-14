@@ -50,6 +50,8 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
         $em = $this->getDoctrine()->getManager();
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($id);
+        if (NULL == $acc)
+            return array('error'=>'Not found');
 
         return $this->processForm($acc);
     }
@@ -208,11 +210,8 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
         if ($form->isValid()) {
 
-//            return $acc;
-            
             if (true == $em->getRepository('FlashDefaultBundle:Account')
                             ->existsEmail($request->get('email'))) {
-
                 $view->setStatusCode(400);
                 return $view->setData(array('email' => array('Такой email уже зарегистрирован')));
             } else {
@@ -237,7 +236,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
                         }
                         $acc->setGroup($group);
                         $em->persist($group);
-                        
+
                         $cRole = new \Flash\Bundle\DefaultBundle\Entity\CustomRole($acc);
                         $acc->addCustomRole($cRole);
                         $em->persist($cRole);
