@@ -50,6 +50,26 @@ class ACLService {
         $this->provider->updateAcl($acl);
     }
 
+    public function removeAuthorFromEntity($entity) {
+        
+        $acl = $this->provider->findAcl(ObjectIdentity::fromDomainObject($entity));
+        $securityId = UserSecurityIdentity::fromAccount($this->context->getToken()->getUser());
+
+        foreach ($acl->getObjectAces() as $ace) {
+            if ($ace->getSecurityIdentity()->equals($securityId)) {
+                $maskBuilder = new MaskBuilder($ace->getMask());
+
+                $maskBuilder->remove(MaskBuilder::MASK_EDIT);
+                $maskBuilder->remove(MaskBuilder::MASK_VIEW);
+                $maskBuilder->remove(MaskBuilder::MASK_DELETE);
+
+                $ace->setMask($maskBuilder->get());
+                break;
+            }
+        }
+        $provider->updateAcl($acl);
+    }
+
 }
 
 ?>

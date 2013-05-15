@@ -7,6 +7,9 @@ use Flash\Bundle\DefaultBundle\Form\EventType;
 use Flash\Bundle\DefaultBundle\Services\CommonService;
 
 class EventService extends CommonService {
+    
+    
+
 
     public function processForm($event) {
 
@@ -28,7 +31,7 @@ class EventService extends CommonService {
             $em->flush();
 
             if ($request->getMethod() == 'POST') {
-                $this->injector->getAcl()->setOwnerForEntity($event);
+                $this->injector->getAcl()->setAuthorForEntity($event);
             }
         } else {
             $view->setStatusCode(400);

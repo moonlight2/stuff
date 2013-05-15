@@ -28,7 +28,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/")
+     * @Route("")
      * @Method({"GET"})
      */
     public function getAction($id = null) {
@@ -36,12 +36,15 @@ class EventApiController extends RESTController implements GenericRestApi {
         $view = View::create();
 
         if (null != $id) {
-            
+            $event = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->find($id);
+            if (NULL != $event) {
+                $view->setData($event);
+            } else {
+                throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+            }
         } else {
-            if ($this->get('security.context')->isGranted('VIEW')) {
                 $events = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->findAll();
                 $view->setData($events);
-            }
         }
         return $this->handle($view);
     }
@@ -55,7 +58,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         $em = $this->getDoctrine()->getManager();
         $view = View::create();
         $acc = $this->get('security.context')->getToken()->getUser();
-        if (null != $id) {
+        if (NULL != $id) {
             
         } else {
             $events = $em->getRepository('FlashDefaultBundle:Event')->getByGroup($acc->getGroup());
