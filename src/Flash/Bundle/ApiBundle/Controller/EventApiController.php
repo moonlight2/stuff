@@ -38,8 +38,10 @@ class EventApiController extends RESTController implements GenericRestApi {
         if (null != $id) {
             
         } else {
-            $events = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->findAll();
-            $view->setData($events);
+            if ($this->get('security.context')->isGranted('VIEW')) {
+                $events = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->findAll();
+                $view->setData($events);
+            }
         }
         return $this->handle($view);
     }
@@ -54,6 +56,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         $view = View::create();
         $acc = $this->get('security.context')->getToken()->getUser();
         if (null != $id) {
+            
         } else {
             $events = $em->getRepository('FlashDefaultBundle:Event')->getByGroup($acc->getGroup());
             $view->setData($events);
@@ -82,6 +85,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     public function deleteAction($id) {
+        
     }
 
 }

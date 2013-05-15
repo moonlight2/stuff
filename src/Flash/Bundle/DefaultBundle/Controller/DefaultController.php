@@ -20,6 +20,9 @@ class DefaultController extends Controller {
 //        exit();
         
         $user = $this->get('security.context')->getToken()->getUser();
+        
+//        var_dump($user->getGroup());
+//        exit();
 
         return array(
             'firstName' => $user->getFirstName(),

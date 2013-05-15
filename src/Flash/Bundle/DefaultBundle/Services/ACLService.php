@@ -31,6 +31,25 @@ class ACLService {
         $this->provider->updateAcl($acl);
     }
 
+    public function setAuthorForEntity($entity) {
+
+        $objectIdentity = ObjectIdentity::fromDomainObject($entity);
+        $acl = $this->provider->createAcl($objectIdentity);
+
+        $securityIdentity = UserSecurityIdentity::fromAccount(
+                        $this->context->getToken()->getUser()
+        );
+
+        $maskBuilder = new MaskBuilder();
+        $maskBuilder->add(MaskBuilder::MASK_VIEW);
+        $maskBuilder->add(MaskBuilder::MASK_EDIT);
+        $maskBuilder->add(MaskBuilder::MASK_DELETE);
+        $mask = $maskBuiler->get();
+
+        $acl->insertObjectAce($securityIdentity, $mask);
+        $this->provider->updateAcl($acl);
+    }
+
 }
 
 ?>

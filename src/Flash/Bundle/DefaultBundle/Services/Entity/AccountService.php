@@ -25,8 +25,7 @@ class AccountService extends CommonService {
                 return $view->setData(array('email' => array('Такой email уже зарегистрирован')));
             } else {
 
-                $factory = $this->injector->getSecurityEncoderFactory();
-                $encoder = $factory->getEncoder($acc);
+                $encoder = $this->injector->getSecurityEncoderFactory()->getEncoder($acc);
                 $password = $encoder->encodePassword($request->get('password'), $acc->getSalt());
 
                 $acc->setPassword($password);
@@ -53,7 +52,7 @@ class AccountService extends CommonService {
 
                     $userEvent = $this->injector->getUserEvent()->get('new_user', $acc);
 
-                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_LEADER');
+                    $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
 
                     $acc->addRole($role);
                     $userEvent->setAccount($acc);

@@ -6,9 +6,7 @@ use FOS\RestBundle\View\View;
 use Flash\Bundle\DefaultBundle\Form\EventType;
 use Flash\Bundle\DefaultBundle\Services\CommonService;
 
-
 class EventService extends CommonService {
-
 
     public function processForm($event) {
 

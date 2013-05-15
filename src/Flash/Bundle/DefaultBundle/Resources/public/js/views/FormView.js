@@ -23,7 +23,7 @@ window.FormView = Backbone.View.extend({
         console.log('Get groups');
         var self = this;
         this.groups = new GroupCollection();
-        this.groups.url = "rest/api/groups/country/" + $("#send-country").val() + "/city/" + $("#send-city").val();
+        this.groups.url = "api/groups/country/" + $("#send-country").val() + "/city/" + $("#send-city").val();
         this.groups.fetch({processData: true,
             success: function(data) {
                 self.clearGroupList();

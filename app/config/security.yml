@@ -24,17 +24,6 @@ security:
             entity: { class: Flash\Bundle\DefaultBundle\Entity\Account }
 
     firewalls:
-        registration_firewall:
-            pattern:    ^/regist$
-            anonymous:  ~
-            
-        api_firewall:
-            pattern:    ^/api/*
-            anonymous:  ~
-            
-        rest_api_firewall:
-            pattern:    ^/rest/*
-            anonymous:  ~
       
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -46,6 +35,7 @@ security:
 
         secured_area:
             pattern:    ^/
+            anonymous: ~
             form_login:
                 check_path: _security_check
                 login_path: _flash_login
@@ -53,10 +43,13 @@ security:
                 always_use_default_target_path: true
             logout:
                 path:   _flash_logout
-                target: _demo
+                target: _flash_login
 
     access_control:
-         - { path: ^/main, roles: ROLE_USER }
+         - { path: ^/main, roles: ROLE_LEADER }
+         - { path: ^/my_group, roles: ROLE_USER }
+         - { path: ^/group*, roles: ROLE_USER, methods: [POST, PUT, GET] }
+         
          - { path: ^/rest/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
 #         - { path: ^/admin/, role: ROLE_ADMIN }
 #         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

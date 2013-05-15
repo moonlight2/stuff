@@ -8,6 +8,7 @@ use Flash\Bundle\DefaultBundle\Entity\Account;
 use Flash\Bundle\ApiBundle\RESTApi\RESTController;
 use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use FOS\RestBundle\View\View;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * @Route("/rest/api/accounts")
@@ -31,7 +32,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
             if (null != $account) {
                 $view->setData($account);
             } else {
-                throw \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+                throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
             }
         } else {
             $view->setData($em->getRepository('FlashDefaultBundle:Account')->findAll());
@@ -44,6 +45,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
      * @Route("/{id}")
      * @Method({"PUT"})
      * @return single Account data
+     * 
      */
     public function putAction($id) {
 
