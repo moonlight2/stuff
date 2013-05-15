@@ -19,14 +19,14 @@ class ACLService {
     }
 
     public function setOwnerForEntity($entity) {
-
+        
         $objectIdentity = ObjectIdentity::fromDomainObject($entity);
         $acl = $this->provider->createAcl($objectIdentity);
 
         $securityIdentity = UserSecurityIdentity::fromAccount(
                         $this->context->getToken()->getUser()
         );
-
+        
         $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
         $this->provider->updateAcl($acl);
     }
@@ -50,19 +50,16 @@ class ACLService {
         $this->provider->updateAcl($acl);
     }
 
-    public function removeAuthorFromEntity($entity) {
+    public function removeOwner($entity) {
         
         $acl = $this->provider->findAcl(ObjectIdentity::fromDomainObject($entity));
         $securityId = UserSecurityIdentity::fromAccount($this->context->getToken()->getUser());
 
         foreach ($acl->getObjectAces() as $ace) {
             if ($ace->getSecurityIdentity()->equals($securityId)) {
+                
                 $maskBuilder = new MaskBuilder($ace->getMask());
-
-                $maskBuilder->remove(MaskBuilder::MASK_EDIT);
-                $maskBuilder->remove(MaskBuilder::MASK_VIEW);
-                $maskBuilder->remove(MaskBuilder::MASK_DELETE);
-
+                $maskBuilder->remove(MaskBuilder::MASK_OWNER);
                 $ace->setMask($maskBuilder->get());
                 break;
             }

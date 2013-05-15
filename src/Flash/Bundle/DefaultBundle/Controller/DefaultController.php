@@ -7,13 +7,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Flash\Bundle\DefaultBundle\Entity\Event;
-
-
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-
-
 
 class DefaultController extends Controller {
 
@@ -25,21 +21,23 @@ class DefaultController extends Controller {
 
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
-//        $acl = $this->container->get('acl_service');
-
+        $acl = $this->get('acl_service');
+        
 //            $event = new Event();
-//            $event->setName('New Event6');
+//            $event->setName('New Event35');
 //            $event->setCity(2);
 //            $event->setCountry(45);
 //            $event->setDate(new \DateTime('2012-12-12 00:00'));
 //            $em->persist($event);
 //            $em->flush();
-//
-//
-//            // creating the ACL
-            $aclProvider = $this->get('security.acl.provider');
-            
-            print_r($aclProvider);
+//            
+//            $acl->setOwnerForEntity($event);
+////
+////
+////            // creating the ACL
+//            $aclProvider = $this->get('security.acl.provider');
+//            print_r($aclProvider);
+//            
 //            $objectIdentity = ObjectIdentity::fromDomainObject($event);
 //            $acl = $aclProvider->createAcl($objectIdentity);
 //
@@ -54,13 +52,19 @@ class DefaultController extends Controller {
 
 
 
-//        $event = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->find(25);
-//        print_r($event);
-//        var_dump($this->get('security.context')->isGranted('EDIT', $event));
+        $securityContext = $this->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+
+        $event = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->find(35);
         
-        
-        
-//        $acl->removeAuthorFromEntity($event);
+
+
+        print_r($event);
+        var_dump($this->get('security.context')->isGranted('DELETE', $event));
+
+
+
+
 //        
 //        if (false == $this->get('security.context')->isGranted('VIEW', $event)) {
 //            throw new AccessDeniedException();
