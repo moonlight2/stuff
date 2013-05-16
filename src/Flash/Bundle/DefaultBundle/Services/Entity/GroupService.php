@@ -5,6 +5,7 @@ namespace Flash\Bundle\DefaultBundle\Services\Entity;
 use FOS\RestBundle\View\View;
 use Flash\Bundle\DefaultBundle\Form\GroupType;
 use Flash\Bundle\DefaultBundle\Services\CommonService;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class GroupService extends CommonService {
 
@@ -29,12 +30,16 @@ class GroupService extends CommonService {
                 );
             }
 
-            $group->addAccount();
+            $group->addAccount($acc);
+            $acc->setGroup($group);
             $em->persist($group);
             $em->flush();
 
             if ($request->getMethod() == 'POST') {
-                $this->injector->getAcl()->setAuthorForEntity($group);
+                $acl = $this->injector->getAcl();
+                $acl->grant($group, MaskBuilder::MASK_EDIT);
+                $acl->grant($group, MaskBuilder::MASK_VIEW);
+                $acl->grant($group, MaskBuilder::MASK_DELETE);
             }
         } else {
             $view->setStatusCode(400);

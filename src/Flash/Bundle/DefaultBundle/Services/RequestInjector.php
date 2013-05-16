@@ -23,7 +23,7 @@ class RequestInjector {
     }
 
     public function getAcl() {
-        return $this->container->get('acl_service');
+        return $this->container->get('acl_manager');
     }
 
     public function getSecurityEncoderFactory() {

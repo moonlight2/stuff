@@ -21,7 +21,7 @@
                 {% elseif is_granted('ROLE_LEADER')%}
                     {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
                 {% elseif is_granted('ROLE_USER')%}
-                    {{ knp_menu_render('FlashDefaultBundle:Builder:userMenu') }}
+                    {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
                 {% endif %}
             {% endblock %}
     </div>

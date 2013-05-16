@@ -21,64 +21,16 @@ class DefaultController extends Controller {
 
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
-        $acl = $this->get('acl_manager');
-        
-
-//            $event = new Event();
-//            $event->setName('New Event58');
-//            $event->setCity(2);
-//            $event->setCountry(45);
-//            $event->setDate(new \DateTime('2012-12-12 00:00'));
-//            $em->persist($event);
-//            $em->flush();
-//            
-//            $acl->grant($event, MaskBuilder::MASK_OWNER);
-////
-////
-////            // creating the ACL
-//            $aclProvider = $this->get('security.acl.provider');
-//            print_r($aclProvider);
-//            
-//            $objectIdentity = ObjectIdentity::fromDomainObject($event);
-//            $acl = $aclProvider->createAcl($objectIdentity);
-//
-//            // retrieving the security identity of the currently logged-in user
-//            $securityContext = $this->get('security.context');
-//            $user = $securityContext->getToken()->getUser();
-//            $securityIdentity = UserSecurityIdentity::fromAccount($user);
-//
-//            // grant owner access
-//            $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-//            $aclProvider->updateAcl($acl);
-
-
 
         $securityContext = $this->get('security.context');
         $user = $securityContext->getToken()->getUser();
-        $event = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->find(58);
-        
-        
-        
-//            $em->persist($event);
-//            $em->flush();
-//        $acl->revoke($event, MaskBuilder::MASK_OWNER);
+        $group = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Group')->find(3);
 
-        print_r($event);
-        var_dump($this->get('security.context')->isGranted('EDIT', $event));
-
-
-
-
-//        
-//        if (false == $this->get('security.context')->isGranted('VIEW', $event)) {
-//            throw new AccessDeniedException();
-//        }
-//        $acl->setAuthorForEntity($event);
+        var_dump($group->getNumberOfParty());
+//        var_dump($this->get('security.context')->isGranted('EDIT', $event));
         echo "Test";
         exit();
-//        $request = $this->get('event_service');
-//        $request->getRequest();
-//        exit();
+
     }
 
     /**

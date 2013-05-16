@@ -51,9 +51,7 @@ class Builder extends ContainerAware {
 
     public function groupLeaderMenu(FactoryInterface $factory, array $options) {
         $menu = $factory->createItem('root');
-
-
-        $menu->addChild('Create event', array('uri' => '#new_event'));
+ 
         $menu->addChild('Group events', array('uri' => '#group_events'));
         $menu->addChild('Users', array('uri' => '#users'));
 
@@ -63,6 +61,14 @@ class Builder extends ContainerAware {
         
         $menu->addChild('Administration', array('uri' => '#admin'));
 
+        return $menu;
+    }
+    
+    public function groupActiveLeaderMenu(FactoryInterface $factory, array $options) {
+        
+        $menu = $factory->createItem('root');
+        
+        $menu->addChild('Create event', array('uri' => '#new_event'));
         return $menu;
     }
 

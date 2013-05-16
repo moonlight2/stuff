@@ -23,7 +23,7 @@
                         {% elseif is_granted('ROLE_LEADER')%}
                             {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
                         {% elseif is_granted('ROLE_USER')%}
-                            {{ knp_menu_render('FlashDefaultBundle:Builder:userMenu') }}
+                             {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
                         {% endif %}
                     {% endblock %}
             </div>
@@ -32,14 +32,12 @@
         
     <div class="block" id='main'>
         <div class='sidebar'>
-                {% for role in app.user.getRoles %}
-                    {% for cRole in app.user.getCustomRoles %}
-                            {% if cRole == role %}
-                                {{ knp_menu_render('FlashDefaultBundle:Builder:groupLeaderMenu') }}
-                                <p>Admin: {{ app.user.firstName }} {{ app.user.lastName }}</p>
-                            {% endif %}
-                    {% endfor %}
-                {% endfor %}
+            {% if is_granted('EDIT', app.user.getGroup) %}
+                {{ knp_menu_render('FlashDefaultBundle:Builder:groupLeaderMenu') }}
+                {% if (app.user.getGroup.getNumberOfParty >= 5) %}
+                    {{ knp_menu_render('FlashDefaultBundle:Builder:groupActiveLeaderMenu') }}
+                {% endif %}
+            {% endif %}
         </div>
     {% block content %}{% endblock %}
     </div>

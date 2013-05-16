@@ -122,6 +122,10 @@ class Group {
     public function getName() {
         return $this->name;
     }
+    
+    public function getNumberOfParty() {
+        return $this->getAccounts()->count();
+    }
 
     /**
      * Add accounts

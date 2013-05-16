@@ -46,7 +46,7 @@ security:
                 target: _flash_login
 
     access_control:
-         - { path: ^/main, roles: ROLE_LEADER }
+         - { path: ^/main, roles: ROLE_USER }
          - { path: ^/my_group, roles: ROLE_USER }
          - { path: ^/group*, roles: ROLE_USER, methods: [POST, PUT, GET] }
          
