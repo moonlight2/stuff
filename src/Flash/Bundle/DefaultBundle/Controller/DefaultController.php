@@ -21,17 +21,18 @@ class DefaultController extends Controller {
 
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
-        $acl = $this->get('acl_service');
+        $acl = $this->get('acl_manager');
         
+
 //            $event = new Event();
-//            $event->setName('New Event35');
+//            $event->setName('New Event58');
 //            $event->setCity(2);
 //            $event->setCountry(45);
 //            $event->setDate(new \DateTime('2012-12-12 00:00'));
 //            $em->persist($event);
 //            $em->flush();
 //            
-//            $acl->setOwnerForEntity($event);
+//            $acl->grant($event, MaskBuilder::MASK_OWNER);
 ////
 ////
 ////            // creating the ACL
@@ -54,13 +55,16 @@ class DefaultController extends Controller {
 
         $securityContext = $this->get('security.context');
         $user = $securityContext->getToken()->getUser();
-
-        $event = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->find(35);
+        $event = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->find(58);
         
-
+        
+        
+//            $em->persist($event);
+//            $em->flush();
+//        $acl->revoke($event, MaskBuilder::MASK_OWNER);
 
         print_r($event);
-        var_dump($this->get('security.context')->isGranted('DELETE', $event));
+        var_dump($this->get('security.context')->isGranted('EDIT', $event));
 
 
 

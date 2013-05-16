@@ -1,5 +1,6 @@
 parameters:
     acl_service.class:       Flash\Bundle\DefaultBundle\Services\ACLService
+    acl_manager.class:       Flash\Bundle\DefaultBundle\Services\ACLManager
     user_event.class:        Flash\Bundle\DefaultBundle\Services\UserEventFactory
     request_injector.class:  Flash\Bundle\DefaultBundle\Services\RequestInjector
     common_service.class:    Flash\Bundle\DefaultBundle\Services\CommonService
@@ -41,5 +42,9 @@ services:
     acl_service:
         class:        %acl_service.class%
         arguments:    [@security.context, @security.acl.provider]
+        
+    acl_manager:
+        class:        %acl_manager.class%
+        arguments:    [@security.acl.provider, @security.context]
         
 
