@@ -14,6 +14,16 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 class DefaultController extends Controller {
 
     /**
+     * @Route("/upload", name="upload_page")
+     * @Template()
+     */
+    public function uploadAction() {
+        
+        return array('name'=>'Upload action');
+        
+    }
+
+    /**
      * @Route("/test", name="test_page")
      * @Template()
      */
@@ -30,7 +40,6 @@ class DefaultController extends Controller {
 //        var_dump($this->get('security.context')->isGranted('EDIT', $event));
         echo "Test";
         exit();
-
     }
 
     /**

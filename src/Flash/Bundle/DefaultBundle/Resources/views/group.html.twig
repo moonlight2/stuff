@@ -34,7 +34,7 @@
         <div class='sidebar'>
             {% if is_granted('EDIT', app.user.getGroup) %}
                 {{ knp_menu_render('FlashDefaultBundle:Builder:groupLeaderMenu') }}
-                {% if (app.user.getGroup.getNumberOfParty >= 5) %}
+                {% if (app.user.getGroup.getNumberOfParty >= app.user.getGroup.getMinimumUsersNumber) %}
                     {{ knp_menu_render('FlashDefaultBundle:Builder:groupActiveLeaderMenu') }}
                 {% endif %}
             {% endif %}

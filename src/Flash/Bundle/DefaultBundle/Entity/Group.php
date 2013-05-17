@@ -21,6 +21,9 @@ use JMS\Serializer\Annotation\Expose;
  */
 class Group {
 
+    
+    private $MIN_USERS_NUMBER = 2;
+    
     /**
      * @var integer
      *
@@ -39,7 +42,7 @@ class Group {
      * @Expose
      */
     protected $name;
-    
+
     /**
      * @var string
      *
@@ -122,9 +125,23 @@ class Group {
     public function getName() {
         return $this->name;
     }
-    
+
+    /**
+     * Get number of users in group
+     *
+     * @return int
+     */
     public function getNumberOfParty() {
         return $this->getAccounts()->count();
+    }
+
+    /**
+     * Get minimum number of users to activate group leader permissions 
+     *
+     * @return int
+     */
+    public function getMinimumUsersNumber() {
+        return $this->MIN_USERS_NUMBER;
     }
 
     /**
@@ -250,17 +267,15 @@ class Group {
         return $this->country;
     }
 
-
     /**
      * Set dateRegist
      *
      * @param \DateTime $dateRegist
      * @return Group
      */
-    public function setDateRegist($dateRegist)
-    {
+    public function setDateRegist($dateRegist) {
         $this->dateRegist = $dateRegist;
-    
+
         return $this;
     }
 
@@ -269,8 +284,7 @@ class Group {
      *
      * @return \DateTime 
      */
-    public function getDateRegist()
-    {
+    public function getDateRegist() {
         return $this->dateRegist;
     }
 
@@ -280,10 +294,9 @@ class Group {
      * @param string $about
      * @return Group
      */
-    public function setAbout($about)
-    {
+    public function setAbout($about) {
         $this->about = $about;
-    
+
         return $this;
     }
 
@@ -292,8 +305,8 @@ class Group {
      *
      * @return string 
      */
-    public function getAbout()
-    {
+    public function getAbout() {
         return $this->about;
     }
+
 }

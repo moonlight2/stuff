@@ -20,7 +20,12 @@ class EventApiController extends RESTController implements GenericRestApi {
      */
     public function postAction() {
 
-        if ($this->get('security.context')->isGranted('ROLE_LEADER')) {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $group = $user->getGroup();
+
+        if ($this->get('security.context')->isGranted('EDIT', $group) &&
+                $user->getGroup()->getNumberOfParty() >= $user->getGroup()->getMinimumUsersNumber()) {
+            
             return $this->get('event_service')->processForm(new Event());
         } else {
             return array('error' => 'Access denied');
@@ -43,8 +48,8 @@ class EventApiController extends RESTController implements GenericRestApi {
                 throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
             }
         } else {
-                $events = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->findAll();
-                $view->setData($events);
+            $events = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->findAll();
+            $view->setData($events);
         }
         return $this->handle($view);
     }

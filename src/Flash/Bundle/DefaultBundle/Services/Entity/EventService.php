@@ -30,9 +30,9 @@ class EventService extends CommonService {
             $em->persist($group);
             $em->flush();
 
-            if ($request->getMethod() == 'POST') {
-                $this->injector->getAcl()->setAuthorForEntity($event);
-            }
+//            if ($request->getMethod() == 'POST') {
+//                $this->injector->getAcl()->setAuthorForEntity($event);
+//            }
         } else {
             $view->setStatusCode(400);
             return $view->setData($this->getErrorMessages($form));

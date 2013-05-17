@@ -1,0 +1,19 @@
+{% extends "FlashDefaultBundle::logged.html.twig" %}
+
+{% block title "Inside page" %}
+
+{% block content %}
+
+
+<div class='sidebar'></div>
+<div class='main-content'>
+        {{ name }}
+        <form enctype="multipart/form-data" action="logged/rest/api/files" method="POST">
+            <input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+            Choose a file to upload: <input name="uploadedfile" type="file" /><br />
+            <input type="submit" value="Upload File" />
+        </form>
+        <div id='events'></div>
+    </div>
+{% endblock %}
+

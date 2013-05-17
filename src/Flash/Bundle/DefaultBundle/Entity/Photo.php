@@ -4,12 +4,16 @@ namespace Flash\Bundle\DefaultBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 
 /**
  * Photo
  *
  * @ORM\Table(name="photo")
  * @ORM\Entity
+ * @ExclusionPolicy("all")
  */
 class Photo {
 
@@ -19,6 +23,7 @@ class Photo {
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     private $id;
 
@@ -26,6 +31,8 @@ class Photo {
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Expose
+     * @Assert\NotBlank
      */
     private $name;
 
@@ -33,19 +40,49 @@ class Photo {
      * @var string
      *
      * @ORM\Column(name="path", type="string", length=255)
+     * @Assert\NotBlank
      */
     private $path;
 
     /**
-     * @ORM\Column(name="rating", type="integer")
+     * @ORM\Column(name="rating", type="integer", nullable=true)
      */
     private $rating;
 
     /**
      *
      * @ManyToOne(targetEntity="Account", inversedBy="photos")
+     * @Expose
      */
     private $account;
+    
+
+    public function getAbsolutePath() {
+        return null === $this->path 
+            ? null
+            : $this->getUploadRootDir() . '/' . $this->path;
+    }
+    
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
+    }
+    
+    protected function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
+    
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/documents';
+    }
 
     /**
      * Get id
@@ -119,17 +156,15 @@ class Photo {
         return $this->account;
     }
 
-
     /**
      * Set path
      *
      * @param string $path
      * @return Photo
      */
-    public function setPath($path)
-    {
+    public function setPath($path) {
         $this->path = $path;
-    
+
         return $this;
     }
 
@@ -138,8 +173,8 @@ class Photo {
      *
      * @return string 
      */
-    public function getPath()
-    {
+    public function getPath() {
         return $this->path;
     }
+
 }
