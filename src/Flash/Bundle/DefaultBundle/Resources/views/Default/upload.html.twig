@@ -1,4 +1,4 @@
-{% extends "FlashDefaultBundle::logged.html.twig" %}
+{% extends "FlashDefaultBundle::layout.html.twig" %}
 
 {% block title "Inside page" %}
 
@@ -8,12 +8,35 @@
 <div class='sidebar'></div>
 <div class='main-content'>
         {{ name }}
-        <form enctype="multipart/form-data" action="logged/rest/api/files" method="POST">
-            <input type="hidden" name="MAX_FILE_SIZE" value="100000" />
-            Choose a file to upload: <input name="uploadedfile" type="file" /><br />
-            <input type="submit" value="Upload File" />
-        </form>
-        <div id='events'></div>
+        <div>
+            <div id="manual-fine-uploader"></div>
+            <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+                <i class="icon-upload icon-white"></i> Upload now
+            </div>
+        </div>
+
     </div>
+    <script>
+        $(document).ready(function() {
+            var manualuploader = new qq.FineUploader({
+                element: $('#manual-fine-uploader')[0],
+                request: {
+                    endpoint: 'logged/rest/api/files'
+                },
+                autoUpload: false,
+                text: {
+                    uploadButton: '<i class="icon-plus icon-white"></i> Select Files'
+                }
+            });
+
+            $('#triggerUpload').click(function() {
+                manualuploader.uploadStoredFiles();
+            });
+        });
+        </script>
+
+
+
+
 {% endblock %}
 

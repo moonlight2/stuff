@@ -18,7 +18,7 @@ class DefaultController extends Controller {
      * @Template()
      */
     public function uploadAction() {
-        
+
         return array('name'=>'Upload action');
         
     }

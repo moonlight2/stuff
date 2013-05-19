@@ -9,6 +9,7 @@ use Flash\Bundle\ApiBundle\RESTApi\RESTController;
 use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
+use Flash\Bundle\DefaultBundle\HttpFoundation\File\UploadedFile\Document;
 
 /**
  * @Route("/logged/rest/api/files")
@@ -26,6 +27,7 @@ class FileLoadApiController extends RESTController implements GenericRestApi {
     public function getAction($id = null) {
         $view = View::create();
         $view->setData(array('success' => 'Upload action'));
+
 
         return $this->handle($view);
     }
@@ -54,34 +56,17 @@ class FileLoadApiController extends RESTController implements GenericRestApi {
      */
     public function postFileAction(Request $request) {
 
-        $document = new \Flash\Bundle\DefaultBundle\HttpFoundation\File\UploadedFile\Document();
-        $form = $this->createFormBuilder($document)
-                ->add('name')
-                ->add('file')
-                ->getForm();
+        $document = new Document();
 
+        $request = $this->getRequest();
 
-
-        $form->bindRequest($request);
-
-        if ($form->isValid()) {
-            print_r($document);
-        } else {
-            $this->getErrorMessages($form);
-        }
-
-        exit('no');
-
-
-
-        print_r($request);
-//        print_r($file->getType());
-
-
-        var_dump($document->getFile());
-
+        /* @var UploadedFile */
+        $uploadedFile = $request->files->get('qqfile');
+        
+        print_r($uploadedFile->getClientMimeType());
+        $uploadedFile->move(__DIR__."/../../../../uploads", $uploadedFile->getClientOriginalName());
         exit();
-        return array('success' => 'Upload action');
+
     }
 
     public function putAction($id) {
