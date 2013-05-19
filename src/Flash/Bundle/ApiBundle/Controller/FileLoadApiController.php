@@ -63,9 +63,12 @@ class FileLoadApiController extends RESTController implements GenericRestApi {
         /* @var UploadedFile */
         $uploadedFile = $request->files->get('qqfile');
         
-        print_r($uploadedFile->getClientMimeType());
         $uploadedFile->move(__DIR__."/../../../../uploads", $uploadedFile->getClientOriginalName());
-        exit();
+        $view = View::create();
+        $view->setData(array('success' => 'true'));
+
+
+        return $this->handle($view);
 
     }
 

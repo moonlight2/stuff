@@ -21,9 +21,14 @@
             var manualuploader = new qq.FineUploader({
                 element: $('#manual-fine-uploader')[0],
                 request: {
-                    endpoint: 'logged/rest/api/files'
+                    endpoint: 'logged/rest/api/files',
+                    customHeaders: {
+                        Accept: 'application/json'
+                    }
                 },
-                autoUpload: false,
+                sizeLimit: 2000,
+                autoUpload: true,
+                showButton: false,
                 text: {
                     uploadButton: '<i class="icon-plus icon-white"></i> Select Files'
                 }
