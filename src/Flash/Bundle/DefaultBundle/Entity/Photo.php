@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Entity
  * @ExclusionPolicy("all")
  * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\PhotoRepository")
  */
 class Photo {
 
@@ -32,9 +33,8 @@ class Photo {
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      * @Expose
-     * @Assert\NotBlank
      */
     private $name;
 
