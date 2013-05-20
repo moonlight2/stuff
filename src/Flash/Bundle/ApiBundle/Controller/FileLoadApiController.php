@@ -56,20 +56,24 @@ class FileLoadApiController extends RESTController implements GenericRestApi {
      */
     public function postFileAction(Request $request) {
 
-        $document = new Document();
-
-        $request = $this->getRequest();
+        $document = new \Flash\Bundle\DefaultBundle\Entity\Photo();
+       $em = $this->getDoctrine()->getManager();
+       $user = $this->get('security.context')->getToken()->getUser();
 
         /* @var UploadedFile */
-        $uploadedFile = $request->files->get('qqfile');
-        
-        $uploadedFile->move(__DIR__."/../../../../uploads", $uploadedFile->getClientOriginalName());
+       
+        //$document = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Photo')->find(1);
+        $file = $this->getRequest()->files->get('qqfile');
+        $document->setFile($file);
+        $document->setName('name');
+        $document->setAccount($user);
+        $em->persist($document);
+
+        $em->flush();
+
         $view = View::create();
         $view->setData(array('success' => 'true'));
-
-
         return $this->handle($view);
-
     }
 
     public function putAction($id) {
