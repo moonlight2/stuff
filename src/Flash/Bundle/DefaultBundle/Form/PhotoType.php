@@ -6,30 +6,24 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class EventType extends AbstractType {
+class PhotoType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
+        
         $builder
-                ->add('name')
-                ->add('description')
-                ->add('city')
-                ->add('country')
-        ;
-        $builder->add('date', 'date', array(
-            'widget' => 'single_text',
-            'format' => 'dd-MM-yyyy hh:mm'
-        ));
+//                ->add('name')
+                ->add('file');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Flash\Bundle\DefaultBundle\Entity\Event',
+            'data_class' => 'Flash\Bundle\DefaultBundle\Entity\Photo',
             'csrf_protection' => false,
         ));
     }
 
     public function getName() {
-        return 'event';
+        return 'photo';
     }
 
 }

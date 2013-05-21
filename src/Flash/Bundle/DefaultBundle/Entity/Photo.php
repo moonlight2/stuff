@@ -39,7 +39,7 @@ class Photo {
     private $name;
 
     /**
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(maxSize="2000000")
      */
     private $file;
 
@@ -94,12 +94,12 @@ class Photo {
         $this->getFile()->move($this->getUploadRootDir(), $this->path);
 
         // check if we have an old image
-        if (isset($this->temp)) {
-            // delete the old image
-            unlink($this->getUploadRootDir() . '/' . $this->temp);
-            // clear the temp image path
-            $this->temp = null;
-        }
+//        if (isset($this->temp)) {
+//            // delete the old image
+//            unlink($this->getUploadRootDir() . '/' . $this->temp);
+//            // clear the temp image path
+//            $this->temp = null;
+//        }
         $this->file = null;
     }
 
