@@ -22,6 +22,17 @@ class DefaultController extends Controller {
         return array('name'=>'Upload action');
         
     }
+    
+    
+    /**
+     * @Route("/gallery", name="gallery_page")
+     * @Template()
+     */
+    public function galleryAction() {
+
+        return array('name'=>'My gallery');
+        
+    }
 
     /**
      * @Route("/test", name="test_page")

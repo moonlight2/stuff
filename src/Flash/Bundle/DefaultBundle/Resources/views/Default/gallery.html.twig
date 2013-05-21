@@ -1,0 +1,40 @@
+{% extends "FlashDefaultBundle::gallery.html.twig" %}
+
+
+
+{% block content %}
+
+
+
+<script type="text/template" id="image-list-tpl">
+    <a class="thumb"  title="Title #1" href='http://localhost/stuff/web/app_dev.php/image/12/<%= path %>'><%= id %></a>
+</script>
+
+<div class='sidebar'></div>
+<div class='main-content'>
+
+    <div id='uploader'>
+        <div id="manual-fine-uploader"></div>
+        <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+            <i class="icon-upload icon-white"></i> Upload now
+        </div>
+    </div>
+
+    <!-- Start Minimal Gallery Html Containers -->
+    <div id="gallery" class="content">
+        <div id="controls" class="controls"></div>
+        <div class="slideshow-container">
+            <div id="loading" class="loader"></div>
+            <div id="slideshow" class="slideshow"></div>
+        </div>
+    </div>
+    <div id="thumbs" class="navigation">
+        <ul class="thumbs noscript">
+
+        </ul>
+    </div>
+    <!-- End Minimal Gallery Html Containers -->
+</div>
+</div>
+{% endblock %}
+

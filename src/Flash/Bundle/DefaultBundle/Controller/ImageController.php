@@ -14,10 +14,11 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
      * @Route("/{acc_id}/{img_name}")
      * @Method({"GET"})
      */
-    public function getByAccountAndPath($acc_id, $img_name) {
+    public function getByAccountAndPath($acc_id, $img_name = null) {
 
         $acc = $image = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+
         $image = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Photo')->getByAccountAndPath($acc, $img_name);
 

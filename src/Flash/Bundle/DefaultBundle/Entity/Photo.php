@@ -48,18 +48,19 @@ class Photo {
      *
      * @ORM\Column(name="path", type="string", length=255)
      * @Assert\NotBlank
+     * @Expose
      */
     private $path;
 
     /**
      * @ORM\Column(name="rating", type="integer", nullable=true)
+     * @Expose
      */
     private $rating;
 
     /**
      *
      * @ManyToOne(targetEntity="Account", inversedBy="photos")
-     * @Expose
      */
     private $account;
 

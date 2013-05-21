@@ -22,7 +22,7 @@ use JMS\Serializer\Annotation\Expose;
 class Group {
 
     
-    private $MIN_USERS_NUMBER = 2;
+    private $MIN_USERS_NUMBER = 3;
     
     /**
      * @var integer

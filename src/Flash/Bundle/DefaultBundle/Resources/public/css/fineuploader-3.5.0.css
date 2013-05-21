@@ -10,7 +10,7 @@
 .qq-upload-button {
     display: block;
     width: 105px;
-    padding: 7px 0;
+    padding: 7px 0 !important;
     text-align: center;
     background: #880000;
     border-bottom: 1px solid #DDD;
