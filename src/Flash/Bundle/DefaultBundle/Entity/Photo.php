@@ -4,6 +4,7 @@ namespace Flash\Bundle\DefaultBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
@@ -59,17 +60,29 @@ class Photo {
     private $rating;
 
     /**
+     * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="photo")
+     */
+    protected $comments;
+
+    /**
      *
      * @ManyToOne(targetEntity="Account", inversedBy="photos")
      */
     private $account;
 
     /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
     public function preUpload() {
-        
+
         if (null !== $this->getFile()) {
             // do whatever you want to generate a unique name
             $filename = sha1(uniqid(mt_rand(), true));
@@ -82,7 +95,7 @@ class Photo {
      * @ORM\PostUpdate()
      */
     public function upload() {
-        
+
         if (null === $this->getFile()) {
             return;
         }
@@ -90,7 +103,7 @@ class Photo {
         // if there is an error when moving the file, an exception will
         // be automatically thrown by move(). This will properly prevent
         // the entity from being persisted to the database on error
-        
+
         $this->getFile()->move($this->getUploadRootDir(), $this->path);
 
         // check if we have an old image
@@ -250,6 +263,36 @@ class Photo {
      */
     public function getFile() {
         return $this->file;
+    }
+
+    /**
+     * Add comments
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $comments
+     * @return Photo
+     */
+    public function addComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $comments) {
+        $this->comments[] = $comments;
+
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $comments
+     */
+    public function removeComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $comments) {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments() {
+        return $this->comments;
     }
 
 }

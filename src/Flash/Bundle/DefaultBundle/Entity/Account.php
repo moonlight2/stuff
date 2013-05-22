@@ -130,6 +130,16 @@ class Account implements AdvancedUserInterface {
      * @Expose
      */
     protected $events;
+    
+    /**
+     * @OneToMany(targetEntity="Comment", mappedBy="account")
+     */
+    protected $comments;
+    
+    /**
+     * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="account")
+     */
+    protected $photoComments;
 
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="account")
@@ -157,6 +167,7 @@ class Account implements AdvancedUserInterface {
         $this->userEvents = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->videos = new ArrayCollection();
+        $this->photoComments = new ArrayCollection();
     }
 
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
@@ -667,4 +678,70 @@ class Account implements AdvancedUserInterface {
             return $rolesNames;
     }
 
+
+    /**
+     * Add comments
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment $comments
+     * @return Account
+     */
+    public function addComment(\Flash\Bundle\DefaultBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment $comments
+     */
+    public function removeComment(\Flash\Bundle\DefaultBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Add photoComments
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments
+     * @return Account
+     */
+    public function addPhotoComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments)
+    {
+        $this->photoComments[] = $photoComments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove photoComments
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments
+     */
+    public function removePhotoComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments)
+    {
+        $this->photoComments->removeElement($photoComments);
+    }
+
+    /**
+     * Get photoComments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhotoComments()
+    {
+        return $this->photoComments;
+    }
 }

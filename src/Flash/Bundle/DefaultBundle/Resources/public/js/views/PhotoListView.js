@@ -4,6 +4,12 @@ window.PhotoListView = Backbone.View.extend({
         this.model.bind('reset', this.render, this);
         this.model.bind('change', this.render, this);
     },
+    events: {
+        "click": "deleteImage"
+    },
+    deleteImage: function() {
+        console.log('Image was deleted');
+    },
     render: function() {
         _.each(this.model.models, function(photo) {
             $(this.el).attr('class', 'thumbs').append(new PhotoListItemView({model: photo}).render().el);

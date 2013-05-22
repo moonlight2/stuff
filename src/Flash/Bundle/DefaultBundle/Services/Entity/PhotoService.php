@@ -62,7 +62,7 @@ class PhotoService extends CommonService {
             $em->remove($photo);
             $em->flush();
 
-            $resp = array('success' => 'photo was deleted');
+            $resp = array('success' => 'Photo was deleted');
         } else {
             $resp = array('error' => "Access denied. You don't have enought permissions");
         }

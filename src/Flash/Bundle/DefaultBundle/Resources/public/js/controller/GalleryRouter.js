@@ -8,7 +8,6 @@ $(document).ready(function() {
             console.log('Starting gallery router');
             console.log(this);
             this.uploaderInit();
-
         },
         galleryInit: function() {
             $('#thumbs').galleriffic({
@@ -34,9 +33,6 @@ $(document).ready(function() {
                 syncTransitions: true,
                 defaultTransitionDuration: 900,
             });
-
-
-
         },
         showImages: function() {
             var self = this;
