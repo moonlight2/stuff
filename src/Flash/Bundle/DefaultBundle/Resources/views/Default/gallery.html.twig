@@ -7,10 +7,29 @@
 
 
 <script type="text/template" id="image-list-tpl">
-    <a class="thumb"  title="Title #1" href='http://localhost/stuff/web/app_dev.php/image/12/<%= path %>'><%= id %></a>
+    <a class="thumb"  title="<%= id %>" href='http://localhost/stuff/web/app_dev.php/image/12/<%= path %>'>
+        <img src="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>" style="height: 50px"/>
+    </a>
+    <div class="caption">
+        <div class="download">
+        <a href="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>">Download Original</a>
+        </div>
+        <div class="image-desc">Photo id: <%= id %></div>
+        <div class='like'>
+            <p>Рейтинг: 45</p>
+            <button class='btn' id='like<%= id %>'>Мне нравится</button>
+        </div>
+        <div class='comment'>
+            <label>Оставьте комментарий:</label>
+            <textarea></textarea>
+            <button class='btn' id='send<%= id %>'>Отправить</button>
+        </div>
+        <div class='photo-edit'>
+            <button class='btn' id='del<%= id %>'>Удалить</button>
+        </div>
+    </div>
 </script>
 
-<div class='sidebar'></div>
 <div class='main-content'>
 
     <div id='uploader'>
@@ -21,18 +40,21 @@
     </div>
 
     <!-- Start Minimal Gallery Html Containers -->
-    <div id="gallery" class="content">
-        <div id="controls" class="controls"></div>
+
+
+    <div class="content">
+        <div id="thumbs" class="navigation">
+        </div>
         <div class="slideshow-container">
+            <div id="controls" class="controls"></div>
             <div id="loading" class="loader"></div>
             <div id="slideshow" class="slideshow"></div>
         </div>
+        <div id="caption" class="caption-container">
+            <div class="photo-index"></div>
+        </div>
     </div>
-    <div id="thumbs" class="navigation">
-        <ul class="thumbs noscript">
 
-        </ul>
-    </div>
     <!-- End Minimal Gallery Html Containers -->
 </div>
 </div>

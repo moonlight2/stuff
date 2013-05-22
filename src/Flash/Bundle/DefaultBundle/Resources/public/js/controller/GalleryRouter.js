@@ -12,9 +12,31 @@ $(document).ready(function() {
         },
         galleryInit: function() {
             $('#thumbs').galleriffic({
+                delay: 2500,
+                numThumbs: 5,
+                preloadAhead: 10,
+                enableTopPager: true,
+                enableBottomPager: false,
                 imageContainerSel: '#slideshow',
-                controlsContainerSel: '#controls'
+                controlsContainerSel: '#controls',
+                captionContainerSel: '#caption',
+                loadingContainerSel: '#loading',
+                renderSSControls: true,
+                renderNavControls: true,
+                playLinkText: 'Play Slideshow',
+                pauseLinkText: 'Pause Slideshow',
+                prevLinkText: '&lsaquo; Previous Photo',
+                nextLinkText: 'Next Photo &rsaquo;',
+                nextPageLinkText: 'Next &rsaquo;',
+                prevPageLinkText: '&lsaquo; Prev',
+                enableHistory: true,
+                autoStart: false,
+                syncTransitions: true,
+                defaultTransitionDuration: 900,
             });
+
+
+
         },
         showImages: function() {
             var self = this;

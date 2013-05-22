@@ -97,7 +97,7 @@
     color: #000000;
 }
 .qq-upload-cancel, .qq-upload-delete {
-	color: #000000;
+    color: #000000;
 }
 .qq-upload-retryable .qq-upload-retry {
     display: inline;
@@ -144,4 +144,9 @@
     border-radius: 6px;
     margin-bottom: 3px;
     display: none;
+}
+
+#triggerUpload {
+    float: left;
+    margin: 20px 0;
 }

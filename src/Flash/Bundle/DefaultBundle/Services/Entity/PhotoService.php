@@ -5,6 +5,7 @@ namespace Flash\Bundle\DefaultBundle\Services\Entity;
 use FOS\RestBundle\View\View;
 use Flash\Bundle\DefaultBundle\Form\PhotoType;
 use Flash\Bundle\DefaultBundle\Services\CommonService;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class PhotoService extends CommonService {
 
@@ -16,7 +17,6 @@ class PhotoService extends CommonService {
         $view = View::create();
 
         $form->bind(array(
-//            'name' => $request->get('name'),
             'file' => $request->files->get('qqfile')
         ));
 
@@ -30,11 +30,43 @@ class PhotoService extends CommonService {
 
             $em->persist($photo);
             $em->flush();
+
+            if ($request->getMethod() == 'POST') {
+                $acl = $this->injector->getAcl();
+                $acl->grant($photo, MaskBuilder::MASK_EDIT);
+                $acl->grant($photo, MaskBuilder::MASK_VIEW);
+                $acl->grant($photo, MaskBuilder::MASK_DELETE);
+            }
+            $response = array('success' => 'true');
         } else {
             $view->setStatusCode(400);
-            return $view->setData($this->getErrorMessages($form));
+            $response = $this->getErrorMessages($form);
         }
-        return array('success' => 'true');
+        return $view->setData($response);
+    }
+
+    public function delete($id) {
+        
+        $em = $this->injector->getDoctrine()->getManager();
+        
+        $photo = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
+        $view = View::create();
+        
+        if (NULL === $photo) {
+            $resp = array('error' => "Photo not found");
+            return $view->setData($resp);
+        }
+
+        if ($this->context->isGranted('DELETE', $photo)) {
+            $em->persist($photo);
+            $em->remove($photo);
+            $em->flush();
+
+            $resp = array('success' => 'photo was deleted');
+        } else {
+            $resp = array('error' => "Access denied. You don't have enought permissions");
+        }
+        return $view->setData($resp);
     }
 
 }
