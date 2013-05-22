@@ -54,7 +54,7 @@ class Photo {
     private $path;
 
     /**
-     * @ORM\Column(name="rating", type="integer", nullable=true)
+     * @OneToMany(targetEntity="Account", mappedBy="photoLike")
      * @Expose
      */
     private $rating;
@@ -75,6 +75,11 @@ class Photo {
      */
     public function __construct() {
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rating = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getRatingCount() {
+        return $this->rating->count();
     }
 
     /**
@@ -176,33 +181,12 @@ class Photo {
     }
 
     /**
-     * Set rating
-     *
-     * @param integer $rating
-     * @return Photo
-     */
-    public function setRating($rating) {
-        $this->rating = $rating;
-
-        return $this;
-    }
-
-    /**
-     * Get rating
-     *
-     * @return integer 
-     */
-    public function getRating() {
-        return $this->rating;
-    }
-
-    /**
      * Set account
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
      * @return Photo
      */
-    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null) {
+    public function setAccount(\Symfony\Component\Security\Core\User\UserInterface $account = null) {
         $this->account = $account;
 
         return $this;
@@ -293,6 +277,36 @@ class Photo {
      */
     public function getComments() {
         return $this->comments;
+    }
+
+    /**
+     * Add rating
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Account $rating
+     * @return Photo
+     */
+    public function addRating(\Flash\Bundle\DefaultBundle\Entity\Account $rating) {
+        $this->rating[] = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRating() {
+        return $this->rating;
+    }
+
+    /**
+     * Remove rating
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Account $rating
+     */
+    public function removeRating(\Flash\Bundle\DefaultBundle\Entity\Account $rating) {
+        $this->rating->removeElement($rating);
     }
 
 }

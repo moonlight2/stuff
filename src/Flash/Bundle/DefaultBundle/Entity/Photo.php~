@@ -54,13 +54,13 @@ class Photo {
     private $path;
 
     /**
-     * @ORM\Column(name="rating", type="integer", nullable=true)
+     * @OneToMany(targetEntity="Account", mappedBy="photoLike")
      * @Expose
      */
     private $rating;
 
     /**
-     * @OneToMany(targetEntity="PhotoComment", mappedBy="photo")
+     * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="photo")
      */
     protected $comments;
 
@@ -268,10 +268,10 @@ class Photo {
     /**
      * Add comments
      *
-     * @param \Flash\Bundle\DefaultBundle\Entity\Comment $comments
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $comments
      * @return Photo
      */
-    public function addComment(\Flash\Bundle\DefaultBundle\Entity\Comment $comments) {
+    public function addComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $comments) {
         $this->comments[] = $comments;
 
         return $this;
@@ -280,9 +280,9 @@ class Photo {
     /**
      * Remove comments
      *
-     * @param \Flash\Bundle\DefaultBundle\Entity\Comment $comments
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $comments
      */
-    public function removeComment(\Flash\Bundle\DefaultBundle\Entity\Comment $comments) {
+    public function removeComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $comments) {
         $this->comments->removeElement($comments);
     }
 

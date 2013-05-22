@@ -124,6 +124,12 @@ class Account implements AdvancedUserInterface {
      * @Expose
      */
     protected $group;
+    
+    /**
+     * @ManyToOne(targetEntity="Photo", inversedBy="rating")
+     * @Expose
+     */
+    protected $photoLike;
 
     /**
      * @ORM\ManyToMany(targetEntity="Event", inversedBy="Account")
@@ -137,7 +143,7 @@ class Account implements AdvancedUserInterface {
     protected $comments;
     
     /**
-     * @OneToMany(targetEntity="PhotoComment", mappedBy="account")
+     * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="account")
      */
     protected $photoComments;
 
@@ -167,6 +173,7 @@ class Account implements AdvancedUserInterface {
         $this->userEvents = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->videos = new ArrayCollection();
+        $this->photoComments = new ArrayCollection();
     }
 
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
@@ -709,5 +716,38 @@ class Account implements AdvancedUserInterface {
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Add photoComments
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments
+     * @return Account
+     */
+    public function addPhotoComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments)
+    {
+        $this->photoComments[] = $photoComments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove photoComments
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments
+     */
+    public function removePhotoComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments)
+    {
+        $this->photoComments->removeElement($photoComments);
+    }
+
+    /**
+     * Get photoComments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhotoComments()
+    {
+        return $this->photoComments;
     }
 }

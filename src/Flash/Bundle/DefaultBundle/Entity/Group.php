@@ -150,7 +150,7 @@ class Group {
      * @param \Flash\Bundle\DefaultBundle\Entity\Account $accounts
      * @return Group
      */
-    public function addAccount(\Flash\Bundle\DefaultBundle\Entity\Account $accounts) {
+    public function addAccount(\Symfony\Component\Security\Core\User\UserInterface $accounts) {
         $this->accounts[] = $accounts;
 
         return $this;
@@ -161,7 +161,7 @@ class Group {
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Account $accounts
      */
-    public function removeAccount(\Flash\Bundle\DefaultBundle\Entity\Account $accounts) {
+    public function removeAccount(\Symfony\Component\Security\Core\User\UserInterface $accounts) {
         $this->accounts->removeElement($accounts);
     }
 

@@ -51,8 +51,9 @@ class PhotoComment {
      */
     protected $photo;
 
-    public function __construct() {
+    public function __construct(\Symfony\Component\Security\Core\User\UserInterface $account) {
         $this->setDatePost(new \DateTime("now"));
+        $this->account = $account;
     }
 
 

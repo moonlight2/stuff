@@ -124,6 +124,12 @@ class Account implements AdvancedUserInterface {
      * @Expose
      */
     protected $group;
+    
+    /**
+     * @ManyToOne(targetEntity="Photo", inversedBy="rating")
+     * @Expose
+     */
+    protected $photoLike;
 
     /**
      * @ORM\ManyToMany(targetEntity="Event", inversedBy="Account")
@@ -550,27 +556,6 @@ class Account implements AdvancedUserInterface {
     }
 
     /**
-     * Set dateRegist
-     *
-     * @param \DateTime $dateRegist
-     * @return Account
-     */
-    public function setDateRegist($dateRegist) {
-        $this->dateRegist = $dateRegist;
-
-        return $this;
-    }
-
-    /**
-     * Get dateRegist
-     *
-     * @return \DateTime 
-     */
-    public function getDateRegist() {
-        return $this->dateRegist;
-    }
-
-    /**
      * Add userEvents
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\UserEvent $userEvents
@@ -743,5 +728,28 @@ class Account implements AdvancedUserInterface {
     public function getPhotoComments()
     {
         return $this->photoComments;
+    }
+
+    /**
+     * Set photoLike
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photoLike
+     * @return Account
+     */
+    public function setPhotoLike(\Flash\Bundle\DefaultBundle\Entity\Photo $photoLike = null)
+    {
+        $this->photoLike = $photoLike;
+    
+        return $this;
+    }
+
+    /**
+     * Get photoLike
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\Photo 
+     */
+    public function getPhotoLike()
+    {
+        return $this->photoLike;
     }
 }
