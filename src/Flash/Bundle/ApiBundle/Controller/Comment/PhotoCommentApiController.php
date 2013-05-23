@@ -36,16 +36,26 @@ class PhotoCommentApiController extends RESTController implements GenericRestApi
 //            }
         } else {
             $comments = $this->getDoctrine()->getManager()->
-                    getRepository('FlashDefaultBundle:Comment\PhotoComment')->findAll();
-            //$view->setData($events);
-            var_dump($comments);
-            exit();
+                            getRepository('FlashDefaultBundle:Comment\PhotoComment')->findAll();
+            $view->setData($comments);
+            //var_dump($comments);
+            //exit();
         }
         return $this->handle($view);
     }
 
+    /**
+     * @Route("")
+     * @Method({"POST"})
+     */
     public function postAction() {
-        
+
+        $acc = $this->get('security.context')->getToken()->getUser();
+
+        $comment = new \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment($acc);
+
+        return $this->handle($this->get('comment_service')
+                                ->processFormForPhotoComment($comment));
     }
 
     public function putAction($id) {

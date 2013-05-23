@@ -3,39 +3,49 @@
 namespace Flash\Bundle\DefaultBundle\Services\Entity;
 
 use FOS\RestBundle\View\View;
-use Flash\Bundle\DefaultBundle\Form\EventType;
+use Flash\Bundle\DefaultBundle\Form\CommentType;
 use Flash\Bundle\DefaultBundle\Services\CommonService;
+use Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class CommentService extends CommonService {
-    
 
-    public function processFormOfPhotoComment($comment) {
+    public function processFormForPhotoComment($comment) {
 
         $request = $this->injector->getRequest();
         $em = $this->injector->getDoctrine()->getManager();
         $form = $this->injector->getForm()->create(new CommentType(), $comment);
         $view = View::create();
 
-        $form->bind($this->getFromRequest(array('name', 'description', 'city', 'country', 'date')));
+        $form->bind($this->getFromRequest(array('text')));
 
         if ($form->isValid()) {
 
-            $acc = $this->context->getToken()->getUser();
-            $group = $acc->getGroup();
-            $event->setGroup($group);
+            $photoId = $request->get('photo_id');
 
-            $em->persist($event);
-            $em->persist($group);
+            $photo = $em->getRepository('FlashDefaultBundle:Photo')->find($photoId);
+
+            if (NULL === $photo) {
+                return $view->setData(array('error' => 'not found'));
+            }
+
+            $comment->setPhoto($photo);
+            $photo->addComment($comment);
+
+            $em->persist($photo);
+            $em->persist($comment);
             $em->flush();
 
-//            if ($request->getMethod() == 'POST') {
-//                $this->injector->getAcl()->setAuthorForEntity($event);
-//            }
+            if ($request->getMethod() == 'POST') {
+                $acl = $this->injector->getAcl();
+                $acl->grant($comment, MaskBuilder::MASK_EDIT);
+                $acl->grant($comment, MaskBuilder::MASK_DELETE);
+            }
         } else {
             $view->setStatusCode(400);
             return $view->setData($this->getErrorMessages($form));
         }
-        return $event;
+        return $view->setData($comment);
     }
 
 }

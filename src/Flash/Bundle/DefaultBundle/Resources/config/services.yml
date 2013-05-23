@@ -10,6 +10,7 @@ parameters:
     account_service.class:   Flash\Bundle\DefaultBundle\Services\Entity\AccountService
     group_service.class:     Flash\Bundle\DefaultBundle\Services\Entity\GroupService
     photo_service.class:     Flash\Bundle\DefaultBundle\Services\Entity\PhotoService
+    comment_service.class:   Flash\Bundle\DefaultBundle\Services\Entity\CommentService
     
         
 services:
@@ -38,6 +39,10 @@ services:
         
     photo_service:
         class:        %photo_service.class%
+        parent:       common_service
+        
+    comment_service:
+        class:        %comment_service.class%
         parent:       common_service
         
     user_event:

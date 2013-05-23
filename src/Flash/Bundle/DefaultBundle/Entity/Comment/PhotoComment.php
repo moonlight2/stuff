@@ -37,6 +37,12 @@ class PhotoComment implements Estimable {
     protected $rating;
 
     /**
+     * @ORM\Column(type="text")
+     * @Expose
+     */
+    protected $text;
+
+    /**
      * @var date
      *
      * @ORM\Column(name="posted", type="datetime")
@@ -46,10 +52,12 @@ class PhotoComment implements Estimable {
 
     /**
      * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="photoComments")
+     * @Expose
      */
     protected $account;
 
     /**
+     * @Expose
      * @ManyToOne(targetEntity="Flash\Bundle\DefaultBundle\Entity\Photo", inversedBy="comments")
      */
     protected $photo;
@@ -170,4 +178,27 @@ class PhotoComment implements Estimable {
         return $this->rating->count();
     }
 
+
+    /**
+     * Set text
+     *
+     * @param string $text
+     * @return PhotoComment
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string 
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
 }
