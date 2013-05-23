@@ -33,6 +33,16 @@ class DefaultController extends Controller {
         return array('name'=>'My gallery');
         
     }
+    
+    /**
+     * @Route("/gallery2", name="gallery2_page")
+     * @Template()
+     */
+    public function gallery2Action() {
+
+        return array('name'=>'My gallery2');
+        
+    }
 
     /**
      * @Route("/test", name="test_page")

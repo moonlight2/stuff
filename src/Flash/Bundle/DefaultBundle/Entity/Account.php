@@ -66,7 +66,6 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ORM\Column(type="string", length=60)
-     * @Expose
      * @Assert\NotBlank(message = "Поле email не может быть пустым")
      * @Assert\Email(message = "Введите корректный email")
      */
@@ -74,7 +73,6 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="Account")
-     * @Expose
      */
     protected $roles;
 
@@ -121,13 +119,11 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ManyToOne(targetEntity="Group", inversedBy="accounts")
-     * @Expose
      */
     protected $group;
     
     /**
      * @ManyToOne(targetEntity="Photo", inversedBy="rating")
-     * @Expose
      */
     protected $photoLike;
     
@@ -782,26 +778,4 @@ class Account implements AdvancedUserInterface {
         return $this->dateRegist;
     }
 
-    /**
-     * Set photoCommentLike
-     *
-     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoCommentLike
-     * @return Account
-     */
-    public function setPhotoCommentLike(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoCommentLike = null)
-    {
-        $this->photoCommentLike = $photoCommentLike;
-    
-        return $this;
-    }
-
-    /**
-     * Get photoCommentLike
-     *
-     * @return \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment 
-     */
-    public function getPhotoCommentLike()
-    {
-        return $this->photoCommentLike;
-    }
 }

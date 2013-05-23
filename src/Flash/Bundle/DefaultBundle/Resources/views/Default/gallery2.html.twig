@@ -1,0 +1,66 @@
+{% extends "FlashDefaultBundle::gallery.html.twig" %}
+
+
+
+{% block content %}
+
+
+
+<script type="text/template" id="image-list-tpl">
+    <a class="thumb"  title="<%= id %>" href='http://localhost/stuff/web/app_dev.php/image/12/<%= path %>'>
+        <img src="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>" style="height: 50px"/>
+    </a>
+    <div class="caption">
+        <fieldset>
+            <legend><%= name %></legend>
+            <div class="download">
+            <a href="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>">Download Original</a>
+            </div>
+            <span class="help-block">Photo id: <%= id %></span>
+            <div class='like'>
+                <span class="help-block">Рейтинг: 45</span>
+                <button class='btn' id='like<%= id %>'>Мне нравится</button>
+            </div>
+            <div class='comment'>
+                <label>Оставьте комментарий:</label>
+                <textarea></textarea>
+                <br>
+                <button class='btn' id='send<%= id %>'>Отправить</button>
+            </div>
+            <div class='photo-edit'>
+                <button class='delete btn' id='del<%= id %>'>Удалить</button>
+            </div>
+        </fieldset>
+    </div>
+</script>
+
+<div class='main-content'>
+
+    <div id='uploader'>
+        <div id="manual-fine-uploader"></div>
+        <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+            <i class="icon-upload icon-white"></i> Upload now
+        </div>
+    </div>
+
+    <!-- Start Minimal Gallery Html Containers -->
+
+
+    <div class="content">
+        <div id="thumbs" class="navigation">
+        </div>
+        <div class="slideshow-container">
+            <div id="controls" class="controls"></div>
+            <div id="loading" class="loader"></div>
+            <div id="slideshow" class="slideshow"></div>
+        </div>
+        <div id="caption" class="caption-container">
+            <div class="photo-index"></div>
+        </div>
+    </div>
+
+    <!-- End Minimal Gallery Html Containers -->
+</div>
+</div>
+{% endblock %}
+

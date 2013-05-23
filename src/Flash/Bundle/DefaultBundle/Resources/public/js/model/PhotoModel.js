@@ -1,6 +1,6 @@
 
 window.PhototModel = Backbone.Model.extend({
-    urlRoot: 'rest/api/photos',
+    urlRoot: 'logged/rest/api/photos',
     defaults: {
         "id": null,
         "name": "",
@@ -10,5 +10,5 @@ window.PhototModel = Backbone.Model.extend({
 
 window.PhotoCollection = Backbone.Collection.extend({
     model: PhototModel,
-    url: 'rest/api/photos'
+    url: 'logged/rest/api/photos'
 });

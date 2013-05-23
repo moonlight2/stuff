@@ -30,7 +30,7 @@ class Photo implements Estimable {
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -38,12 +38,12 @@ class Photo implements Estimable {
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      * @Expose
      */
-    private $name;
+    protected $name;
 
     /**
      * @Assert\File(maxSize="2000000")
      */
-    private $file;
+    protected $file;
 
     /**
      * @var string
@@ -52,7 +52,7 @@ class Photo implements Estimable {
      * @Assert\NotBlank
      * @Expose
      */
-    private $path;
+    protected $path;
 
     /**
      * @OneToMany(targetEntity="Account", mappedBy="photoLike")
@@ -61,6 +61,7 @@ class Photo implements Estimable {
     protected $rating;
 
     /**
+     * @Expose
      * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="photo")
      */
     protected $comments;
@@ -69,7 +70,7 @@ class Photo implements Estimable {
      *
      * @ManyToOne(targetEntity="Account", inversedBy="photos")
      */
-    private $account;
+    protected $account;
 
     /**
      * Constructor
@@ -294,6 +295,18 @@ class Photo implements Estimable {
      */
     public function getRating() {
         return $this->rating;
+    }
+
+    /**
+     * Check rating for exists
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
+     */
+    public function existsRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
+        foreach ($this->rating as $acc) {
+            echo $acc->getEmail();
+        }
+        exit();
     }
 
     /**

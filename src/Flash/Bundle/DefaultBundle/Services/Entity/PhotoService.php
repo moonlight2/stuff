@@ -37,7 +37,7 @@ class PhotoService extends CommonService {
                 $acl->grant($photo, MaskBuilder::MASK_VIEW);
                 $acl->grant($photo, MaskBuilder::MASK_DELETE);
             }
-            $response = array('success' => 'true');
+            $response = $photo;
         } else {
             $view->setStatusCode(400);
             $response = $this->getErrorMessages($form);
@@ -45,13 +45,46 @@ class PhotoService extends CommonService {
         return $view->setData($response);
     }
 
-    public function delete($id) {
-        
+    public function like($id) {
+
         $em = $this->injector->getDoctrine()->getManager();
-        
+
         $photo = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
         $view = View::create();
         
+
+        if (NULL === $photo) {
+            $resp = array('error' => "Photo not found");
+            return $view->setData($resp);
+        }
+        
+        
+        $acc = $this->context->getToken()->getUser();
+        
+       
+//        if ($photo->getRating()->contains($this->context->getToken()->getUser())) {
+//            
+//            $photo->removeRating($acc);
+//        } else {
+            $acc->setPhotoLike($photo);
+            $photo->addRating($acc);
+//        }
+
+
+        $em->persist($photo);
+        $em->persist($acc);
+        $em->flush();
+        
+        return $view->setData($photo);
+    }
+
+    public function delete($id) {
+
+        $em = $this->injector->getDoctrine()->getManager();
+
+        $photo = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
+        $view = View::create();
+
         if (NULL === $photo) {
             $resp = array('error' => "Photo not found");
             return $view->setData($resp);

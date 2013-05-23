@@ -27,19 +27,18 @@ class PhotoCommentApiController extends RESTController implements GenericRestApi
 
         $view = View::create();
 
-        if (null != $id) {
-//            $event = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Event')->find($id);
-//            if (NULL != $event) {
-//                $view->setData($event);
-//            } else {
-//                throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
-//            }
+        if (NULL != $id) {
+            $photo = $this->getDoctrine()->getManager()
+                    ->getRepository('FlashDefaultBundle:Comment\PhotoComment')->find($id);
+            if (NULL != $comment) {
+                $view->setData($comment);
+            } else {
+                $view->setData(array('error'=>'Not found'));
+            }
         } else {
             $comments = $this->getDoctrine()->getManager()->
                             getRepository('FlashDefaultBundle:Comment\PhotoComment')->findAll();
             $view->setData($comments);
-            //var_dump($comments);
-            //exit();
         }
         return $this->handle($view);
     }
