@@ -2,6 +2,7 @@
 
 namespace Flash\Bundle\DefaultBundle\Entity;
 
+use Flash\Bundle\DefaultBundle\Entity\Common\Estimable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\PhotoRepository")
  */
-class Photo {
+class Photo implements Estimable {
 
     /**
      * @var integer
@@ -57,7 +58,7 @@ class Photo {
      * @OneToMany(targetEntity="Account", mappedBy="photoLike")
      * @Expose
      */
-    private $rating;
+    protected $rating;
 
     /**
      * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="photo")
@@ -76,10 +77,6 @@ class Photo {
     public function __construct() {
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rating = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    public function getRatingCount() {
-        return $this->rating->count();
     }
 
     /**
@@ -282,10 +279,9 @@ class Photo {
     /**
      * Add rating
      *
-     * @param \Flash\Bundle\DefaultBundle\Entity\Account $rating
-     * @return Photo
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
      */
-    public function addRating(\Flash\Bundle\DefaultBundle\Entity\Account $rating) {
+    public function addRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
         $this->rating[] = $rating;
 
         return $this;
@@ -303,10 +299,19 @@ class Photo {
     /**
      * Remove rating
      *
-     * @param \Flash\Bundle\DefaultBundle\Entity\Account $rating
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
      */
-    public function removeRating(\Flash\Bundle\DefaultBundle\Entity\Account $rating) {
+    public function removeRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
         $this->rating->removeElement($rating);
+    }
+
+    /**
+     * Get rating count
+     *
+     * @return int
+     */
+    public function getRatingCount() {
+        return $this->rating->count();
     }
 
 }

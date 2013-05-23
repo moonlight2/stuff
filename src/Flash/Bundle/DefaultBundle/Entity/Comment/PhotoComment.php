@@ -1,9 +1,12 @@
 <?php
+
 namespace Flash\Bundle\DefaultBundle\Entity\Comment;
 
+use Flash\Bundle\DefaultBundle\Entity\Common\Estimable;
 use Doctrine\ORM\Mapping as ORM;
 use Flash\Bundle\DefaultBundle\Entity\Account;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
@@ -15,8 +18,8 @@ use JMS\Serializer\Annotation\Expose;
  * @ORM\Entity
  * @ExclusionPolicy("all")
  */
-class PhotoComment {
-    
+class PhotoComment implements Estimable {
+
     /**
      * @var integer
      *
@@ -28,7 +31,7 @@ class PhotoComment {
     protected $id;
 
     /**
-     * @ORM\Column(name="rating", type="integer", nullable=true)
+     * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", mappedBy="photoCommentLike")
      * @Expose
      */
     protected $rating;
@@ -42,10 +45,10 @@ class PhotoComment {
     protected $datePost;
 
     /**
-     * @ManyToOne(targetEntity="Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="photoComments")
+     * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="photoComments")
      */
     protected $account;
-    
+
     /**
      * @ManyToOne(targetEntity="Flash\Bundle\DefaultBundle\Entity\Photo", inversedBy="comments")
      */
@@ -54,40 +57,16 @@ class PhotoComment {
     public function __construct(\Symfony\Component\Security\Core\User\UserInterface $account) {
         $this->setDatePost(new \DateTime("now"));
         $this->account = $account;
+        $this->rating = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
-    }
-
-    /**
-     * Set rating
-     *
-     * @param integer $rating
-     * @return Comment
-     */
-    public function setRating($rating)
-    {
-        $this->rating = $rating;
-    
-        return $this;
-    }
-
-    /**
-     * Get rating
-     *
-     * @return integer 
-     */
-    public function getRating()
-    {
-        return $this->rating;
     }
 
     /**
@@ -96,10 +75,9 @@ class PhotoComment {
      * @param \DateTime $datePost
      * @return Comment
      */
-    public function setDatePost(\DateTime $datePost)
-    {
+    public function setDatePost(\DateTime $datePost) {
         $this->datePost = $datePost;
-    
+
         return $this;
     }
 
@@ -108,8 +86,7 @@ class PhotoComment {
      *
      * @return \DateTime 
      */
-    public function getDatePost()
-    {
+    public function getDatePost() {
         return $this->datePost;
     }
 
@@ -119,10 +96,9 @@ class PhotoComment {
      * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
      * @return Comment
      */
-    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null)
-    {
+    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null) {
         $this->account = $account;
-    
+
         return $this;
     }
 
@@ -131,8 +107,7 @@ class PhotoComment {
      *
      * @return \Flash\Bundle\DefaultBundle\Entity\Account 
      */
-    public function getAccount()
-    {
+    public function getAccount() {
         return $this->account;
     }
 
@@ -142,10 +117,9 @@ class PhotoComment {
      * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photo
      * @return Comment
      */
-    public function setPhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photo = null)
-    {
+    public function setPhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photo = null) {
         $this->photo = $photo;
-    
+
         return $this;
     }
 
@@ -154,8 +128,46 @@ class PhotoComment {
      *
      * @return \Flash\Bundle\DefaultBundle\Entity\Photo 
      */
-    public function getPhoto()
-    {
+    public function getPhoto() {
         return $this->photo;
     }
+
+    /**
+     * Add rating
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
+     */
+    public function addRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
+        $this->rating[] = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRating() {
+        return $this->rating;
+    }
+
+    /**
+     * Remove rating
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
+     */
+    public function removeRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
+        $this->rating->removeElement($rating);
+    }
+
+    /**
+     * Get rating count
+     *
+     * @return int
+     */
+    public function getRatingCount() {
+        return $this->rating->count();
+    }
+
 }

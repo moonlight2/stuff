@@ -19,11 +19,11 @@ class PhotoCommentApiController extends RESTController implements GenericRestApi
     }
 
     /**
-     * @Param id - id of photo
+     * @param id - id of photo
      * @Route("/{id}", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
-    public function getAction($id) {
+    public function getAction($id = NULL) {
 
         $view = View::create();
 
@@ -35,8 +35,11 @@ class PhotoCommentApiController extends RESTController implements GenericRestApi
 //                throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
 //            }
         } else {
-            $comments = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Comment')->findAll();
-            $view->setData($events);
+            $comments = $this->getDoctrine()->getManager()->
+                    getRepository('FlashDefaultBundle:Comment\PhotoComment')->findAll();
+            //$view->setData($events);
+            var_dump($comments);
+            exit();
         }
         return $this->handle($view);
     }

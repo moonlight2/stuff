@@ -4,6 +4,7 @@ namespace Flash\Bundle\DefaultBundle\Entity\Comment;
 use Doctrine\ORM\Mapping as ORM;
 use Flash\Bundle\DefaultBundle\Entity\Account;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
@@ -28,10 +29,10 @@ class PhotoComment {
     protected $id;
 
     /**
-     * @ORM\Column(name="rating", type="integer", nullable=true)
+     * @OneToMany(targetEntity="Account", mappedBy="photoCommentLike")
      * @Expose
      */
-    protected $rating;
+    private $rating;
 
     /**
      * @var date
@@ -42,17 +43,19 @@ class PhotoComment {
     protected $datePost;
 
     /**
-     * @ManyToOne(targetEntity="Account", inversedBy="photoComments")
+     * @ManyToOne(targetEntity="Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="photoComments")
      */
     protected $account;
     
     /**
-     * @ManyToOne(targetEntity="Photo", inversedBy="comments")
+     * @ManyToOne(targetEntity="Flash\Bundle\DefaultBundle\Entity\Photo", inversedBy="comments")
      */
     protected $photo;
 
-    public function __construct() {
+    public function __construct(\Symfony\Component\Security\Core\User\UserInterface $account) {
         $this->setDatePost(new \DateTime("now"));
+        $this->account = $account;
+        $this->rating = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
