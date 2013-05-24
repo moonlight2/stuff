@@ -45,50 +45,32 @@ class PhotoService extends CommonService {
         return $view->setData($response);
     }
 
-    public function like($id) {
+    public function like($photo) {
 
         $em = $this->injector->getDoctrine()->getManager();
-
-        $photo = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
         $view = View::create();
-        
-
-        if (NULL === $photo) {
-            $resp = array('error' => "Photo not found");
-            return $view->setData($resp);
-        }
-        
-        
         $acc = $this->context->getToken()->getUser();
-        
-       
-//        if ($photo->getRating()->contains($this->context->getToken()->getUser())) {
-//            
-//            $photo->removeRating($acc);
-//        } else {
+
+        if ($photo->existsRating($acc)) {
+            $acc->removePhotoLike($photo);
+            $photo->removeRating($acc);
+        } else {
             $acc->setPhotoLike($photo);
             $photo->addRating($acc);
-//        }
+        }
 
-
-        $em->persist($photo);
         $em->persist($acc);
+        $em->persist($photo);
+
         $em->flush();
-        
+
         return $view->setData($photo);
     }
 
-    public function delete($id) {
-
+    public function delete($photo) {
+        
         $em = $this->injector->getDoctrine()->getManager();
-
-        $photo = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
         $view = View::create();
-
-        if (NULL === $photo) {
-            $resp = array('error' => "Photo not found");
-            return $view->setData($resp);
-        }
 
         if ($this->context->isGranted('DELETE', $photo)) {
             $em->persist($photo);

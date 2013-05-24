@@ -303,10 +303,14 @@ class Photo implements Estimable {
      * @param \Symfony\Component\Security\Core\User\UserInterface $rating
      */
     public function existsRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
-        foreach ($this->rating as $acc) {
-            echo $acc->getEmail();
+        
+        $accs = $this->rating->getValues();
+        foreach ($accs as $acc) {
+            if ($acc->getEmail() == $rating->getEmail()) {
+                return true;
+            } 
         }
-        exit();
+        return false;
     }
 
     /**
@@ -318,9 +322,11 @@ class Photo implements Estimable {
         $this->rating->removeElement($rating);
     }
 
+    
+
     /**
      * Get rating count
-     *
+     * 
      * @return int
      */
     public function getRatingCount() {

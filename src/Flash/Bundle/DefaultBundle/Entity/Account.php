@@ -121,12 +121,12 @@ class Account implements AdvancedUserInterface {
      * @ManyToOne(targetEntity="Group", inversedBy="accounts")
      */
     protected $group;
-    
+
     /**
      * @ManyToOne(targetEntity="Photo", inversedBy="rating")
      */
     protected $photoLike;
-    
+
     /**
      * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", inversedBy="rating")
      * @Expose
@@ -138,12 +138,12 @@ class Account implements AdvancedUserInterface {
      * @Expose
      */
     protected $events;
-    
+
     /**
      * @OneToMany(targetEntity="Comment", mappedBy="account")
      */
     protected $comments;
-    
+
     /**
      * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="account")
      */
@@ -332,7 +332,7 @@ class Account implements AdvancedUserInterface {
      * @return array
      */
     public function getRoles() {
-        
+
         $roles = $this->roles->getValues();
 
         foreach ($roles as $role) {
@@ -347,8 +347,6 @@ class Account implements AdvancedUserInterface {
         }
         return $rolesNames;
     }
-    
-    
 
     public function eraseCredentials() {
         
@@ -656,15 +654,14 @@ class Account implements AdvancedUserInterface {
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getCustomRoles() {
-        
-            $rolesNames = null;
-            $cRoles = $this->customRoles->getValues();
-            foreach ($cRoles as $r) {
-                $rolesNames[] = $r->getRole();
-            }
-            return $rolesNames;
-    }
 
+        $rolesNames = null;
+        $cRoles = $this->customRoles->getValues();
+        foreach ($cRoles as $r) {
+            $rolesNames[] = $r->getRole();
+        }
+        return $rolesNames;
+    }
 
     /**
      * Add comments
@@ -672,10 +669,9 @@ class Account implements AdvancedUserInterface {
      * @param \Flash\Bundle\DefaultBundle\Entity\Comment $comments
      * @return Account
      */
-    public function addComment(\Flash\Bundle\DefaultBundle\Entity\Comment $comments)
-    {
+    public function addComment(\Flash\Bundle\DefaultBundle\Entity\Comment $comments) {
         $this->comments[] = $comments;
-    
+
         return $this;
     }
 
@@ -684,8 +680,7 @@ class Account implements AdvancedUserInterface {
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Comment $comments
      */
-    public function removeComment(\Flash\Bundle\DefaultBundle\Entity\Comment $comments)
-    {
+    public function removeComment(\Flash\Bundle\DefaultBundle\Entity\Comment $comments) {
         $this->comments->removeElement($comments);
     }
 
@@ -694,8 +689,7 @@ class Account implements AdvancedUserInterface {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getComments()
-    {
+    public function getComments() {
         return $this->comments;
     }
 
@@ -705,10 +699,9 @@ class Account implements AdvancedUserInterface {
      * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments
      * @return Account
      */
-    public function addPhotoComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments)
-    {
+    public function addPhotoComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments) {
         $this->photoComments[] = $photoComments;
-    
+
         return $this;
     }
 
@@ -717,8 +710,7 @@ class Account implements AdvancedUserInterface {
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments
      */
-    public function removePhotoComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments)
-    {
+    public function removePhotoComment(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoComments) {
         $this->photoComments->removeElement($photoComments);
     }
 
@@ -727,8 +719,7 @@ class Account implements AdvancedUserInterface {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPhotoComments()
-    {
+    public function getPhotoComments() {
         return $this->photoComments;
     }
 
@@ -738,10 +729,9 @@ class Account implements AdvancedUserInterface {
      * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photoLike
      * @return Account
      */
-    public function setPhotoLike(\Flash\Bundle\DefaultBundle\Entity\Photo $photoLike = null)
-    {
+    public function setPhotoLike(\Flash\Bundle\DefaultBundle\Entity\Photo $photoLike = null) {
         $this->photoLike = $photoLike;
-    
+
         return $this;
     }
 
@@ -750,9 +740,14 @@ class Account implements AdvancedUserInterface {
      *
      * @return \Flash\Bundle\DefaultBundle\Entity\Photo 
      */
-    public function getPhotoLike()
-    {
+    public function getPhotoLike() {
         return $this->photoLike;
+    }
+
+    public function removePhotoLike() {
+        unset($this->photoLike);
+
+        return $this;
     }
 
     /**
@@ -761,10 +756,9 @@ class Account implements AdvancedUserInterface {
      * @param \DateTime $dateRegist
      * @return Account
      */
-    public function setDateRegist($dateRegist)
-    {
+    public function setDateRegist($dateRegist) {
         $this->dateRegist = $dateRegist;
-    
+
         return $this;
     }
 
@@ -773,9 +767,35 @@ class Account implements AdvancedUserInterface {
      *
      * @return \DateTime 
      */
-    public function getDateRegist()
-    {
+    public function getDateRegist() {
         return $this->dateRegist;
+    }
+
+    /**
+     * Set photoCommentLike
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoCommentLike
+     * @return Account
+     */
+    public function setPhotoCommentLike(\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment $photoCommentLike = null) {
+        $this->photoCommentLike = $photoCommentLike;
+
+        return $this;
+    }
+
+    public function removePhotoCommentLike() {
+        unset($this->photoCommentLike);
+
+        return $this;
+    }
+
+    /**
+     * Get photoCommentLike
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment 
+     */
+    public function getPhotoCommentLike() {
+        return $this->photoCommentLike;
     }
 
 }
