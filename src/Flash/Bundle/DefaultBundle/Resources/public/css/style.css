@@ -83,7 +83,7 @@ root {
 }
 
 .ui-datepicker-header {
-        background-clip: padding-box;
+    background-clip: padding-box;
     background-color: #FFFFFF;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 6px 6px 6px 6px;
@@ -124,3 +124,4 @@ root {
 #group-block {
     display: none;
 }
+

@@ -19,29 +19,36 @@ class DefaultController extends Controller {
      */
     public function uploadAction() {
 
-        return array('name'=>'Upload action');
-        
+        return array('name' => 'Upload action');
     }
-    
-    
+
     /**
      * @Route("/gallery", name="gallery_page")
      * @Template()
      */
     public function galleryAction() {
 
-        return array('name'=>'My gallery');
-        
+        return array('name' => 'My gallery');
     }
-    
+
     /**
-     * @Route("/gallery2", name="gallery2_page")
+     * @Route("/p{acc_id}/gallery2", requirements={"id" = "\d+"}, name="gallery2_page")
      * @Template()
      */
-    public function gallery2Action() {
+    public function gallery2Action($acc_id = null) {
 
-        return array('name'=>'My gallery2');
-        
+        $em = $this->getDoctrine()->getManager();
+        if (NULL != $acc_id) {
+            $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+            if (NULL != $acc) {
+                return array('name' => 'My gallery2'. $acc->getEmail(),
+                    'acc_id'=>$acc->getId());
+            } else {
+                throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+            }
+        } else {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+        }
     }
 
     /**

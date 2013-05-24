@@ -42,7 +42,7 @@ class PhotoService extends CommonService {
             $view->setStatusCode(400);
             $response = $this->getErrorMessages($form);
         }
-        return $view->setData($response);
+        return $view->setData(array('success'=>'true', 'photo'=>$photo));
     }
 
     public function like($photo) {

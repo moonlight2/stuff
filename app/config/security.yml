@@ -47,6 +47,7 @@ security:
 
     access_control:
          - { path: ^/main, roles: ROLE_USER }
+         - { path: ^/p*, roles: ROLE_USER }
          - { path: ^/my_group, roles: ROLE_USER }
          - { path: ^/group*, roles: ROLE_USER, methods: [POST, PUT, GET] }
          

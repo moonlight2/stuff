@@ -10,7 +10,7 @@ use FOS\RestBundle\View\View;
 use Flash\Bundle\DefaultBundle\Entity\Photo;
 
 /**
- * @Route("/logged/rest/api/files")
+ * @Route("/{acc_id}/files")
  */
 class FileLoadApiController extends RESTController implements GenericRestApi {
 

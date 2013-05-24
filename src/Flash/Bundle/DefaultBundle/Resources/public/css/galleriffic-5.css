@@ -18,6 +18,20 @@ div.navigation a.pageLink {
 	line-height: 77px;
 }
 
+.photo-details {
+
+}
+.photo-details .thumb {
+    display: block;
+    width: 350px;
+    float: left;
+}
+.photo-details .caption {
+    width: 250px;
+    float: left;
+
+}
+
 div.controls {
 	margin-top: 5px;
 	height: 23px;

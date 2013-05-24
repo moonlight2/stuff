@@ -1,37 +1,48 @@
-{% extends "FlashDefaultBundle::gallery.html.twig" %}
+{% extends "FlashDefaultBundle::gallery2.html.twig" %}
 
 
 
 {% block content %}
 
+<h2>Account id: {{ acc_id }}</h2>
+
 
 
 <script type="text/template" id="image-list-tpl">
-    <a class="thumb"  title="<%= id %>" href='http://localhost/stuff/web/app_dev.php/image/12/<%= path %>'>
+    <a class="thumb"  title="<%= name %>" href='#photo/<%= id %>'>
         <img src="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>" style="height: 50px"/>
     </a>
-    <div class="caption">
-        <fieldset>
-            <legend><%= name %></legend>
-            <div class="download">
-            <a href="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>">Download Original</a>
-            </div>
-            <span class="help-block">Photo id: <%= id %></span>
-            <div class='like'>
-                <span class="help-block">Рейтинг: 45</span>
-                <button class='btn' id='like<%= id %>'>Мне нравится</button>
-            </div>
-            <div class='comment'>
-                <label>Оставьте комментарий:</label>
-                <textarea></textarea>
-                <br>
-                <button class='btn' id='send<%= id %>'>Отправить</button>
-            </div>
-            <div class='photo-edit'>
-                <button class='delete btn' id='del<%= id %>'>Удалить</button>
-            </div>
-        </fieldset>
+</script>
+
+<script type="text/template" id="image-details-tpl">
+    <div class="photo-details">
+        <a class="thumb"  title="<%= id %>" href='http://localhost/stuff/web/app_dev.php/image/12/<%= path %>'>
+            <img src="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>" style="height: 250px"/>
+        </a>
+        <div class="caption">
+            <fieldset>
+                <legend><%= name %></legend>
+                <div class="download">
+                <a href="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>">Download Original</a>
+                </div>
+                <span class="help-block">Photo id: <%= id %></span>
+                <div class='like'>
+                    <span class="help-block">Рейтинг: 45</span>
+                    <button class='btn' id='like' val='<%= id %>'>Мне нравится</button>
+                </div>
+                <div class='comment'>
+                    <label>Оставьте комментарий:</label>
+                    <textarea></textarea>
+                    <br>
+                    <button class='btn' id='send' val ='<%= id %>'>Отправить</button>
+                </div>
+                <div class='photo-edit'>
+                    <button class='delete btn' id='delete' val='<%= id %>'>Удалить</button>
+                </div>
+            </fieldset>
+        </div>
     </div>
+        
 </script>
 
 <div class='main-content'>
@@ -45,13 +56,11 @@
 
     <!-- Start Minimal Gallery Html Containers -->
 
-
     <div class="content">
         <div id="thumbs" class="navigation">
         </div>
         <div class="slideshow-container">
             <div id="controls" class="controls"></div>
-            <div id="loading" class="loader"></div>
             <div id="slideshow" class="slideshow"></div>
         </div>
         <div id="caption" class="caption-container">

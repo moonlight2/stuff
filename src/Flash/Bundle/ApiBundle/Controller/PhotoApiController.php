@@ -10,7 +10,7 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use Flash\Bundle\DefaultBundle\Entity\Photo;
 
 /**
- * @Route("logged/rest/api/p{acc_id}/photos", requirements={"acc_id" = "\d+"})
+ * @Route("p{acc_id}/photos", requirements={"acc_id" = "\d+"})
  */
 class PhotoApiController extends RESTController implements GenericRestApi {
 
