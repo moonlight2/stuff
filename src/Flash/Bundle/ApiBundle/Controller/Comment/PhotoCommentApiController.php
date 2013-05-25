@@ -14,8 +14,12 @@ use FOS\RestBundle\View\View;
  */
 class PhotoCommentApiController extends RESTController implements GenericRestApi {
 
-    public function deleteAction($id) {
-        
+    /**
+     * @Route("/{id}/{comm_id}", requirements={"id" = "\d+"})
+     * @Method({"DELETE"})
+     */
+    public function deleteAction($id, $comm_id = null) {
+        exit('delete');
     }
 
     /**
@@ -29,11 +33,11 @@ class PhotoCommentApiController extends RESTController implements GenericRestApi
 
         if (NULL != $id) {
             $photo = $this->getDoctrine()->getManager()
-                    ->getRepository('FlashDefaultBundle:Photo')->find($id);
+                            ->getRepository('FlashDefaultBundle:Photo')->find($id);
             if (NULL != $photo) {
                 $view->setData($photo->getComments()->getValues());
             } else {
-                $view->setData(array('error'=>'Not found'));
+                $view->setData(array('error' => 'Not found'));
             }
         } else {
             $comments = $this->getDoctrine()->getManager()->

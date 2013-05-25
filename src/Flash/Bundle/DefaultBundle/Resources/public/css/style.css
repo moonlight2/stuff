@@ -21,7 +21,9 @@ root {
     margin: 30px 220px 0 0;
     color: #333 !important;
 }
-
+.own-comment {
+    background: #ffff99;
+}
 .comment-list {
     width: 300px;
 }

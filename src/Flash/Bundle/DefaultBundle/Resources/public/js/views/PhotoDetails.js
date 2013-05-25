@@ -14,6 +14,7 @@ window.PhotoView = Backbone.View.extend({
         'click #like': 'likePhoto',
         'click #send': 'commentPhoto',
         'click #delete': 'deletePhoto',
+        'click .comment-delete': 'deleteComment',
     },
     showComments: function() {
 
@@ -28,6 +29,21 @@ window.PhotoView = Backbone.View.extend({
                 $('#comments').append(new PhotoCommentListView({model: self.comments}).render().el);
             }});
 
+    },
+    deleteComment: function(e) {
+
+        var id = $(e.target).attr('val');
+        var comment = this.comments.get(id);
+        
+        var hash = window.location.hash.substring(1);
+        
+        comment.url = 'photo/' + (hash.split('/'))[1] + '/comment/' + id;
+        comment.destroy({
+            success: function() {
+                console.log('destroyed');
+            }
+        });
+        return false;
     },
     likePhoto: function(e) {
         console.log($(e.target).attr('val'));

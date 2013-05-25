@@ -39,7 +39,7 @@ window.OwnPhotoCommentListItemView = Backbone.View.extend({
     tagName: 'li',
     template: _.template($('#own-comment-list-tpl').html()),
     render: function() {
-        $(this.el).attr('value', this.model.get('id')).html(this.template(this.model.toJSON()));
+        $(this.el).attr('class', 'own-comment').attr('value', this.model.get('id')).html(this.template(this.model.toJSON()));
         return this;
     }
 });
