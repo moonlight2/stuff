@@ -7,6 +7,7 @@ window.PhotoView = Backbone.View.extend({
     },
     render: function(eventName) {
         $(this.el).html(this.template(this.model.toJSON()));
+        this.showComments();
         return this;
     },
     events: {
@@ -14,11 +15,24 @@ window.PhotoView = Backbone.View.extend({
         'click #send': 'commentPhoto',
         'click #delete': 'deletePhoto',
     },
-    
-    likePhoto: function(e){
+    showComments: function() {
+
+        var self = this;
+        this.comments = new PhotoCommentCollection();
+
+        var hash = window.location.hash.substring(1);
+        this.comments.url = 'comment/photo/' + (hash.split('/'))[1];
+
+        $('#comments').html('');
+        this.comments.fetch({success: function(data) {
+                $('#comments').append(new PhotoCommentListView({model: self.comments}).render().el);
+            }});
+
+    },
+    likePhoto: function(e) {
         console.log($(e.target).attr('val'));
     },
-    deletePhoto: function(e){
+    deletePhoto: function(e) {
         this.model.destroy({
             success: function() {
                 window.history.back();
@@ -27,42 +41,24 @@ window.PhotoView = Backbone.View.extend({
         return false;
     },
     commentPhoto: function(e) {
-        console.log($(e.target).attr('val'));
-        return false;
 
         var self = this;
-        this.model.set({
-            name: $('#name').val(),
-            about: $('#about').val(),
-            country: $('#send-country').val(),
-            city: $('#send-city').val(),
+        this.photoComment = new PhotoCommentModel();
+
+        this.photoComment.set({
+            text: $('textarea#comment').val(),
+            photo_id: $(e.target).attr('val')
         });
-        if (this.model.isNew()) {
-            this.model.save(null, {
-                success: function(model, response) {
-                    app.navigate('new_group/success', true);
-                },
-                error: function(model, response) {
-                    self.showErrors(response.responseText);
-                    app.navigate('new_group/error', true);
-                }
-            });
-        }
-        return false;
-    },
-    deleteGroup: function() {
-        this.model.destroy({
-            success: function() {
-                alert('Destroyed!');
-                console.log(this);
-                app.navigate('/', false);
-                //$('#main-content').html('Deleted');
-                //window.history.back();
+
+        this.photoComment.save(null, {
+            success: function(model, response) {
+                $('textarea#comment').val('');
+                self.comments.add(self.photoComment);
+            },
+            error: function(model, response) {
+                alert(response);
             }
         });
         return false;
-    },
-    change: function(event) {
-        console.log('change');
-    },
+    }
 });

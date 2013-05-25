@@ -14,6 +14,11 @@
     </a>
 </script>
 
+<script type="text/template" id="comment-list-tpl">
+    <p><b><%= account.first_name %> <%= account.last_name %></b> Пишет:</p>
+    <p><%= text %></p>
+</script>
+
 <script type="text/template" id="image-details-tpl">
     <div class="photo-details">
         <a class="thumb"  title="<%= id %>" href='http://localhost/stuff/web/app_dev.php/image/12/<%= path %>'>
@@ -32,7 +37,7 @@
                 </div>
                 <div class='comment'>
                     <label>Оставьте комментарий:</label>
-                    <textarea></textarea>
+                    <textarea id='comment'></textarea>
                     <br>
                     <button class='btn' id='send' val ='<%= id %>'>Отправить</button>
                 </div>
@@ -41,6 +46,7 @@
                 </div>
             </fieldset>
         </div>
+        <div id='comments'></div>
     </div>
         
 </script>

@@ -35,9 +35,6 @@ $(document).ready(function() {
                 UploaderModel.uploadStoredFiles();
             });
         },
-        test: function() {
-            alert('Test');
-        },
         before: function(callback) {
             if (this.photos) {
                 if (callback)

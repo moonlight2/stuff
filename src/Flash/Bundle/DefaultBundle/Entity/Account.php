@@ -79,14 +79,12 @@ class Account implements AdvancedUserInterface {
     /**
      * @ORM\Column(name="city_id", type="integer")
      * @Assert\NotBlank(message = "Поле не city может быть пустым")
-     * @Expose
      */
     protected $city;
 
     /**
      * @ORM\Column(name="country_id", type="integer")
      * @Assert\NotBlank(message = "Поле country не может быть пустым")
-     * @Expose
      */
     protected $country;
 
@@ -94,7 +92,6 @@ class Account implements AdvancedUserInterface {
      * @var date
      *
      * @ORM\Column(name="registered", type="datetime")
-     * @Expose
      */
     protected $dateRegist;
 
@@ -113,7 +110,6 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Expose
      */
     protected $about;
 
@@ -129,13 +125,11 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", inversedBy="rating")
-     * @Expose
      */
     protected $photoCommentLike;
 
     /**
      * @ORM\ManyToMany(targetEntity="Event", inversedBy="Account")
-     * @Expose
      */
     protected $events;
 
@@ -156,7 +150,6 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @OneToMany(targetEntity="CustomRole", mappedBy="account")
-     * @Expose
      */
     protected $customRoles;
 

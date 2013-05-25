@@ -10,7 +10,7 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use FOS\RestBundle\View\View;
 
 /**
- * @Route("/logged/rest/api/photo/comments")
+ * @Route("p{acc_id}/comment/photo", requirements={"acc_id" = "\d+"} )
  */
 class PhotoCommentApiController extends RESTController implements GenericRestApi {
 
@@ -29,9 +29,9 @@ class PhotoCommentApiController extends RESTController implements GenericRestApi
 
         if (NULL != $id) {
             $photo = $this->getDoctrine()->getManager()
-                    ->getRepository('FlashDefaultBundle:Comment\PhotoComment')->find($id);
-            if (NULL != $comment) {
-                $view->setData($comment);
+                    ->getRepository('FlashDefaultBundle:Photo')->find($id);
+            if (NULL != $photo) {
+                $view->setData($photo->getComments()->getValues());
             } else {
                 $view->setData(array('error'=>'Not found'));
             }

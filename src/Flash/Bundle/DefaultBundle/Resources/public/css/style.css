@@ -16,6 +16,25 @@ root {
 
 }
 
+#comments {
+    float: right;
+    margin: 30px 220px 0 0;
+    color: #333 !important;
+}
+
+.comment-list {
+    width: 300px;
+}
+
+.comment-list li {
+padding: 10px;
+border: 1px solid #999;
+border-radius: 10px;
+}
+
+
+
+
 .navbar-inner ul {
     position: relative;
     left: 0;
