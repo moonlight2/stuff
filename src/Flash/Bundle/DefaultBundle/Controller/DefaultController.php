@@ -38,11 +38,13 @@ class DefaultController extends Controller {
     public function gallery2Action($acc_id = null) {
 
         $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
         if (NULL != $acc_id) {
             $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
             if (NULL != $acc) {
                 return array('name' => 'My gallery2'. $acc->getEmail(),
-                    'acc_id'=>$acc->getId());
+                    'acc_id'=>$acc->getId(),
+                    'own_id'=>$user->getId());
             } else {
                 throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
             }

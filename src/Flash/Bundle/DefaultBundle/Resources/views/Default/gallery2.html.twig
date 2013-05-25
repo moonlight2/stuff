@@ -5,7 +5,7 @@
 {% block content %}
 
 <h2>Account id: {{ acc_id }}</h2>
-
+<input type='hidden' id='own_id' value='{{ own_id }}' />
 
 
 <script type="text/template" id="image-list-tpl">
@@ -17,6 +17,12 @@
 <script type="text/template" id="comment-list-tpl">
     <p><b><%= account.first_name %> <%= account.last_name %></b> Пишет:</p>
     <p><%= text %></p>
+</script>
+
+<script type="text/template" id="own-comment-list-tpl">
+    <p><b><%= account.first_name %> <%= account.last_name %></b> Пишет:</p>
+    <p><%= text %></p>
+    <button class='btn comment-delete' val='<%= id %>'>Удалить</button>
 </script>
 
 <script type="text/template" id="image-details-tpl">
