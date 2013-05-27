@@ -6,6 +6,7 @@ use Flash\Bundle\DefaultBundle\Entity\Common\Estimable;
 use Doctrine\ORM\Mapping as ORM;
 use Flash\Bundle\DefaultBundle\Entity\Account;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
@@ -59,6 +60,7 @@ class PhotoComment implements Estimable {
     /**
      * @Expose
      * @ManyToOne(targetEntity="Flash\Bundle\DefaultBundle\Entity\Photo", inversedBy="comments")
+     * @ORM\JoinColumn(name="photo_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $photo;
 

@@ -3,7 +3,6 @@
 window.PhotoView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($('#image-details-tpl').html());
-        this.model.bind('change', this.render, this);
     },
     render: function(eventName) {
         $(this.el).html(this.template(this.model.toJSON()));
@@ -15,6 +14,7 @@ window.PhotoView = Backbone.View.extend({
         'click #send': 'commentPhoto',
         'click #delete': 'deletePhoto',
         'click .comment-delete': 'deleteComment',
+        'click .thumb': 'nextPhoto',
     },
     showComments: function() {
 
@@ -34,7 +34,6 @@ window.PhotoView = Backbone.View.extend({
 
         var id = $(e.target).attr('val');
         var comment = this.comments.get(id);
-        
         var hash = window.location.hash.substring(1);
         
         comment.url = 'photo/' + (hash.split('/'))[1] + '/comment/' + id;
@@ -54,6 +53,12 @@ window.PhotoView = Backbone.View.extend({
                 window.history.back();
             }
         });
+        return false;
+    },
+    nextPhoto: function() {
+        app.photos.setElement(this.model);
+        var id = app.photos.next().getElement().id;
+        app.navigate('#photo/' + id, true);
         return false;
     },
     commentPhoto: function(e) {

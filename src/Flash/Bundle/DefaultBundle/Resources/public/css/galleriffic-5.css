@@ -25,6 +25,7 @@ div.navigation a.pageLink {
     display: block;
     width: 350px;
     float: left;
+    cursor: pointer;
 }
 .photo-details .caption {
     width: 250px;

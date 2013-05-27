@@ -24,9 +24,7 @@ $(document).ready(function() {
         photoDetails: function(id) {
             this.before(function() {
                 var photo = this.photos.get(id);
-                this.showView('#thumbs', new PhotoView({
-                    model: photo
-                }));
+                this.showView('#thumbs', new PhotoView({model: photo}));
             });
         },
         uploaderInit: function() {

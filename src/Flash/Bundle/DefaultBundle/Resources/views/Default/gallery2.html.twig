@@ -6,6 +6,7 @@
 
 <h2>Account id: {{ acc_id }}</h2>
 <input type='hidden' id='own_id' value='{{ own_id }}' />
+<input type='hidden' id='acc_id' value='{{ acc_id }}' />
 
 
 <script type="text/template" id="image-list-tpl">
@@ -27,9 +28,9 @@
 
 <script type="text/template" id="image-details-tpl">
     <div class="photo-details">
-        <a class="thumb"  title="<%= id %>" href='http://localhost/stuff/web/app_dev.php/image/12/<%= path %>'>
+        <div class="thumb"  title="<%= id %>">
             <img src="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>" style="height: 250px"/>
-        </a>
+        </div>
         <div class="caption">
             <fieldset>
                 <legend><%= name %></legend>
@@ -47,9 +48,14 @@
                     <br>
                     <button class='btn' id='send' val ='<%= id %>'>Отправить</button>
                 </div>
-                <div class='photo-edit'>
-                    <button class='delete btn' id='delete' val='<%= id %>'>Удалить</button>
-                </div>
+                
+                <% if ($('#own_id').val() == $('#acc_id').val()) { %>
+                    <div class='photo-edit'>
+                        <button class='delete btn' id='delete' val='<%= id %>'>Удалить</button>
+                    </div>
+                <% } %>
+                
+
             </fieldset>
         </div>
         <div id='comments'></div>

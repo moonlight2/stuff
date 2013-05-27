@@ -2,7 +2,6 @@ window.PhotoListView = Backbone.View.extend({
     tagName: 'ul',
     initialize: function() {
         this.model.bind('reset', this.render, this);
-       // this.model.bind('change', this.render, this);
         this.model.bind('add', this.appendLast, this);
     },
     events: {
