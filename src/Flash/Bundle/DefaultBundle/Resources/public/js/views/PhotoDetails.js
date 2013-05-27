@@ -22,7 +22,7 @@ window.PhotoView = Backbone.View.extend({
         this.comments = new PhotoCommentCollection();
 
         var hash = window.location.hash.substring(1);
-        this.comments.url = 'comment/photo/' + (hash.split('/'))[1];
+        this.comments.url = 'photo/' + (hash.split('/'))[1] + '/comment';
 
         $('#comments').html('');
         this.comments.fetch({success: function(data) {
@@ -35,8 +35,9 @@ window.PhotoView = Backbone.View.extend({
         var id = $(e.target).attr('val');
         var comment = this.comments.get(id);
         var hash = window.location.hash.substring(1);
-        
+
         comment.url = 'photo/' + (hash.split('/'))[1] + '/comment/' + id;
+
         comment.destroy({
             success: function() {
                 console.log('destroyed');
@@ -45,7 +46,16 @@ window.PhotoView = Backbone.View.extend({
         return false;
     },
     likePhoto: function(e) {
-        console.log($(e.target).attr('val'));
+
+        this.model.save(null, {
+            success: function(model, response) {
+                $('#rating').html(response.rating.length);
+            },
+            error: function(model, response) {
+                console.log("error");
+            }
+        });
+        return false;
     },
     deletePhoto: function(e) {
         this.model.destroy({

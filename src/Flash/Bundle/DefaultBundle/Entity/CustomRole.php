@@ -32,6 +32,7 @@ class CustomRole implements \Symfony\Component\Security\Core\Role\RoleInterface 
     /**
      *
      * @ManyToOne(targetEntity="Account", inversedBy="customRoles")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $account;
     

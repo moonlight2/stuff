@@ -11,7 +11,7 @@
 
 <script type="text/template" id="image-list-tpl">
     <a class="thumb"  title="<%= name %>" href='#photo/<%= id %>'>
-        <img src="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>" style="height: 50px"/>
+        <img src="http://localhost/stuff/web/app_dev.php/image/14/<%= path %>" style="height: 50px"/>
     </a>
 </script>
 
@@ -29,17 +29,20 @@
 <script type="text/template" id="image-details-tpl">
     <div class="photo-details">
         <div class="thumb"  title="<%= id %>">
-            <img src="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>" style="height: 250px"/>
+            <img src="http://localhost/stuff/web/app_dev.php/image/14/<%= path %>" style="height: 250px"/>
         </div>
         <div class="caption">
             <fieldset>
                 <legend><%= name %></legend>
                 <div class="download">
-                <a href="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>">Download Original</a>
+                <a href="http://localhost/stuff/web/app_dev.php/image/14/<%= path %>">Download Original</a>
                 </div>
                 <span class="help-block">Photo id: <%= id %></span>
+                
+
                 <div class='like'>
-                    <span class="help-block">Рейтинг: 45</span>
+                    <%  var ratingNum = rating.length; %> 
+                    <span class="help-block">Рейтинг: <span id='rating'><%= ratingNum %></span></span>
                     <button class='btn' id='like' val='<%= id %>'>Мне нравится</button>
                 </div>
                 <div class='comment'>

@@ -54,6 +54,7 @@ class UserEvent {
     /**
      *
      * @ManyToOne(targetEntity="Account", inversedBy="userEvents")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $account;
 

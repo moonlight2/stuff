@@ -287,6 +287,16 @@ class Photo implements Estimable {
 
         return $this;
     }
+    
+    /**
+     * Clear rating
+     *
+     */
+    public function clearRating() {
+        $this->rating->clear();
+
+        return $this;
+    }
 
     /**
      * Get rating

@@ -10,21 +10,34 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use FOS\RestBundle\View\View;
 
 /**
- * @Route("p{acc_id}/comment/photo", requirements={"acc_id" = "\d+"} )
+ * @Route("p{acc_id}/photo", requirements={"acc_id" = "\d+"} )
  */
 class PhotoCommentApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("/{id}/{comm_id}", requirements={"id" = "\d+"})
+     * @Route("/{id}/comment/{comm_id}", requirements={"id" = "\d+"})
      * @Method({"DELETE"})
      */
     public function deleteAction($id, $comm_id = null) {
-        exit('delete');
+        
+        
+        $em = $this->getDoctrine()->getManager();
+        if (NULL != $comm_id) {
+            $comment = $em->getRepository('FlashDefaultBundle:Comment\PhotoComment')->find($comm_id);
+            if (NULL != $comment) {
+                /* Comment servise will check your rights to remove photo */
+                return $this->handle($this->get('comment_service')->delete($comment));
+            } else {
+                $view->setData(array('error' => 'Not found'));
+            }
+        } else {
+            $view->setData(array('error' => 'Not found'));
+        }
     }
 
     /**
      * @param id - id of photo
-     * @Route("/{id}", requirements={"id" = "\d+"})
+     * @Route("/{id}/comment", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
     public function getAction($id = NULL) {
@@ -48,7 +61,7 @@ class PhotoCommentApiController extends RESTController implements GenericRestApi
     }
 
     /**
-     * @Route("")
+     * @Route("/comment")
      * @Method({"POST"})
      */
     public function postAction() {

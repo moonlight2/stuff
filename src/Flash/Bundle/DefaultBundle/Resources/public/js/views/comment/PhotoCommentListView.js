@@ -3,6 +3,7 @@ window.PhotoCommentListView = Backbone.View.extend({
     initialize: function() {
         this.model.bind('reset', this.render, this);
         this.model.bind('add', this.appendLast, this);
+//        this.model.bind('remove', this.deleteElement, this);
     },
     render: function() {
         _.each(this.model.models, function(comment) {
@@ -12,6 +13,13 @@ window.PhotoCommentListView = Backbone.View.extend({
                 $(this.el).attr('class', 'comment-list').append(new PhotoCommentListItemView({model: comment}).render().el);
             }
         }, this);
+        return this;
+    },
+    deleteElement: function(e) {
+        var id = $(e.target).attr('val');
+        var comment = this.model.get(id);
+        $(this.el).remove(comment);
+        console.log('Delete element');
         return this;
     },
     appendLast: function() {
@@ -32,7 +40,7 @@ window.PhotoCommentListItemView = Backbone.View.extend({
     render: function() {
         $(this.el).attr('value', this.model.get('id')).html(this.template(this.model.toJSON()));
         return this;
-    }
+    },
 });
 
 window.OwnPhotoCommentListItemView = Backbone.View.extend({
@@ -41,5 +49,9 @@ window.OwnPhotoCommentListItemView = Backbone.View.extend({
     render: function() {
         $(this.el).attr('class', 'own-comment').attr('value', this.model.get('id')).html(this.template(this.model.toJSON()));
         return this;
-    }
+    },
+    initialize:function () {
+        this.model.bind("change", this.render, this);
+        this.model.bind("destroy", this.close, this);
+    },
 });

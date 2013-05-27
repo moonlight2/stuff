@@ -1,6 +1,6 @@
 
 window.PhotoCommentModel = Backbone.Model.extend({
-    urlRoot: 'comment/photo',
+    urlRoot: 'photo/comment',
     defaults: {
         "id": null,
         "text": "",
@@ -12,5 +12,5 @@ window.PhotoCommentModel = Backbone.Model.extend({
 
 window.PhotoCommentCollection = Backbone.Collection.extend({
     model: PhotoCommentModel,
-    url: 'comment/photo'
+    url: 'photo/comment'
 });

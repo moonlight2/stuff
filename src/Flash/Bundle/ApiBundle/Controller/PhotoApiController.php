@@ -76,8 +76,8 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/{id}/like", requirements={"id" = "\d+"})
-     * @Method({"POST"})
+     * @Route("/{id}", requirements={"id" = "\d+"})
+     * @Method({"PUT"})
      */
     public function likeAction($acc_id, $id) {
 

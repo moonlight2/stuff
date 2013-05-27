@@ -42,7 +42,7 @@ class PhotoService extends CommonService {
             $view->setStatusCode(400);
             $response = $this->getErrorMessages($form);
         }
-        return $view->setData(array('success'=>'true', 'photo'=>$photo));
+        return $view->setData(array('success' => 'true', 'photo' => $photo));
     }
 
     public function like($photo) {
@@ -68,11 +68,20 @@ class PhotoService extends CommonService {
     }
 
     public function delete($photo) {
-        
+
         $em = $this->injector->getDoctrine()->getManager();
         $view = View::create();
 
         if ($this->context->isGranted('DELETE', $photo)) {
+            
+            if ($photo->getRating()->count() > 0) {
+                $accs = $photo->getRating()->getValues();
+                foreach ($accs as $acc) {
+                    $acc->removePhotoLike();
+                    $em->persist($acc);
+                }
+                $photo->clearRating();
+            }
             $em->persist($photo);
             $em->remove($photo);
             $em->flush();

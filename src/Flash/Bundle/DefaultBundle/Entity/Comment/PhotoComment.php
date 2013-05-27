@@ -53,12 +53,12 @@ class PhotoComment implements Estimable {
 
     /**
      * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="photoComments")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @Expose
      */
     protected $account;
 
     /**
-     * @Expose
      * @ManyToOne(targetEntity="Flash\Bundle\DefaultBundle\Entity\Photo", inversedBy="comments")
      * @ORM\JoinColumn(name="photo_id", referencedColumnName="id", onDelete="CASCADE")
      */
