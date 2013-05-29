@@ -4,54 +4,91 @@
 
 {% block content %}
 
+<h2>Account id: {{ acc_id }}</h2>
+<input type='hidden' id='own_id' value='{{ own_id }}' />
+<input type='hidden' id='acc_id' value='{{ acc_id }}' />
 
 
 <script type="text/template" id="image-list-tpl">
-    <a class="thumb"  title="<%= id %>" href='http://localhost/stuff/web/app_dev.php/image/12/<%= path %>'>
-        <img src="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>" style="height: 50px"/>
+    <a class="thumb"  title="<%= name %>" href='#photo/<%= id %>'>
+        <img src="http://localhost/stuff/web/app_dev.php/image/thumb/14/<%= path %>"/>
     </a>
-    <div class="caption">
-        <fieldset>
-            <legend><%= name %></legend>
-            <div class="download">
-            <a href="http://localhost/stuff/web/app_dev.php/image/12/<%= path %>">Download Original</a>
-            </div>
-            <span class="help-block">Photo id: <%= id %></span>
-            <div class='like'>
-                <span class="help-block">Рейтинг: 45</span>
-                <button class='btn' id='like<%= id %>'>Мне нравится</button>
-            </div>
-            <div class='comment'>
-                <label>Оставьте комментарий:</label>
-                <textarea></textarea>
-                <br>
-                <button class='btn' id='send<%= id %>'>Отправить</button>
-            </div>
-            <div class='photo-edit'>
-                <button class='delete btn' id='del<%= id %>'>Удалить</button>
-            </div>
-        </fieldset>
+</script>
+
+<script type="text/template" id="comment-list-tpl">
+    <p><b><%= account.first_name %> <%= account.last_name %></b> Пишет:</p>
+    <p><%= text %></p>
+</script>
+
+<script type="text/template" id="own-comment-list-tpl">
+    <p><b><%= account.first_name %> <%= account.last_name %></b> Пишет:</p>
+    <p><%= text %></p>
+    <button class='btn comment-delete' val='<%= id %>'>Удалить</button>
+</script>
+
+<script type="text/template" id="image-details-tpl">
+    <div class="photo-details">
+    
+        <% var accId = $('#acc_id').val()  %>
+    
+        <div class="thumb"  title="<%= id %>">
+            <img src="http://localhost/stuff/web/app_dev.php/image/<%= accId %>/<%= path %>" />
+        </div>
+        <div class="caption">
+            <fieldset>
+                <legend><%= name %></legend>
+                <div class="download">
+                <a href="http://localhost/stuff/web/app_dev.php/image/<%= accId %>/<%= path %>">Download Original</a>
+                </div>
+                <span class="help-block">Photo id: <%= id %></span>
+                
+
+                <div class='like'>
+                    <%  var ratingNum = rating.length; %> 
+                    <span class="help-block">Рейтинг: <span id='rating'><%= ratingNum %></span></span>
+                    <button class='btn' id='like' val='<%= id %>'>Мне нравится</button>
+                </div>
+                <div class='comment'>
+                    <label>Оставьте комментарий:</label>
+                    <textarea id='comment'></textarea>
+                    <br>
+                    <button class='btn' id='send' val ='<%= id %>'>Отправить</button>
+                </div>
+                
+                <% if ($('#own_id').val() == $('#acc_id').val()) { %>
+                    <div class='photo-edit'>
+                        <button class='delete btn' id='delete' val='<%= id %>'>Удалить</button>
+                    </div>
+                <% } %>
+                
+
+            </fieldset>
+        </div>
+        <div id='comments'></div>
     </div>
+        
 </script>
 
 <div class='main-content'>
 
-    <div id='uploader'>
-        <div id="manual-fine-uploader"></div>
-        <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
-            <i class="icon-upload icon-white"></i> Upload now
+    {% if (acc_id == own_id) %}
+        <div id='uploader'>
+            <div id="manual-fine-uploader"></div>
+            <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+                <i class="icon-upload icon-white"></i> Upload now
+            </div>
         </div>
-    </div>
+    {% endif %}
+
+
 
     <!-- Start Minimal Gallery Html Containers -->
-
 
     <div class="content">
         <div id="thumbs" class="navigation">
         </div>
         <div class="slideshow-container">
             <div id="controls" class="controls"></div>
-            <div id="loading" class="loader"></div>
             <div id="slideshow" class="slideshow"></div>
         </div>
         <div id="caption" class="caption-container">

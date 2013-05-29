@@ -23,7 +23,7 @@ div.navigation a.pageLink {
 }
 .photo-details .thumb {
     display: block;
-    width: 350px;
+    width: 450px;
     float: left;
     cursor: pointer;
 }
@@ -172,10 +172,12 @@ ul.thumbs li {
 	padding: 0;
 	margin: 2px;
 	list-style: none;
+        height: 150px;
 }
 a.thumb {
 	padding: 1px;
 	display: block;
+        height: 15opx !important;
 }
 a.thumb:focus {
 	outline: none;

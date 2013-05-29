@@ -16,7 +16,6 @@
 <script src="{{ asset('bundles/acmedemo/js/lib/underscore-min.js') }}"></script>
 <script src="{{ asset('bundles/acmedemo/js/lib/backbone-min.js') }}"></script>
 <script src="{{ asset('bundles/flashdefault/js/lib/jquery.fineuploader-3.5.0.min.js') }}"></script>
-<script src="{{ asset('bundles/flashdefault/js/lib/jquery.galleriffic.js') }}"></script>
 
 {% endblock %}
 
@@ -48,9 +47,12 @@
     <script src="{{ asset('bundles/flashdefault/js/common/BasicRouterExtend.js') }}"></script>      
         
     <script src="{{ asset('bundles/flashdefault/js/model/PhotoModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/comment/PhotoCommentModel.js') }}"></script>
     <script src="{{ asset('bundles/flashdefault/js/model/UploaderModel.js') }}"></script>
     <script src="{{ asset('bundles/flashdefault/js/views/PhotoListView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/comment/PhotoCommentListView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/PhotoDetails.js') }}"></script>
     
-    <script src="{{ asset('bundles/flashdefault/js/controller/GalleryRouter.js') }}"></script>   
+    <script src="{{ asset('bundles/flashdefault/js/controller/PhotoGalleryRouter.js') }}"></script>   
 
 {% endblock %}

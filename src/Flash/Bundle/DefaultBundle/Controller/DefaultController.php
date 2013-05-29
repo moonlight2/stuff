@@ -23,28 +23,19 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/gallery", name="gallery_page")
+     * @Route("/p{acc_id}/gallery", requirements={"id" = "\d+"}, name="_gallery")
      * @Template()
      */
-    public function galleryAction() {
-
-        return array('name' => 'My gallery');
-    }
-
-    /**
-     * @Route("/p{acc_id}/gallery2", requirements={"id" = "\d+"}, name="gallery2_page")
-     * @Template()
-     */
-    public function gallery2Action($acc_id = null) {
+    public function galleryAction($acc_id = null) {
 
         $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         if (NULL != $acc_id) {
             $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
             if (NULL != $acc) {
-                return array('name' => 'My gallery2'. $acc->getEmail(),
-                    'acc_id'=>$acc->getId(),
-                    'own_id'=>$user->getId());
+                return array('name' => 'My gallery2' . $acc->getEmail(),
+                    'acc_id' => $acc->getId(),
+                    'own_id' => $user->getId());
             } else {
                 throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
             }
@@ -59,16 +50,18 @@ class DefaultController extends Controller {
      */
     public function testAction() {
 
-        $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
 
-        $securityContext = $this->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $group = $this->getDoctrine()->getManager()->getRepository('FlashDefaultBundle:Group')->find(3);
+        $imgR = $this
+                ->get('liip_imagine.controller');
+          // filter defined in config.yml
 
-        var_dump($group->getNumberOfParty());
-//        var_dump($this->get('security.context')->isGranted('EDIT', $event));
-        echo "Test";
+        // string to put directly in the "src" of the tag <img>
+       // $cacheManager = $this->get('liip_imagine.cache.manager');
+      //  $srcPath = $cacheManager->getBrowserPath('/image/14/f847d9d2c15e618314cd4551206550197cde3126.jpeg', 'my_thumb');
+        print_r($imgR);
+
+        //return array('name' => 'My name');
+        //echo "Test";
         exit();
     }
 

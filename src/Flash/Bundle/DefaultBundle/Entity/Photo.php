@@ -117,6 +117,14 @@ class Photo implements Estimable {
 //            $this->temp = null;
 //        }
         $this->file = null;
+        $this->createThumbnail();
+    }
+
+    public function createThumbnail() {
+        $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $image->load($this->getAbsolutePath());
+        $image->resizeToWidth(150);
+        $image->save($this->getAbsoluteThumbnailPath());
     }
 
     /**
@@ -126,17 +134,24 @@ class Photo implements Estimable {
         if ($file = $this->getAbsolutePath()) {
             unlink($file);
         }
+        if ($file = $this->getAbsoluteThumbnailPath()) {
+            unlink($file);
+        }
     }
 
     public function getAbsolutePath() {
         return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
-    public function getWebPath() {
-        return null === $this->path ? null : $this->getUploadDir() . '/' . $this->path;
+    public function getAbsoluteThumbnailPath() {
+        return null === $this->path ? null : $this->getUploadRootDir() . '/thumb/' . $this->path;
     }
 
-    protected function getUploadRootDir() {
+    public function getWebPath() {
+        return null === $this->path ? null : 'image' . '/' . $this->getAccount()->getId() . '/' . $this->path;
+    }
+
+    public function getUploadRootDir() {
         // the absolute directory path where uploaded
         // documents should be saved
         return __DIR__ . '/../../../../uploads/' . $this->getUploadDir();
@@ -287,7 +302,7 @@ class Photo implements Estimable {
 
         return $this;
     }
-    
+
     /**
      * Clear rating
      *
@@ -313,12 +328,12 @@ class Photo implements Estimable {
      * @param \Symfony\Component\Security\Core\User\UserInterface $rating
      */
     public function existsRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
-        
+
         $accs = $this->rating->getValues();
         foreach ($accs as $acc) {
             if ($acc->getEmail() == $rating->getEmail()) {
                 return true;
-            } 
+            }
         }
         return false;
     }
@@ -331,8 +346,6 @@ class Photo implements Estimable {
     public function removeRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
         $this->rating->removeElement($rating);
     }
-
-    
 
     /**
      * Get rating count
