@@ -4,7 +4,6 @@ namespace Flash\Bundle\DefaultBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Flash\Bundle\Flash\Bundle\DefaultBundle\Lib\SimpleImage;
 
 /**
  * @Route("/image")

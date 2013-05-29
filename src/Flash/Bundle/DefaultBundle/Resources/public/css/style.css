@@ -18,7 +18,7 @@ root {
 
 #comments {
     float: right;
-    margin: 30px 220px 0 0;
+    margin: 30px 10px 0 0;
     color: #333 !important;
 }
 .own-comment {
@@ -51,7 +51,7 @@ border-radius: 10px;
 }
 
 .main-content {
-    /*width: 600px;*/
+    width: 500px;
 }
 
 .sidebar {

@@ -10,7 +10,15 @@
             <p>Для создания событий в группе, в ней должно быть {{ app.user.getGroup.getMinimumUsersNumber }} и более участников</p>
         {% endif %}
     {% endif %}
-            
+    
+    <div class='sidebar'>
+        {% if is_granted('EDIT', app.user.getGroup) %}
+            {{ knp_menu_render('FlashDefaultBundle:Builder:groupLeaderMenu') }}
+            {% if (app.user.getGroup.getNumberOfParty >= app.user.getGroup.getMinimumUsersNumber) %}
+                {{ knp_menu_render('FlashDefaultBundle:Builder:groupActiveLeaderMenu') }}
+            {% endif %}
+        {% endif %}
+    </div>
     <div class='main-content'>
         <div id='events'></div>
     </div>

@@ -5,11 +5,6 @@ namespace Flash\Bundle\DefaultBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Flash\Bundle\DefaultBundle\Entity\Event;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class DefaultController extends Controller {
 
@@ -49,20 +44,6 @@ class DefaultController extends Controller {
      * @Template()
      */
     public function testAction() {
-
-
-        $imgR = $this
-                ->get('liip_imagine.controller');
-          // filter defined in config.yml
-
-        // string to put directly in the "src" of the tag <img>
-       // $cacheManager = $this->get('liip_imagine.cache.manager');
-      //  $srcPath = $cacheManager->getBrowserPath('/image/14/f847d9d2c15e618314cd4551206550197cde3126.jpeg', 'my_thumb');
-        print_r($imgR);
-
-        //return array('name' => 'My name');
-        //echo "Test";
-        exit();
     }
 
     /**
@@ -71,36 +52,24 @@ class DefaultController extends Controller {
      */
     public function mainAction() {
 
-//        $request = $this->get('event_service');
-//        $request->getRequest();
-//        exit();
-
-        $user = $this->get('security.context')->getToken()->getUser();
-
-//        var_dump($user->getGroup());
-//        exit();
-
-        return array(
-            'firstName' => $user->getFirstName(),
-            'lastName' => $user->getLastName()
-        );
+        $acc = $this->get('security.context')->getToken()->getUser();
+        return $this->redirect($this->generateUrl('_user_page', array('id'=>$acc->getId())), 301);
     }
 
     /**
-     * @Route("/id{id}", name="user_page")
+     * @Route("/p{id}", name="_user_page")
      * @Template()
      */
     public function userAction($id = null) {
-
 
         $em = $this->getDoctrine()->getManager();
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($id);
 
         if (null != $acc) {
-//            exit($id);
             return array(
                 'firstName' => $acc->getFirstName(),
-                'lastName' => $acc->getLastName()
+                'lastName' => $acc->getLastName(),
+                'acc_id' => $acc->getId(),
             );
         } else {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Page not found');

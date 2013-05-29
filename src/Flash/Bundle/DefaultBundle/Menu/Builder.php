@@ -36,7 +36,11 @@ class Builder extends ContainerAware {
         $menu = $factory->createItem('root');
 
         $menu->addChild('Home', array('route' => 'main_page'));
-        $menu->addChild('My Group', array('route' => '_my_group_page'));
+        
+        if (NULL != $acc->getGroup()) {
+            $menu->addChild('My Group', array('route' => '_group_page',
+                'routeParameters' => array('id' => $acc->getGroup()->getId())));
+        }
         $menu->addChild('My Photos', 
                 array('route' => '_gallery', 
                     'routeParameters' => array('acc_id' => $acc->getId())));

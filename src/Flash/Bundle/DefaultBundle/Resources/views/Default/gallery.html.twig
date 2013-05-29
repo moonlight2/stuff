@@ -4,14 +4,13 @@
 
 {% block content %}
 
-<h2>Account id: {{ acc_id }}</h2>
 <input type='hidden' id='own_id' value='{{ own_id }}' />
 <input type='hidden' id='acc_id' value='{{ acc_id }}' />
 
 
 <script type="text/template" id="image-list-tpl">
     <a class="thumb"  title="<%= name %>" href='#photo/<%= id %>'>
-        <img src="http://localhost/stuff/web/app_dev.php/image/thumb/14/<%= path %>"/>
+        <img src="http://localhost/stuff/web/app_dev.php/image/thumb/{{ acc_id }}/<%= path %>"/>
     </a>
 </script>
 
@@ -29,25 +28,25 @@
 <script type="text/template" id="image-details-tpl">
     <div class="photo-details">
     
-        <% var accId = $('#acc_id').val()  %>
-    
         <div class="thumb"  title="<%= id %>">
-            <img src="http://localhost/stuff/web/app_dev.php/image/<%= accId %>/<%= path %>" />
+            <img src="http://localhost/stuff/web/app_dev.php/image/{{ acc_id }}/<%= path %>" />
         </div>
         <div class="caption">
             <fieldset>
                 <legend><%= name %></legend>
+                
                 <div class="download">
-                <a href="http://localhost/stuff/web/app_dev.php/image/<%= accId %>/<%= path %>">Download Original</a>
+                    <a href="http://localhost/stuff/web/app_dev.php/image/{{ acc_id }}/<%= path %>">Download Original</a>
                 </div>
+                
                 <span class="help-block">Photo id: <%= id %></span>
                 
-
                 <div class='like'>
                     <%  var ratingNum = rating.length; %> 
                     <span class="help-block">Рейтинг: <span id='rating'><%= ratingNum %></span></span>
                     <button class='btn' id='like' val='<%= id %>'>Мне нравится</button>
                 </div>
+                
                 <div class='comment'>
                     <label>Оставьте комментарий:</label>
                     <textarea id='comment'></textarea>
@@ -55,13 +54,12 @@
                     <button class='btn' id='send' val ='<%= id %>'>Отправить</button>
                 </div>
                 
-                <% if ($('#own_id').val() == $('#acc_id').val()) { %>
+                {% if (acc_id == own_id) %}
                     <div class='photo-edit'>
                         <button class='delete btn' id='delete' val='<%= id %>'>Удалить</button>
                     </div>
-                <% } %>
+                {% endif %}
                 
-
             </fieldset>
         </div>
         <div id='comments'></div>
@@ -69,7 +67,7 @@
         
 </script>
 
-<div class='main-content'>
+<div class='main-content' style='width: 800px'>
 
     {% if (acc_id == own_id) %}
         <div id='uploader'>
@@ -79,8 +77,6 @@
             </div>
         </div>
     {% endif %}
-
-
 
     <!-- Start Minimal Gallery Html Containers -->
 

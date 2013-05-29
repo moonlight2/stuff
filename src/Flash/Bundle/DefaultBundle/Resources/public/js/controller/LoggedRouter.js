@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    
+
     window.LoggedRouter = Backbone.Router.extend({
         routes: {
             "": "showEvents",
@@ -13,10 +13,16 @@ $(document).ready(function() {
         },
         showEvents: function() {
 
-            var eventList = new UserEventView();
-            eventList.getEventList();
+            var self = this;
+
+            this.events = new UserEventCollection();
+            this.events.url = 'p' + $('#acc_id').val() + '/user_events';
+            this.events.fetch({success: function(data) {
+                    $('#events').append(new UserEventListView({model: self.events}).render().el);
+                }});
+
         },
-        showGroupSuccess: function(){
+        showGroupSuccess: function() {
             alert('Group has been created!!!!');
         },
         newGroup: function() {

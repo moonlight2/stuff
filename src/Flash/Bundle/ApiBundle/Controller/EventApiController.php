@@ -92,8 +92,12 @@ class EventApiController extends RESTController implements GenericRestApi {
         return $this->get('event_service')->processForm($event);
     }
 
+
+
     public function deleteAction($id) {
         
     }
+
+
 
 }

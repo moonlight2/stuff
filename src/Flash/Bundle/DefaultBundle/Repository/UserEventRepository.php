@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserEventRepository extends EntityRepository  {
 
-    public function findAllByCurentUser($user) {
+    public function findAllByUser($user) {
 
         $list = $this->getEntityManager()
                 ->createQuery('SELECT e FROM FlashDefaultBundle:UserEvent e

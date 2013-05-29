@@ -121,6 +121,11 @@ class Photo implements Estimable {
     }
 
     public function createThumbnail() {
+        
+        if (!file_exists($this->getUploadRootDir() . '/thumb')) {
+            mkdir($this->getUploadRootDir() . '/thumb');
+        }
+
         $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
         $image->load($this->getAbsolutePath());
         $image->resizeToWidth(150);
