@@ -1,0 +1,113 @@
+{% extends "FlashDefaultBundle::profile.html.twig" %}
+
+{% block title "Inside page" %}
+
+
+{% block content %}
+
+    <input type='hidden' id='acc_id' value='{{ acc_id }}' />
+    
+    <script type="text/template" id="city-tpl"><%= name %></script>
+
+    <script type="text/template" id="country-tpl"><%= name %></script>
+
+    <script type="text/template" id="group-tpl"><%= name %></script>
+
+    <script type="text/template" id="form-tpl"> 
+        <div class="form-register bs-docs-example form-horizontal">
+            <h2>Профиль пользователя {{ firstName }} {{ lastName }}</h2>
+
+            <div class="control-group">
+                <label class='control-label'>Email:</label>
+                <div class='controls'>
+                    <input type="text" id="email" name="email" value="<%= email %>"/>
+                </div>
+                <span class="help-inline" id='error-email'></span>
+            </div>
+    
+            <div class="control-group">
+                <label class='control-label'>Имя:</label>
+                <div class='controls'>
+                    <input type="text" id="firstName" name="firstName" value="<%= first_name %>"/>
+                </div>
+                <span class="help-inline" id='error-firstName'></span>
+            </div>
+    
+            <div class="control-group">
+                <label class='control-label'>Фамилия:</label>
+                <div class='controls'>
+                    <input type="text" id="lastName" name="lastName" value="<%= last_name %>"/>
+                </div>
+                <span class="help-inline" id='error-lastName'></span>
+            </div>
+            
+            <div class="control-group">
+                <label class='control-label'>Пароль:</label>
+                <div class='controls'>
+                    <input type="password" id="password" name="password"  value="<%= password %>"/>
+                </div>
+                <span class="help-inline" id='error-password'></span>
+            </div>
+            
+            <div class="control-group">
+                <label class='control-label'>Cтрана:</label>
+                <div class='controls selector input-append' style='display:block' id="country">
+                    <input type="text" id="country-input" readonly placeholder='Выберите страну' />
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                            <span class="caret"></span>
+                        </button>
+                    </div>
+                </div>
+                <input type='hidden' name='country' id='send-country' />
+                <span class="help-inline" id='error-country'></span>
+            </div>
+            
+            <div class="control-group" id='city-block'>
+                <label class='control-label'>Город:</label>
+                <div class='controls selector input-append' style='display:block' id='city'>
+                    <input type="text" id="city-input" placeholder='Выберите город'/>
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                            <span class="caret"></span>
+                        </button>
+                    </div>
+                </div>
+                <input type='hidden' name='city' id='send-city' />
+                <span class="help-inline" id='error-city'></span>
+            </div>
+            
+            <div class="control-group" id='group-block'>
+                <label class='control-label'>В Вашем городе есть команды:</label>
+                <div class='controls'>
+                    <div class='selector' id='group'>
+                    </div>
+                </div>
+                <span class="help-inline" id='error-group'></span>
+            </div>
+           
+            
+            <div class="control-group">
+                <div class="controls">
+                  <button id='send' class="btn">Изменить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </script>
+
+    {% if (acc_id == own_id) %}
+        <div id='uploader'>
+            <div id="manual-fine-uploader"></div>
+            <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+                <i class="icon-upload icon-white"></i> Upload now
+            </div>
+        </div>
+        
+    {% endif %}
+    <div class='sidebar'></div>
+    <div class='main-content'>
+        <div id='form'></div>
+    </div>
+{% endblock %}
+

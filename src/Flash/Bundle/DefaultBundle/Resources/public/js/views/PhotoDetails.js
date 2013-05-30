@@ -14,6 +14,7 @@ window.PhotoView = Backbone.View.extend({
         'click #send': 'commentPhoto',
         'click #delete': 'deletePhoto',
         'click .comment-delete': 'deleteComment',
+        'click .comment-answer': 'answerComment',
         'click .thumb': 'nextPhoto',
     },
     showComments: function() {
@@ -29,6 +30,17 @@ window.PhotoView = Backbone.View.extend({
                 $('#comments').append(new PhotoCommentListView({model: self.comments}).render().el);
             }});
 
+    },
+    answerComment: function(e) {
+
+        var id = $(e.currentTarget).attr('val');
+        var acc = this.comments.get(id).attributes.account;
+        
+        console.log(acc.first_name);
+        console.log(acc.last_name);
+        $('textarea#comment').val('');
+        $('textarea#comment').val(acc.first_name + ' ' + acc.last_name + ', ');
+        
     },
     deleteComment: function(e) {
 

@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
- * @Route("/api")
+ * @Route("")
  */
 class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller {
 
@@ -29,7 +29,8 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     }
 
     /**
-     * @Route("/country/{country_id}")
+     * @Route("/api/country/{country_id}")
+     * @Route("{acc_id}/api/country/{country_id}")
      * @Method({"GET"})
      * @param Integer $country_id
      * @return liat of cities
@@ -67,7 +68,8 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     }
 
     /**
-     * @Route("/country/{id}/city/{name}")
+     * @Route("/api/country/{id}/city/{name}")
+     * @Route("/{acc_id}/api/country/{id}/city/{name}")
      * @Method({"GET"})
      * @param Integer $id
      * @return single Account data or array of accounts
@@ -103,7 +105,8 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     }
 
     /**
-     * @Route("/countries/{all}")
+     * @Route("/api/countries/{all}")
+     * @Route("/{acc_id}/api/countries/{all}")
      * @Method({"GET"})
      * @param Integer $id
      * @return single Account data or array of accounts

@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
 
 /**
@@ -68,6 +69,7 @@ class Account implements AdvancedUserInterface {
      * @ORM\Column(type="string", length=60)
      * @Assert\NotBlank(message = "Поле email не может быть пустым")
      * @Assert\Email(message = "Введите корректный email")
+     * @Expose
      */
     protected $email;
 

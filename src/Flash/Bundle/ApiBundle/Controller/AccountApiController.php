@@ -11,12 +11,12 @@ use FOS\RestBundle\View\View;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
- * @Route("/rest/api/accounts")
+ * @Route("")
  */
 class AccountApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("/{id}")
+     * @Route("/rest/api/accounts/{id}")
      * @Method({"GET"})
      * @param Integer $id
      * @return single Account data or array of accounts
@@ -42,7 +42,38 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/{id}")
+     * @Route("{acc_id}/accounts/own")
+     * @Method({"GET"})
+     * @param Integer $id
+     * @return single Account data or array of accounts
+     */
+    public function getOwnAction() {
+
+        $view = View::create();
+        $sql = "SELECT 
+            id,
+            email, 
+            first_name,
+            last_name,
+            city_id, 
+            country_id 
+        from account WHERE id = :acc_id LIMIT 1";
+
+        $params = array(
+            "acc_id" => $this->get('security.context')
+                    ->getToken()->getUser()->getId(),
+        );
+
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sql);
+        $stmt->execute($params);
+        $arr = $stmt->fetchAll();
+        $view->setData($arr[0]);
+
+        return $this->handle($view);
+    }
+
+    /**
+     * @Route("/rest/api/accounts/{id}")
      * @Method({"PUT"})
      * @return single Account data
      * 
@@ -52,23 +83,23 @@ class AccountApiController extends RESTController implements GenericRestApi {
         $em = $this->getDoctrine()->getManager();
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($id);
         if (NULL == $acc)
-            return array('error'=>'Not found');
+            return array('error' => 'Not found');
 
         return $this->processForm($acc);
     }
 
     /**
-     * @Route("")
+     * @Route("/rest/api/accounts")
      * @Method({"POST"})
      * @return single Account data
      */
     public function postAction() {
-        
+
         return $this->get('account_service')->processForm(new Account());
     }
 
     /**
-     * @Route("/{id}")
+     * @Route("/rest/api/accounts/{id}")
      * @Method({"DELETE"})
      * @param Integer $id
      * @return array
@@ -87,7 +118,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/byname/{name}")
+     * @Route("/rest/api/accounts/byname/{name}")
      * @Method({"GET"})
      * @param String $name
      * @return single Account data  
@@ -109,7 +140,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/byemail/{email}")
+     * @Route("/rest/api/accounts/byemail/{email}")
      * @Method({"GET"})
      * @param String $email
      * @return single Account data
@@ -131,7 +162,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/byrole/{role}")
+     * @Route("/rest/api/accounts/byrole/{role}")
      * @Method({"GET"})
      * @param String $role
      * @return array of Accounts
@@ -155,7 +186,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     /**
      * This method adds a new role to the account
      * 
-     * @Route("/role")
+     * @Route("/rest/api/accounts/role")
      * @Method({"POST"})
      * @return single Account data
      */
@@ -179,7 +210,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     /**
      * This method removes a role from the account
      * 
-     * @Route("/role/{accountId}/{roleId}")
+     * @Route("/rest/api/accounts/role/{accountId}/{roleId}")
      * @Method({"DELETE"})
      * @return single Account data
      */
@@ -199,4 +230,5 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
         return $account;
     }
+
 }

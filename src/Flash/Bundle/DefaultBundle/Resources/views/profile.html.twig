@@ -1,0 +1,66 @@
+{% extends "TwigBundle::layout.html.twig" %}
+
+{% block head %}
+<link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/style.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/bootstrap.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/fineuploader-3.5.0.css') }}" />
+
+
+<script src="{{ asset('bundles/acmedemo/js/lib/jquery-1.7.1.min.js') }}"></script>
+<script src="{{ asset('bundles/acmedemo/js/lib/underscore-min.js') }}"></script>
+<script src="{{ asset('bundles/acmedemo/js/lib/backbone-min.js') }}"></script>
+<script src="{{ asset('bundles/flashdefault/js/lib/jquery.fineuploader-3.5.0.min.js') }}"></script>
+
+{% endblock %}
+
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        <div class="flash-message">
+            <em>Notice</em>: {{ flashMessage }}
+        </div>
+    {% endfor %}
+
+    {% block content_header %}
+        <div class="navbar">
+            <div class="navbar-inner">             
+                    {% block content_header_more %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            {{ knp_menu_render('FlashDefaultBundle:Builder:adminMenu') }}
+                        {% elseif is_granted('ROLE_LEADER')%}
+                            {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
+                        {% elseif is_granted('ROLE_USER')%}
+                            {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
+                        {% endif %}
+                    {% endblock %}
+            </div>
+        </div>
+        <div style="clear: both"></div>
+    {% endblock %}
+
+    <div class="block" id='main'>
+         {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ asset('bundles/flashdefault/js/common/BasicViewExtend.js') }}"></script>   
+
+    <script src="{{ asset('bundles/flashdefault/js/common/BasicRouterExtend.js') }}"></script>   
+    <script src="{{ asset('bundles/flashdefault/js/common/LocationViewExtend.js') }}"></script>   
+    
+    <script src="{{ asset('bundles/flashdefault/js/model/AccountModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/CityModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/CountryModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/GroupModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/PhotoModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/UploaderModel.js') }}"></script>
+
+    <script src="{{ asset('bundles/flashdefault/js/views/CityListView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/GroupListView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/CountryListView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/FormView.js') }}"></script>
+
+    <script src="{{ asset('bundles/flashdefault/js/controller/ProfileRouter.js') }}"></script>    
+
+
+{% endblock %}

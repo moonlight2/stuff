@@ -131,6 +131,18 @@ class Photo implements Estimable {
         $image->resizeToWidth(150);
         $image->save($this->getAbsoluteThumbnailPath());
     }
+    
+    public function createAvatar() {
+        
+        if (!file_exists($this->getUploadRootDir() . '/avatar')) {
+            mkdir($this->getUploadRootDir() . '/avatar');
+        }
+
+        $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $image->load($this->getAbsolutePath());
+        $image->resizeToWidth(200);
+        $image->save($this->getAbsoluteThumbnailPath());
+    }
 
     /**
      * @ORM\PostRemove()
@@ -142,6 +154,9 @@ class Photo implements Estimable {
         if ($file = $this->getAbsoluteThumbnailPath()) {
             unlink($file);
         }
+        if ($file = $this->getAbsoluteAvatarPath()) {
+            unlink($file);
+        }
     }
 
     public function getAbsolutePath() {
@@ -150,6 +165,10 @@ class Photo implements Estimable {
 
     public function getAbsoluteThumbnailPath() {
         return null === $this->path ? null : $this->getUploadRootDir() . '/thumb/' . $this->path;
+    }
+
+    public function getAbsoluteAvatarPath() {
+        return null === $this->path ? null : $this->getUploadRootDir() . '/avatar/' . $this->path;
     }
 
     public function getWebPath() {

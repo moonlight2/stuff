@@ -45,6 +45,8 @@ class Builder extends ContainerAware {
                 array('route' => '_gallery', 
                     'routeParameters' => array('acc_id' => $acc->getId())));
         $menu->addChild('Create group', array('uri' => '#new_group'));
+        $menu->addChild('Profile', array('route' => '_userp_profile__page',
+             'routeParameters' => array('id' => $acc->getId())));
         $menu->addChild('Logout', array('route' => '_flash_logout'));
 
         return $menu;

@@ -75,5 +75,27 @@ class DefaultController extends Controller {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Page not found');
         }
     }
+    
+    /**
+     * @Route("/p{id}/profile", name="_userp_profile__page")
+     * @Template()
+     */
+    public function userProfileAction($id = null) {
+
+        $em = $this->getDoctrine()->getManager();
+        $acc = $em->getRepository('FlashDefaultBundle:Account')->find($id);
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if (null != $acc) {
+            return array(
+                'firstName' => $acc->getFirstName(),
+                'lastName' => $acc->getLastName(),
+                'acc_id' => $acc->getId(),
+                'own_id' => $user->getId()
+            );
+        } else {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Page not found');
+        }
+    }
 
 }

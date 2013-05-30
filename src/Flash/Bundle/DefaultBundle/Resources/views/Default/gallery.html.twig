@@ -17,6 +17,7 @@
 <script type="text/template" id="comment-list-tpl">
     <p><b><%= account.first_name %> <%= account.last_name %></b> Пишет:</p>
     <p><%= text %></p>
+    <button class='btn comment-answer' val='<%= id %>'>Ответить</button>
 </script>
 
 <script type="text/template" id="own-comment-list-tpl">
@@ -47,6 +48,14 @@
                     <button class='btn' id='like' val='<%= id %>'>Мне нравится</button>
                 </div>
                 
+                
+                {% if (acc_id == own_id) %}
+                    <div class='photo-edit'>
+                        <button class='delete btn' id='delete' val='<%= id %>'>Удалить</button>
+                    </div>
+                {% endif %}
+                    
+                <div id='comments'></div>
                 <div class='comment'>
                     <label>Оставьте комментарий:</label>
                     <textarea id='comment'></textarea>
@@ -54,15 +63,9 @@
                     <button class='btn' id='send' val ='<%= id %>'>Отправить</button>
                 </div>
                 
-                {% if (acc_id == own_id) %}
-                    <div class='photo-edit'>
-                        <button class='delete btn' id='delete' val='<%= id %>'>Удалить</button>
-                    </div>
-                {% endif %}
-                
             </fieldset>
         </div>
-        <div id='comments'></div>
+        
     </div>
         
 </script>
