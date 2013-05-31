@@ -6,8 +6,10 @@ Backbone.View.prototype.getCountries = function(country_id, city_id) {
     this.city_id = city_id;
     this.countries = new CountryCollection();
     this.countries.fetch({success: function(data) {
-            if (typeof (country_id) != 'undefined ') {
+            if (typeof (country_id) != 'undefined') {
                  self.fillContryInput(data.get(country_id)); // set input value to first country name
+            } else {
+                self.fillContryInput(data.models[0]);
             }
             $('#country .btn-group').append(new CountryListView({model: self.countries}).render().el);
             self.getCities(self.city_id);

@@ -2,7 +2,9 @@ $(document).ready(function() {
 
     window.ProfileRouter = Backbone.Router.extend({
         routes: {
-            "": "uploaderInit"
+            "": "uploaderInit",
+            "success": "showSuccess",
+            "error": "showErrors",
         },
         initialize: function() {
             console.log('Starting Profile router');
@@ -16,6 +18,9 @@ $(document).ready(function() {
                     form.getCountries(model.attributes.country_id, model.attributes.city_id);
                 }});
         },
+        showSuccess: function(){
+            $('#success').show();
+        },
         galleryInit: function() {
         },
         uploaderInit: function() {
@@ -25,7 +30,7 @@ $(document).ready(function() {
             });
         },
         showErrors: function() {
-            console.log('There is some errors');
+             $('#success').hide();
         }
     });
 

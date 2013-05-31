@@ -40,7 +40,7 @@ class AccountService extends CommonService {
                     if (NULL != $group) {
                         $group = $em->getRepository('FlashDefaultBundle:Group')->find($request->get('group'));
                         if (!$group) {
-                            return array('error'=>'Group not found.');
+                            return array('error' => 'Group not found.');
                         }
                         $acc->setGroup($group);
                         $em->persist($group);
@@ -71,5 +71,42 @@ class AccountService extends CommonService {
         return $acc;
     }
 
+    public function processFormWithoutPassword($acc) {
+
+        $request = $this->injector->getRequest();
+        $em = $this->injector->getDoctrine()->getManager();
+        $form = $this->injector->getForm()->create(new AccountType(), $acc);
+        $view = View::create();
+        $ownAcc = $this->context->getToken()->getUser();
+        
+        $form->bind(array(
+            'city' => $request->get('city'),
+            'country' => $request->get('country'),
+            'firstName' => $request->get('firstName'),
+            'lastName' => $request->get('lastName'),
+            'email' => $request->get('email'),
+            'password' => 'DEFAULT_PASSWORD',
+        ));
+
+        if ($form->isValid()) {
+
+                $ownAcc->setCity($acc->getCity());
+                $ownAcc->setCountry($acc->getCountry());
+                $ownAcc->setFirstName($acc->getFirstName());
+                $ownAcc->setLastName($acc->getLastName());
+                $ownAcc->setEmail($acc->getEmail());
+                $ownAcc->setUsername($acc->getEmail());
+
+                $em->persist($ownAcc);
+                $em->flush();
+
+        } else {
+            $view->setStatusCode(400);
+            return $view->setData($this->getErrorMessages($form));
+        }
+        return $view->setData($ownAcc);
+    }
+
 }
+
 ?>
