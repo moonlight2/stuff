@@ -77,7 +77,7 @@ class DefaultController extends Controller {
     }
     
     /**
-     * @Route("/p{id}/profile", name="_userp_profile__page")
+     * @Route("/p{id}/profile",  requirements={"id" = "\d+"}, name="_userp_profile__page")
      * @Template()
      */
     public function userProfileAction($id = null) {
@@ -85,6 +85,10 @@ class DefaultController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($id);
         $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user->getId() != $id ) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Page not found');
+        }
         
         if (null != $acc) {
             return array(

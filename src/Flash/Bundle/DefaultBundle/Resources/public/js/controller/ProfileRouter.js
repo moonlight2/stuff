@@ -2,39 +2,26 @@ $(document).ready(function() {
 
     window.ProfileRouter = Backbone.Router.extend({
         routes: {
-            "photo/:id": "photoDetails"
+            "": "uploaderInit"
         },
         initialize: function() {
             console.log('Starting Profile router');
             var self = this;
-            console.log(this);
-            this.uploaderInit();
             this.acc = new Account();
             this.acc.urlRoot = 'accounts/own';
             this.acc.fetch({success: function(model) {
-                    
                     console.log(model);
-                     var form = new FormView({model: model});
+                     var form = new ProfileFormView({model: model});
                     self.showView('#form', form);
-                    form.getCountries();
+                    form.getCountries(model.attributes.country_id, model.attributes.city_id);
                 }});
-           
-            //console.log(form);
-            
-            
         },
         galleryInit: function() {
-        },
-        photoDetails: function(id) {
-//            this.before(function() {
-//                var photo = this.photos.get(id);
-//                this.showView('#thumbs', new PhotoView({model: photo}));
-//            });
         },
         uploaderInit: function() {
             var self = this;
             $('#triggerUpload').click(function() {
-                UploaderModel.uploadStoredFiles();
+                AvatarUploaderModel.uploadStoredFiles();
             });
         },
         showErrors: function() {

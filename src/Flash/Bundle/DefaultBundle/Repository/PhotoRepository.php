@@ -38,7 +38,27 @@ class PhotoRepository extends EntityRepository {
         
         $list = $this->getEntityManager()
                 ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
-                                       WHERE p.account = :account')
+                                       WHERE p.account = :account AND p.avatar = 0')
+                ->setParameter('account', $acc)
+                ->getResult();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+    
+    public function getAvatarByAccount($acc) {
+        
+        $list = $this->getEntityManager()
+                ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
+                                       WHERE p.account = :account AND p.avatar = 1')
+                ->setParameter('account', $acc)
+                ->getResult();
+        return (sizeof($list) > 0) ? $list[0] : null;
+    }
+    
+    public function getAvatarsByAccount($acc) {
+        
+        $list = $this->getEntityManager()
+                ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
+                                       WHERE p.account = :account AND p.avatar = 1')
                 ->setParameter('account', $acc)
                 ->getResult();
         return (sizeof($list) > 0) ? $list : null;

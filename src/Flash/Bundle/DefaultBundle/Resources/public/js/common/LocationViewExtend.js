@@ -1,24 +1,31 @@
 
 
-Backbone.View.prototype.getCountries = function() {
+Backbone.View.prototype.getCountries = function(country_id, city_id) {
+
     var self = this;
+    this.city_id = city_id;
     this.countries = new CountryCollection();
     this.countries.fetch({success: function(data) {
-            self.fillContryInput(data.models[0]); // set input value to first country name
+            if (typeof (country_id) != 'undefined ') {
+                 self.fillContryInput(data.get(country_id)); // set input value to first country name
+            }
             $('#country .btn-group').append(new CountryListView({model: self.countries}).render().el);
-            self.getCities();
-
+            self.getCities(self.city_id);
         }});
 };
 
-Backbone.View.prototype.getCities = function() {
+Backbone.View.prototype.getCities = function(city_id) {
     var self = this;
     this.cities = new CityCollection();
     this.cities.url = "api/country/" + $("#send-country").val();
     this.clearCityInput();
-    this.cities.fetch({success: function() {
+    this.cities.fetch({success: function(data) {
+            console.log(city_id);
             self.clearCityList();
             $('#group-block').hide();
+            if (typeof (city_id) != 'undefined ') {
+                 self.fillCityInput(data.get(city_id)); // set input value to first country name
+            }
             $('#city .btn-group').append(new CityListView({model: self.cities}).render().el);
         }});
 
@@ -64,6 +71,12 @@ Backbone.View.prototype.hideDropdown = function() {
 Backbone.View.prototype.fillContryInput = function(model) {
     $('#country-input').val(this.removeElements(model.get('name'), 'b'));
     $('#send-country').val(model.get('id'));
+};
+Backbone.View.prototype.fillCityInput = function(model) {
+    if (null != model){
+        $('#city-input').val(this.removeElements(model.get('name'), 'b'));
+        $('#send-city').val(model.get('id'));
+    }
 };
 Backbone.View.prototype.changeCountryInput = function(e) {
     console.log('Change country');

@@ -69,7 +69,6 @@ class Account implements AdvancedUserInterface {
      * @ORM\Column(type="string", length=60)
      * @Assert\NotBlank(message = "Поле email не может быть пустым")
      * @Assert\Email(message = "Введите корректный email")
-     * @Expose
      */
     protected $email;
 

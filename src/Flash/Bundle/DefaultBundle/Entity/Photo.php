@@ -73,6 +73,14 @@ class Photo implements Estimable {
     protected $account;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="avatar", type="boolean")
+     * @Expose
+     */
+    protected $avatar = false;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -116,12 +124,21 @@ class Photo implements Estimable {
 //            // clear the temp image path
 //            $this->temp = null;
 //        }
-        $this->file = null;
+
         $this->createThumbnail();
+        if (false != $this->isAvatar()) {
+            $this->createAvatar();
+            $this->removePhotos();
+        }
+        $this->file = null;
+    }
+
+    public function isAvatar() {
+        return $this->avatar;
     }
 
     public function createThumbnail() {
-        
+
         if (!file_exists($this->getUploadRootDir() . '/thumb')) {
             mkdir($this->getUploadRootDir() . '/thumb');
         }
@@ -131,32 +148,45 @@ class Photo implements Estimable {
         $image->resizeToWidth(150);
         $image->save($this->getAbsoluteThumbnailPath());
     }
-    
+
     public function createAvatar() {
-        
+
         if (!file_exists($this->getUploadRootDir() . '/avatar')) {
             mkdir($this->getUploadRootDir() . '/avatar');
         }
 
         $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
         $image->load($this->getAbsolutePath());
-        $image->resizeToWidth(200);
-        $image->save($this->getAbsoluteThumbnailPath());
+        $image->resizeToWidth(150);
+        $image->save($this->getAbsoluteAvatarPath());
     }
 
     /**
      * @ORM\PostRemove()
      */
     public function removeUpload() {
-        if ($file = $this->getAbsolutePath()) {
-            unlink($file);
+
+        if ($this->isAvatar() == TRUE) {
+            if ($file = $this->getAbsoluteAvatarPath()) {
+                unlink($file);
+            }
+        } else {
+            if (NULL != $this->getAbsolutePath()) {
+                unlink($this->getAbsolutePath());
+            }
+            if (NULL != $this->getAbsoluteThumbnailPath()) {
+                unlink($this->getAbsoluteThumbnailPath());
+            }
         }
-        if ($file = $this->getAbsoluteThumbnailPath()) {
-            unlink($file);
-        }
-        if ($file = $this->getAbsoluteAvatarPath()) {
-            unlink($file);
-        }
+    }
+    
+    public function removePhotos() {
+            if (NULL != $this->getAbsolutePath()) {
+                unlink($this->getAbsolutePath());
+            }
+            if (NULL != $this->getAbsoluteThumbnailPath()) {
+                unlink($this->getAbsoluteThumbnailPath());
+            }
     }
 
     public function getAbsolutePath() {
@@ -378,6 +408,27 @@ class Photo implements Estimable {
      */
     public function getRatingCount() {
         return $this->rating->count();
+    }
+
+    /**
+     * Set avatar
+     *
+     * @param boolean $avatar
+     * @return Photo
+     */
+    public function setAvatar($avatar) {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return boolean 
+     */
+    public function getAvatar() {
+        return $this->avatar;
     }
 
 }

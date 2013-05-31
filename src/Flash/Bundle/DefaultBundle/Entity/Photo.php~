@@ -2,6 +2,7 @@
 
 namespace Flash\Bundle\DefaultBundle\Entity;
 
+use Flash\Bundle\DefaultBundle\Entity\Common\Estimable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\PhotoRepository")
  */
-class Photo {
+class Photo implements Estimable {
 
     /**
      * @var integer
@@ -29,7 +30,7 @@ class Photo {
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -37,12 +38,12 @@ class Photo {
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      * @Expose
      */
-    private $name;
+    protected $name;
 
     /**
      * @Assert\File(maxSize="2000000")
      */
-    private $file;
+    protected $file;
 
     /**
      * @var string
@@ -51,15 +52,16 @@ class Photo {
      * @Assert\NotBlank
      * @Expose
      */
-    private $path;
+    protected $path;
 
     /**
      * @OneToMany(targetEntity="Account", mappedBy="photoLike")
      * @Expose
      */
-    private $rating;
+    protected $rating;
 
     /**
+     * @Expose
      * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="photo")
      */
     protected $comments;
@@ -68,13 +70,22 @@ class Photo {
      *
      * @ManyToOne(targetEntity="Account", inversedBy="photos")
      */
-    private $account;
+    protected $account;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="avatar", type="boolean")
+     * @Expose
+     */
+    protected $avatar = false;
 
     /**
      * Constructor
      */
     public function __construct() {
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rating = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -113,7 +124,60 @@ class Photo {
 //            // clear the temp image path
 //            $this->temp = null;
 //        }
+
+        $this->createThumbnail();
+        if (false != $this->avatar) {
+            $this->createAvatar();
+            $this->removePhotos();
+        }
         $this->file = null;
+    }
+
+    public function isAvatar($avatar = NULL) {
+        if (NULL == $avatar) {
+            return $this->avatar;
+        } else {
+            $this->avatar = $avatar;
+        }
+    }
+
+    public function createThumbnail() {
+
+        if (!file_exists($this->getUploadRootDir() . '/thumb')) {
+            mkdir($this->getUploadRootDir() . '/thumb');
+        }
+
+        $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $image->load($this->getAbsolutePath());
+        $image->resizeToWidth(150);
+        $image->save($this->getAbsoluteThumbnailPath());
+    }
+
+    public function createAvatar() {
+
+        if (!file_exists($this->getUploadRootDir() . '/avatar')) {
+            mkdir($this->getUploadRootDir() . '/avatar');
+        }
+
+        $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $image->load($this->getAbsolutePath());
+        $image->resizeToWidth(150);
+        $image->save($this->getAbsoluteAvatarPath());
+    }
+
+    public function removePhotos() {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+        if ($file = $this->getAbsoluteThumbnailPath()) {
+            unlink($file);
+        }
+    }
+
+    public function removeAvatar() {
+        if ($file = $this->getAbsoluteAvatarPath()) {
+            unlink($file);
+        }
     }
 
     /**
@@ -123,17 +187,31 @@ class Photo {
         if ($file = $this->getAbsolutePath()) {
             unlink($file);
         }
+        if ($file = $this->getAbsoluteThumbnailPath()) {
+            unlink($file);
+        }
+        if ($file = $this->getAbsoluteAvatarPath()) {
+            unlink($file);
+        }
     }
 
     public function getAbsolutePath() {
         return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
-    public function getWebPath() {
-        return null === $this->path ? null : $this->getUploadDir() . '/' . $this->path;
+    public function getAbsoluteThumbnailPath() {
+        return null === $this->path ? null : $this->getUploadRootDir() . '/thumb/' . $this->path;
     }
 
-    protected function getUploadRootDir() {
+    public function getAbsoluteAvatarPath() {
+        return null === $this->path ? null : $this->getUploadRootDir() . '/avatar/' . $this->path;
+    }
+
+    public function getWebPath() {
+        return null === $this->path ? null : 'image' . '/' . $this->getAccount()->getId() . '/' . $this->path;
+    }
+
+    public function getUploadRootDir() {
         // the absolute directory path where uploaded
         // documents should be saved
         return __DIR__ . '/../../../../uploads/' . $this->getUploadDir();
@@ -176,33 +254,12 @@ class Photo {
     }
 
     /**
-     * Set rating
-     *
-     * @param integer $rating
-     * @return Photo
-     */
-    public function setRating($rating) {
-        $this->rating = $rating;
-
-        return $this;
-    }
-
-    /**
-     * Get rating
-     *
-     * @return integer 
-     */
-    public function getRating() {
-        return $this->rating;
-    }
-
-    /**
      * Set account
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
      * @return Photo
      */
-    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null) {
+    public function setAccount(\Symfony\Component\Security\Core\User\UserInterface $account = null) {
         $this->account = $account;
 
         return $this;
@@ -293,6 +350,70 @@ class Photo {
      */
     public function getComments() {
         return $this->comments;
+    }
+
+    /**
+     * Add rating
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
+     */
+    public function addRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
+        $this->rating[] = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Clear rating
+     *
+     */
+    public function clearRating() {
+        $this->rating->clear();
+
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRating() {
+        return $this->rating;
+    }
+
+    /**
+     * Check rating for exists
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
+     */
+    public function existsRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
+
+        $accs = $this->rating->getValues();
+        foreach ($accs as $acc) {
+            if ($acc->getEmail() == $rating->getEmail()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove rating
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
+     */
+    public function removeRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
+        $this->rating->removeElement($rating);
+    }
+
+    /**
+     * Get rating count
+     * 
+     * @return int
+     */
+    public function getRatingCount() {
+        return $this->rating->count();
     }
 
 }

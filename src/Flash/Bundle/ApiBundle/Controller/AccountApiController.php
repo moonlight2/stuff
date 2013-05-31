@@ -71,6 +71,23 @@ class AccountApiController extends RESTController implements GenericRestApi {
 
         return $this->handle($view);
     }
+    
+    /**
+     * @Route("p{acc_id}/accounts/own/update/{id}")
+     * @Method({"PUT"})
+     * @param Integer $id
+     * @return single Account data or array of accounts
+     */
+    public function updateOwnAction($id) {
+
+        $view = View::create();
+        $em = $this->getDoctrine()->getManager();
+        $acc = $em->getRepository('FlashDefaultBundle:Account')->find($id);
+        if (NULL == $acc)
+            return array('error' => 'Not found');
+
+        return $this->handle($this->get('account_service')->processFormWithoutPassword($acc));
+    }
 
     /**
      * @Route("/rest/api/accounts/{id}")

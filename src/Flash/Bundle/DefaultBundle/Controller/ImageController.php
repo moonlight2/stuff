@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller {
 
     /**
-     * @Route("/{acc_id}/{img_name}")
+     * @Route("/{acc_id}/{img_name}", requirements={"acc_id" = "\d+"})
      * @Method({"GET"})
      */
     public function getAction($acc_id, $img_name = null) {
@@ -49,6 +49,28 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
 
         header('Content-Type: image/jpeg');
         readfile($image->getAbsoluteThumbnailPath());
+        exit();
+    }
+    
+    /**
+     * @Route("/avatar/{acc_id}")
+     * @Method({"GET"})
+     */
+    public function getAvatarAction($acc_id) {
+
+        $acc = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+        
+
+        $image = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Photo')->getAvatarByAccount($acc);
+
+        if (NULL == $image) {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+        }
+
+        header('Content-Type: image/jpeg');
+        readfile($image->getAbsoluteAvatarPath());
         exit();
     }
 

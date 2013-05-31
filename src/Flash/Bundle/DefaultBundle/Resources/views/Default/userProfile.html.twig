@@ -42,14 +42,6 @@
             </div>
             
             <div class="control-group">
-                <label class='control-label'>Пароль:</label>
-                <div class='controls'>
-                    <input type="password" id="password" name="password"  value="<%= password %>"/>
-                </div>
-                <span class="help-inline" id='error-password'></span>
-            </div>
-            
-            <div class="control-group">
                 <label class='control-label'>Cтрана:</label>
                 <div class='controls selector input-append' style='display:block' id="country">
                     <input type="text" id="country-input" readonly placeholder='Выберите страну' />
@@ -77,35 +69,28 @@
                 <span class="help-inline" id='error-city'></span>
             </div>
             
-            <div class="control-group" id='group-block'>
-                <label class='control-label'>В Вашем городе есть команды:</label>
-                <div class='controls'>
-                    <div class='selector' id='group'>
-                    </div>
-                </div>
-                <span class="help-inline" id='error-group'></span>
-            </div>
-           
-            
             <div class="control-group">
                 <div class="controls">
-                  <button id='send' class="btn">Изменить</button>
+                  <button id='change' class="btn">Изменить</button>
                 </div>
             </div>
         </div>
     </div>
     </script>
 
-    {% if (acc_id == own_id) %}
-        <div id='uploader'>
-            <div id="manual-fine-uploader"></div>
-            <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
-                <i class="icon-upload icon-white"></i> Upload now
-            </div>
+
+    <div id='uploader'>
+        <div id="manual-fine-uploader"></div>
+        <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+            <i class="icon-upload icon-white"></i> Upload now
         </div>
-        
-    {% endif %}
-    <div class='sidebar'></div>
+    </div>
+    <div style="clear: both"></div>
+    <div class='sidebar'>
+        <div id='avatar'>
+            <img src='../image/avatar/14' />
+        </div>
+    </div>
     <div class='main-content'>
         <div id='form'></div>
     </div>
