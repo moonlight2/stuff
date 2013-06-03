@@ -16,6 +16,13 @@ root {
 
 }
 
+.ui-dialog {
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 7px;
+    background: #FFF;
+}
+
 #avatar {
     clear: both;
 }
@@ -33,9 +40,9 @@ root {
 }
 
 .comment-list li {
-padding: 10px;
-border: 1px solid #999;
-border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #999;
+    border-radius: 10px;
 }
 
 

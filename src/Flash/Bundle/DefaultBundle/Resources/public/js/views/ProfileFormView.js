@@ -12,6 +12,7 @@ window.ProfileFormView = Backbone.View.extend({
         "click .dropdown-toggle": "switchDropdown",
         "click": "hideDropdown",
         "click #change": "saveAccount",
+        "click #change_password": "savePassword",
         "click #country li": "changeCountryInput",
         "click #city li": "changeCityInput",
         "input #city-input": "getSimilarCities",
@@ -19,6 +20,18 @@ window.ProfileFormView = Backbone.View.extend({
     },
     getGroups: function() {
         console.log('Get groups');
+    },
+    savePassword: function() {
+        console.log('Save password');
+        var self = this;
+        if ($('#password').val() != $('#password2').val()) {
+            self.showErrors('{"password2": ["Пароли не совпадают"]}');
+            app.navigate('error', true);
+            
+        } else {
+            app.navigate('success', true);
+            console.log('Sovpali');
+        }
     },
     saveAccount: function() {
         var self = this;

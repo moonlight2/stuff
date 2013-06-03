@@ -5,6 +5,8 @@
 
 {% block content %}
 
+    
+
     <input type='hidden' id='acc_id' value='{{ acc_id }}' />
     
     <script type="text/template" id="city-tpl"><%= name %></script>
@@ -71,9 +73,32 @@
             
             <div class="control-group">
                 <div class="controls">
-                  <button id='change' class="btn">Изменить</button>
+                  <button id='change' class="btn">Изменить информацию</button>
                 </div>
             </div>
+            
+            <p>Изменить пароль</p>
+            <div class="control-group">
+                <label class='control-label'>Пароль:</label>
+                <div class='controls'>
+                    <input type="password" id="password" name="password"  value="<%= password %>"/>
+                </div>
+                <span class="help-inline" id='error-password'></span>
+            </div>
+            <div class="control-group">
+                <label class='control-label'>Подтвердите пароль:</label>
+                <div class='controls'>
+                    <input type="password" id="password2" name="password2"  value="<%= password %>"/>
+                </div>
+                <span class="help-inline" id='error-password2'></span>
+            </div>
+            
+            <div class="control-group">
+                <div class="controls">
+                  <button id='change_password' class="btn">Изменить пароль</button>
+                </div>
+            </div>
+            
         </div>
     </div>
     </script>

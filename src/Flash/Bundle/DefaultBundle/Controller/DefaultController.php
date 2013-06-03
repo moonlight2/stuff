@@ -87,7 +87,7 @@ class DefaultController extends Controller {
         $user = $this->get('security.context')->getToken()->getUser();
         
         if($user->getId() != $id ) {
-            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Page not found');
+            throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('Access denied');
         }
         
         if (null != $acc) {

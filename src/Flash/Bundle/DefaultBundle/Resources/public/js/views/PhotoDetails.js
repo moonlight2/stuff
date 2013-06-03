@@ -87,7 +87,9 @@ window.PhotoView = Backbone.View.extend({
 
         var self = this;
         this.photoComment = new PhotoCommentModel();
-
+        this.button = e.target;
+        this.button.disabled = true;
+        
         this.photoComment.set({
             text: $('textarea#comment').val(),
             photo_id: $(e.target).attr('val')
@@ -95,6 +97,7 @@ window.PhotoView = Backbone.View.extend({
 
         this.photoComment.save(null, {
             success: function(model, response) {
+                self.button.disabled = false;
                 $('textarea#comment').val('');
                 self.comments.add(self.photoComment);
             },

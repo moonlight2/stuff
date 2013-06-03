@@ -86,11 +86,23 @@
     </script>
     
 
-    
+      <div id='eventDialog' style = 'display: none' class='dialog ui-helper-hidden di'>
+            <form>
+                <div>
+                    <label>Title:</label>
+                    <input id='title' class="field" type="text"></input>
+                </div>
+                <div>
+                    <label>Text:</label>
+                    <input id='text' class="field" type="text"></input>
+                </div>
+            </form>
+        </div>
     
     <h1>Cтраница пользователя <b>{{ firstName }} {{ lastName }}</b></h1>
     <div class='sidebar'></div>
     <div class='main-content'>
+        <div id='calendar'></div>
         <div id='events'></div>
     </div>
 {% endblock %}

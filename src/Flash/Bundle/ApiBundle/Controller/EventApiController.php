@@ -10,12 +10,52 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use FOS\RestBundle\View\View;
 
 /**
- * @Route("/logged/rest/api/events")
+ * @Route("")
  */
 class EventApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("/group")
+     * @Route("/events")
+     * @Method({"GET"})
+     */
+    public function getCalendarAction() {
+        
+        
+        print_r('{"id":1,"title":"My event","text":"Super text","start":"2013-06-03T21:00:00.000Z","end":"2013-06-03T21:00:00.000Z"}');
+        exit();
+        
+    }
+
+    /**
+     * @Route("/events")
+     * @Method({"POST"})
+     */
+    public function postCalendarAction() {
+
+
+        $view = View::create();
+        
+        print_r('{"id":2,"title":"My event2","text":"Super text","start":"2013-06-04T21:00:00.000Z","end":"2013-06-03T21:00:00.000Z"}');
+        exit();
+        return $this->handle($view->setData($resp));
+        print_r("Event added");
+        
+        exit('1');
+
+        $user = $this->get('security.context')->getToken()->getUser();
+        $group = $user->getGroup();
+
+        if ($this->get('security.context')->isGranted('EDIT', $group) &&
+                $user->getGroup()->getNumberOfParty() >= $user->getGroup()->getMinimumUsersNumber()) {
+
+            return $this->get('event_service')->processForm(new Event());
+        } else {
+            return array('error' => 'Access denied');
+        }
+    }
+
+    /**
+     * @Route("/logged/rest/api/events/group")
      * @Method({"POST"})
      */
     public function postAction() {
@@ -25,7 +65,7 @@ class EventApiController extends RESTController implements GenericRestApi {
 
         if ($this->get('security.context')->isGranted('EDIT', $group) &&
                 $user->getGroup()->getNumberOfParty() >= $user->getGroup()->getMinimumUsersNumber()) {
-            
+
             return $this->get('event_service')->processForm(new Event());
         } else {
             return array('error' => 'Access denied');
@@ -33,7 +73,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("")
+     * @Route("/logged/rest/api/events")
      * @Method({"GET"})
      */
     public function getAction($id = null) {
@@ -55,7 +95,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/group/{id}")
+     * @Route("/logged/rest/api/events/group/{id}")
      * @Method({"GET"})
      */
     public function getByGroupAction($id = null) {
@@ -74,7 +114,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/group/{id}")
+     * @Route("/logged/rest/api/events/group/{id}")
      * @Method({"PUT"})
      */
     public function putAction($id) {
@@ -92,12 +132,8 @@ class EventApiController extends RESTController implements GenericRestApi {
         return $this->get('event_service')->processForm($event);
     }
 
-
-
     public function deleteAction($id) {
         
     }
-
-
 
 }

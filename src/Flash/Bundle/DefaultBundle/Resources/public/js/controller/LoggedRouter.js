@@ -10,6 +10,7 @@ $(document).ready(function() {
         initialize: function() {
             console.log('Starting router');
             console.log(this);
+            
         },
         showEvents: function() {
 
@@ -21,6 +22,10 @@ $(document).ready(function() {
                     $('#events').append(new UserEventListView({model: self.events}).render().el);
                 }});
 
+            this.calendarInit();
+        },
+        calendarInit: function() {
+            new CalendarEventsView().render();
         },
         showGroupSuccess: function() {
             alert('Group has been created!!!!');

@@ -18,7 +18,8 @@ window.AvatarUploaderModel = new qq.FineUploader({
     callbacks: {
         onComplete: function(id, fileName, responseJSON) {
             var model = responseJSON.photo;
-            $('#avatar').html("<img src='../image/avatar/14' />");
+            var id = $('#acc_id').val();
+            $('#avatar').html("<img src='../image/avatar/" +id+"' />");
         }
     }
 });
