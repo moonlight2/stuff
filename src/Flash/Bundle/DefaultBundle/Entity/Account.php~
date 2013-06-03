@@ -143,6 +143,11 @@ class Account implements AdvancedUserInterface {
      * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="account")
      */
     protected $photoComments;
+    
+    /**
+     * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent", mappedBy="account")
+     */
+    protected $calendarEvents;
 
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="account")

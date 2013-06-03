@@ -143,6 +143,11 @@ class Account implements AdvancedUserInterface {
      * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="account")
      */
     protected $photoComments;
+    
+    /**
+     * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent", mappedBy="account")
+     */
+    protected $calendarEvents;
 
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="account")
@@ -170,6 +175,7 @@ class Account implements AdvancedUserInterface {
         $this->photos = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->photoComments = new ArrayCollection();
+        $this->calendarEvents = new ArrayCollection();
     }
 
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
@@ -792,4 +798,37 @@ class Account implements AdvancedUserInterface {
         return $this->photoCommentLike;
     }
 
+
+    /**
+     * Add calendarEvents
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents
+     * @return Account
+     */
+    public function addCalendarEvent(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents)
+    {
+        $this->calendarEvents[] = $calendarEvents;
+    
+        return $this;
+    }
+
+    /**
+     * Remove calendarEvents
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents
+     */
+    public function removeCalendarEvent(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents)
+    {
+        $this->calendarEvents->removeElement($calendarEvents);
+    }
+
+    /**
+     * Get calendarEvents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCalendarEvents()
+    {
+        return $this->calendarEvents;
+    }
 }

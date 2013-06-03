@@ -5,6 +5,7 @@ namespace Flash\Bundle\ApiBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Flash\Bundle\DefaultBundle\Entity\Event;
+use Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent;
 use Flash\Bundle\ApiBundle\RESTApi\RESTController;
 use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use FOS\RestBundle\View\View;
@@ -18,7 +19,27 @@ class EventApiController extends RESTController implements GenericRestApi {
      * @Route("/events")
      * @Method({"GET"})
      */
-    public function getCalendarAction() {
+    public function getCalendarAction($id=null) {        
+        
+        $view = View::create();
+
+        if (NULL != $id) {
+            $event = $this->getDoctrine()->getManager()
+                            ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+            if (NULL != $event) {
+                $view->setData($event);
+            } else {
+                $view->setData(array('error' => 'Not found'));
+            }
+        } else {
+            $events = $this->getDoctrine()->getManager()->
+                            getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->findAll();
+            $view->setData($events);
+        }
+        return $this->handle($view);
+        
+        
+        
         
         
         print_r('{"id":1,"title":"My event","text":"Super text","start":"2013-06-03T21:00:00.000Z","end":"2013-06-03T21:00:00.000Z"}');
@@ -32,26 +53,9 @@ class EventApiController extends RESTController implements GenericRestApi {
      */
     public function postCalendarAction() {
 
-
-        $view = View::create();
-        
-        print_r('{"id":2,"title":"My event2","text":"Super text","start":"2013-06-04T21:00:00.000Z","end":"2013-06-03T21:00:00.000Z"}');
-        exit();
-        return $this->handle($view->setData($resp));
-        print_r("Event added");
-        
-        exit('1');
-
-        $user = $this->get('security.context')->getToken()->getUser();
-        $group = $user->getGroup();
-
-        if ($this->get('security.context')->isGranted('EDIT', $group) &&
-                $user->getGroup()->getNumberOfParty() >= $user->getGroup()->getMinimumUsersNumber()) {
-
-            return $this->get('event_service')->processForm(new Event());
-        } else {
-            return array('error' => 'Access denied');
-        }
+        $acc = $this->get('security.context')->getToken()->getUser();
+        return $this->handle($this->get('event_service')
+                ->processCalendarEventForm(new CalendarEvent($acc)));        
     }
 
     /**

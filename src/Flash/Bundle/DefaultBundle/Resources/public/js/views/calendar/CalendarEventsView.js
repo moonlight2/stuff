@@ -10,7 +10,6 @@ var CalendarEventsView = Backbone.View.extend({
         "click .fc-event": "showEvent",
     },
     showEvent: function(e) {
-        alert('e');
         console.log(e);
     },
     render: function() {

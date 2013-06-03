@@ -44,6 +44,34 @@ class DefaultController extends Controller {
      * @Template()
      */
     public function testAction() {
+
+        $time = '2011-08-12T09:55:03Z';
+        
+        print_r(new \DateTime($time));
+        
+        echo date("U",strtotime('2011-08-12T09:55:03Z'));
+        exit();
+        
+        
+        $date = '2011-10-02T23:25:42Z';
+        var_dump($this->validateDate($date));
+
+        $date = '2011-17-17T23:25:42Z';
+        var_dump($this->validateDate($date));
+    }
+
+    function validateDate($date) {
+        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/', $date, $parts) == true) {
+            $time = gmmktime($parts[4], $parts[5], $parts[6], $parts[2], $parts[3], $parts[1]);
+
+            $input_time = strtotime($date);
+            if ($input_time === false)
+                return false;
+
+            return $input_time == $time;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -53,7 +81,7 @@ class DefaultController extends Controller {
     public function mainAction() {
 
         $acc = $this->get('security.context')->getToken()->getUser();
-        return $this->redirect($this->generateUrl('_user_page', array('id'=>$acc->getId())), 301);
+        return $this->redirect($this->generateUrl('_user_page', array('id' => $acc->getId())), 301);
     }
 
     /**
@@ -75,7 +103,7 @@ class DefaultController extends Controller {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Page not found');
         }
     }
-    
+
     /**
      * @Route("/p{id}/profile",  requirements={"id" = "\d+"}, name="_userp_profile__page")
      * @Template()
@@ -85,11 +113,11 @@ class DefaultController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($id);
         $user = $this->get('security.context')->getToken()->getUser();
-        
-        if($user->getId() != $id ) {
+
+        if ($user->getId() != $id) {
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('Access denied');
         }
-        
+
         if (null != $acc) {
             return array(
                 'firstName' => $acc->getFirstName(),
