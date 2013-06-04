@@ -19,8 +19,8 @@ class EventApiController extends RESTController implements GenericRestApi {
      * @Route("/events")
      * @Method({"GET"})
      */
-    public function getCalendarAction($id=null) {        
-        
+    public function getCalendarAction($id = null) {
+
         $view = View::create();
 
         if (NULL != $id) {
@@ -37,14 +37,41 @@ class EventApiController extends RESTController implements GenericRestApi {
             $view->setData($events);
         }
         return $this->handle($view);
-        
-        
-        
-        
-        
-        print_r('{"id":1,"title":"My event","text":"Super text","start":"2013-06-03T21:00:00.000Z","end":"2013-06-03T21:00:00.000Z"}');
-        exit();
-        
+    }
+
+    /**
+     * @Route("/events/{id}", requirements={"id" = "\d+"})
+     * @Method({"PUT"})
+     */
+    public function updateCalendarAction($id) {
+
+        $event = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+
+        if (NULL != $event) {
+            return $this->handle($this->get('event_service')
+                                    ->processCalendarEventForm($event));
+        } else {
+            return $this->handle(View::create()->setData(array('error' => 'Not found.')));
+        }
+    }
+
+    /**
+     * @Route("/events/{id}", requirements={"id" = "\d+"})
+     * @Method({"DELETE"})
+     */
+    public function deleteCalendarAction($id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+        if (NULL != $event) {
+            /* Comment servise will check your rights to remove photo */
+            return $this->handle($this->get('event_service')->deleteCalendarEvent($event));
+        } else {
+            $view->setData(array('error' => 'Not found'));
+            return $this->handle($view);
+        }
     }
 
     /**
@@ -55,7 +82,7 @@ class EventApiController extends RESTController implements GenericRestApi {
 
         $acc = $this->get('security.context')->getToken()->getUser();
         return $this->handle($this->get('event_service')
-                ->processCalendarEventForm(new CalendarEvent($acc)));        
+                                ->processCalendarEventForm(new CalendarEvent($acc)));
     }
 
     /**

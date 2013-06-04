@@ -4,10 +4,18 @@ window.DialogEventView = Backbone.View.extend({
         _.bindAll(this);
     },
     render: function() {
+
+        var self = this;
+        this.buttons = {'Ok': this.save};
+        _.extend(self.buttons, {'Cancel': this.closeDialog});
+        if (!this.model.isNew()) {
+            _.extend(self.buttons, {'Delete': this.destroy});
+        }
+
         this.el.dialog({
             modal: true,
-            title: 'New Event',
-            buttons: {'Ok': this.save, 'Cancel': this.closeDialog},
+            title: (this.model.isNew() ? 'Новое' : 'Редактипрвать') + ' событие',
+            buttons: self.buttons,
             open: this.onOpen,
         });
 
@@ -27,18 +35,42 @@ window.DialogEventView = Backbone.View.extend({
         this.model.set({text: $('#text').val()});
 
         var self = this;
+        if (this.model.isNew()) {
+            this.model.save(null, {
+                success: function(model, response) {
+                    self.collection.add(model, {success: self.closeDialog()});
+                },
+                error: function(model, response) {
+                    self.showErrors(response.responseText);
+                    app.navigate('error', true);
+                }
+            })
+        } else {
+            this.model.save({}, {success: this.closeDialog()});
+        }
+    },
+    closeDialog: function() {
+        this.el.dialog('close');
+    },
+    destroy: function() {
 
-        this.model.save(null, {
+        var self = this;
+        this.model.destroy({
             success: function(model, response) {
-                self.collection.add(model, {success: self.closeDialog()});
+                self.closeDialog();
+                if (response.error) {
+                    alert(response.error);
+                } else if (response.success) {
+                    console.log(response.success);
+                }
             },
             error: function(model, response) {
                 self.showErrors(response.responseText);
                 app.navigate('error', true);
             }
-        });
-    },
-    closeDialog: function() {
-        this.el.dialog('close');
+        })
+
+
+
     }
 });

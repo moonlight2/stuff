@@ -49,7 +49,6 @@ class EventService extends CommonService {
         $start = new \DateTime($request->get('start'));
         $end = new \DateTime($request->get('end'));
 
-
         $form->bind(array(
             'title' => $request->get('title'),
             'text' => $request->get('text'),
@@ -59,12 +58,12 @@ class EventService extends CommonService {
 
         if ($form->isValid()) {
 
-            $acc = $this->context->getToken()->getUser();
-
-            $acc->addCalendarEvent($event);
-
+            if ($request->getMethod() == 'POST') {
+                $acc = $this->context->getToken()->getUser();
+                $acc->addCalendarEvent($event);
+                $em->persist($acc);
+            }
             $em->persist($event);
-            $em->persist($acc);
             $em->flush();
 
             if ($request->getMethod() == 'POST') {
@@ -77,6 +76,29 @@ class EventService extends CommonService {
             return $view->setData($this->getErrorMessages($form));
         }
         return $view->setData($event);
+    }
+    
+    public function deleteCalendarEvent($event) {
+    
+        
+        $em = $this->injector->getDoctrine()->getManager();
+        $view = View::create();
+
+        if ($this->context->isGranted('DELETE', $event)) {
+            
+            $acc = $this->context->getToken()->getUser();
+            $acc->removeCalendarEvent($event);
+            $em->persist($acc);
+            $em->persist($event);
+            $em->remove($event);
+            $em->flush();
+
+            $resp = array('success' => 'Event was deleted');
+        } else {
+            $resp = array('error' => "Access denied. You don't have enought permissions");
+        }
+        return $view->setData($resp);
+        
     }
 
     private function validateDate($date) {
