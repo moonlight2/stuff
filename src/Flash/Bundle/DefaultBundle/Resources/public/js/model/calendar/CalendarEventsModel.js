@@ -6,6 +6,7 @@ var CalendarEventModel = Backbone.Model.extend({
         "text": "",
         "start": "",
         "end": "",
+        "allDay": "",
     }
 
 });

@@ -20,10 +20,11 @@ var CalendarEventsView = Backbone.View.extend({
             header: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'month, basicDay',
-                ignoreTimezone: false,
+                right: 'month, agendaDay',
             },
             eventClick: this.eventClick,
+            eventDrop: this.eventDropOrResize,
+            eventResize: this.eventDropOrResize,
             selectable: true,
             selectHelper: true,
             editable: true,
@@ -34,17 +35,15 @@ var CalendarEventsView = Backbone.View.extend({
     },
     eventClick: function(e) {
 
-        console.log(e.id);
         var eventView = new DialogEventView({
             model: this.collection.get(e.id),
             collection: this.collection
         });
-        console.log('EventView:');
-        console.log(eventView);
+   
         eventView.render();
     },
     addOne: function(event) {
-        console.log(event);
+  
         this.el.fullCalendar('renderEvent', event.toJSON());
     },
     change: function(e) {
@@ -53,14 +52,20 @@ var CalendarEventsView = Backbone.View.extend({
         fcEvent.color = e.get('text');
         this.el.fullCalendar('updateEvent', fcEvent);
     },
-    select: function(startDate, endDate) {
+    select: function(start, end, allDay) {
 
-        var eventView = new DialogEventView({
-            model: new CalendarEventModel({
-                start: startDate,
-                end: endDate,
-            }), collection: this.collection
+        var event = new CalendarEventModel({
+            start: start,
+            end: end,
+            allDay: allDay
         });
+        console.log('My model');
+        console.log(event);
+        var eventView = new DialogEventView({
+            model: event,
+            collection: this.collection
+        });
+        
         eventView.render();
     },
     addAll: function() {
@@ -68,5 +73,9 @@ var CalendarEventsView = Backbone.View.extend({
     },
     destroy: function(event) {
         this.el.fullCalendar('removeEvents', event.id);
+    },
+    eventDropOrResize: function(e) {
+
+        this.collection.get(e.id).save({start: e.start, end: e.end});
     }
 });

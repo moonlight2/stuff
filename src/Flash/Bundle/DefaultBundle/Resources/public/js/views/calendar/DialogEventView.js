@@ -12,6 +12,9 @@ window.DialogEventView = Backbone.View.extend({
             _.extend(self.buttons, {'Delete': this.destroy});
         }
 
+        console.log('Current dialog model');
+        console.log(this.model);
+
         this.el.dialog({
             modal: true,
             title: (this.model.isNew() ? 'Новое' : 'Редактипрвать') + ' событие',
@@ -22,23 +25,28 @@ window.DialogEventView = Backbone.View.extend({
         return this;
     },
     onOpen: function() {
-
-        console.log('Model of dialog:');
-        console.log(this.model);
-
+        $('#start').val(this.model.get('start'));
+        $('#end').val(this.model.get('end'));
         $('#title').val(this.model.get('title'));
         $('#text').val(this.model.get('text'));
     },
-    save: function() {
+    save: function(e) {
 
         this.model.set({title: $('#title').val()});
         this.model.set({text: $('#text').val()});
+        this.model.set({start: $('#start').val()});
+        this.model.set({end: $('#end').val()});
 
         var self = this;
         if (this.model.isNew()) {
+
+            console.log('Model of dialog:');
+            console.log(this.model);
+
             this.model.save(null, {
                 success: function(model, response) {
                     self.collection.add(model, {success: self.closeDialog()});
+                    app.navigate('success', true);
                 },
                 error: function(model, response) {
                     self.showErrors(response.responseText);
@@ -59,9 +67,10 @@ window.DialogEventView = Backbone.View.extend({
             success: function(model, response) {
                 self.closeDialog();
                 if (response.error) {
-                    alert(response.error);
+                    app.navigate('error', true);
                 } else if (response.success) {
                     console.log(response.success);
+
                 }
             },
             error: function(model, response) {
