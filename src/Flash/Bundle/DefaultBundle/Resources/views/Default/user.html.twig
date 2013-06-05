@@ -8,8 +8,11 @@
     <input type='hidden' id='acc_id' value='{{ acc_id }}' />
 
     <script type="text/template" id="user-event-list-tpl">
-        <p><%= date %></p>
+
         <div class='event'>
+        <% var d = new Date(date);%>
+        <%= date %>
+        <p><%= d.getDate() %>-<%= d.getMonth() %>-<%= d.getFullYear() %></p>
         <p class='strong'><%= title %></p>
         <p><%= description %></p>
         </div>

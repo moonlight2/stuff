@@ -8,12 +8,6 @@ var CalendarEventsView = Backbone.View.extend({
         this.collection.bind('change', this.change);
         this.collection.bind('destroy', this.destroy);
     },
-    events: {
-        "click .fc-event": "showEvent",
-    },
-    showEvent: function(e) {
-        console.log(e);
-    },
     render: function() {
 
         this.el.fullCalendar({
@@ -35,15 +29,17 @@ var CalendarEventsView = Backbone.View.extend({
     },
     eventClick: function(e) {
 
+
+
         var eventView = new DialogEventView({
             model: this.collection.get(e.id),
             collection: this.collection
         });
-   
+
         eventView.render();
     },
     addOne: function(event) {
-  
+
         this.el.fullCalendar('renderEvent', event.toJSON());
     },
     change: function(e) {
@@ -54,19 +50,24 @@ var CalendarEventsView = Backbone.View.extend({
     },
     select: function(start, end, allDay) {
 
-        var event = new CalendarEventModel({
-            start: start,
-            end: end,
-            allDay: allDay
-        });
-        console.log('My model');
-        console.log(event);
-        var eventView = new DialogEventView({
-            model: event,
-            collection: this.collection
-        });
-        
-        eventView.render();
+        var timeStamp = new Date();
+        var startDate = new Date(start);
+
+        if (startDate >= timeStamp) {
+            var event = new CalendarEventModel({
+                start: start,
+                end: end,
+                allDay: allDay
+            });
+            console.log('My model');
+            console.log(event);
+            var eventView = new DialogEventView({
+                model: event,
+                collection: this.collection
+            });
+            eventView.render();
+        }
+        return false;
     },
     addAll: function() {
         this.el.fullCalendar('addEventSource', this.collection.toJSON());
