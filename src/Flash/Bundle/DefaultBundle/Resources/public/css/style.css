@@ -16,6 +16,16 @@ root {
 
 }
 
+#loader {
+    display: none;
+    width: 100px;
+    height: 50px;
+    
+    position: relative;
+    top: 5px;
+    padding: 10px;
+}
+
 .ui-dialog {
     padding: 10px;
     border: 1px solid;

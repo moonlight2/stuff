@@ -47,6 +47,23 @@ class CalendarEvent  {
      * @Expose
      */
     protected $text;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="all_day", type="boolean")
+     * @Expose
+     */
+    protected $allDay = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_shown", type="boolean")
+     * @Expose
+     */
+    protected $isShown = false;
+    
 
     /**
      * @var date
@@ -246,5 +263,51 @@ class CalendarEvent  {
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * Set allDay
+     *
+     * @param boolean $allDay
+     * @return CalendarEvent
+     */
+    public function setAllDay($allDay)
+    {
+        $this->allDay = $allDay;
+    
+        return $this;
+    }
+
+    /**
+     * Get allDay
+     *
+     * @return boolean 
+     */
+    public function getAllDay()
+    {
+        return $this->allDay;
+    }
+
+    /**
+     * Set isShown
+     *
+     * @param boolean $isShown
+     * @return CalendarEvent
+     */
+    public function setIsShown($isShown)
+    {
+        $this->isShown = $isShown;
+    
+        return $this;
+    }
+
+    /**
+     * Get isShown
+     *
+     * @return boolean 
+     */
+    public function getIsShown()
+    {
+        return $this->isShown;
     }
 }

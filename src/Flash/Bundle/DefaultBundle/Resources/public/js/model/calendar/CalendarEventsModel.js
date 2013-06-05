@@ -2,16 +2,29 @@ var CalendarEventModel = Backbone.Model.extend({
     urlRoot: 'events',
     defaults: {
         "id": null,
-        "title":"",
+        "title": "",
         "text": "",
         "start": "",
         "end": "",
-        "allDay": "",
+        "all_day": false,
+        "is_shown": false,
     }
-
 });
 
 var CalendarEventsCollection = Backbone.Collection.extend({
     model: CalendarEventModel,
-    url: 'events'
+    url: 'events',
+    parse: function(response) {
+        
+        var self = this;
+
+        if ((response.today).length > 0) {
+            this.collection = new CalendarEventsCollection();
+            _.each(response.today, function(event) {
+                self.collection.add(event);
+            }, this);
+            new DialogTodayView({collection: this.collection}).render();
+        }
+        return response.events;
+    }
 });

@@ -37,6 +37,7 @@ class CalendarEvent  {
      * @var string
      * @Type("string")
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * @Expose
      */
     protected $title;
     
@@ -46,6 +47,23 @@ class CalendarEvent  {
      * @Expose
      */
     protected $text;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="all_day", type="boolean")
+     * @Expose
+     */
+    protected $allDay = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_shown", type="boolean")
+     * @Expose
+     */
+    protected $isShown = false;
+    
 
     /**
      * @var date
@@ -199,5 +217,51 @@ class CalendarEvent  {
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * Set start
+     *
+     * @param \DateTime $start
+     * @return CalendarEvent
+     */
+    public function setStart($start)
+    {
+        $this->start = $start;
+    
+        return $this;
+    }
+
+    /**
+     * Get start
+     *
+     * @return \DateTime 
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * Set end
+     *
+     * @param \DateTime $end
+     * @return CalendarEvent
+     */
+    public function setEnd($end)
+    {
+        $this->end = $end;
+    
+        return $this;
+    }
+
+    /**
+     * Get end
+     *
+     * @return \DateTime 
+     */
+    public function getEnd()
+    {
+        return $this->end;
     }
 }

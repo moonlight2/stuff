@@ -54,6 +54,7 @@ class EventService extends CommonService {
             'text' => $request->get('text'),
             'start' => $start->format('Y-m-d H:i:s'),
             'end' => $end->format('Y-m-d H:i:s'),
+            'isShown' => $request->get('is_shown'),
         ));
 
         if ($form->isValid()) {

@@ -34,7 +34,17 @@ class EventApiController extends RESTController implements GenericRestApi {
         } else {
             $events = $this->getDoctrine()->getManager()->
                             getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->findAll();
-            $view->setData($events);
+            
+            $now = new \DateTime('now');
+            $today = array();
+            foreach ($events as $event) {
+                if ($event->getStart()->format('Y-m-d') == $now->format('Y-m-d') && 
+                        $event->getIsShown() == false) {
+                    $today[] = ($event);
+                }
+            }
+           
+            $view->setData(array('today'=>$today, 'events'=>$events));
         }
         return $this->handle($view);
     }
