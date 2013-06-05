@@ -54,7 +54,7 @@ class CalendarEvent  {
      * @ORM\Column(name="all_day", type="boolean")
      * @Expose
      */
-    protected $allDay = false;
+    protected $allDay;
     
     /**
      * @var boolean

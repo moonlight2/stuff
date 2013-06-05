@@ -63,7 +63,11 @@ class EventService extends CommonService {
                 $acc = $this->context->getToken()->getUser();
                 $acc->addCalendarEvent($event);
                 $em->persist($acc);
+                
+                $event->setIsShown(false);
             }
+            $event->setAllDay(false);
+            
             $em->persist($event);
             $em->flush();
 

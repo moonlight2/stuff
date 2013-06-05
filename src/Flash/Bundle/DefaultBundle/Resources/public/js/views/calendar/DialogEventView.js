@@ -36,6 +36,7 @@ window.DialogEventView = Backbone.View.extend({
         this.model.set({text: $('#text').val()});
         this.model.set({start: $('#start').val()});
         this.model.set({end: $('#end').val()});
+        this.model.set({is_shown: false});
 
         var self = this;
         if (this.model.isNew()) {
@@ -54,6 +55,7 @@ window.DialogEventView = Backbone.View.extend({
                 }
             })
         } else {
+            this.model.set({is_shown: true});
             this.model.save({}, {success: this.closeDialog()});
         }
     },
