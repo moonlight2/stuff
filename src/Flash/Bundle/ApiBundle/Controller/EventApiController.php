@@ -18,7 +18,7 @@ class EventApiController extends RESTController implements GenericRestApi {
      * @Route("p{acc_id}/events",requirements={"acc_id" = "\d+"})
      * @Method({"GET"})
      */
-    public function getCalendarAction($acc_id) {
+    public function getCalendarEventsAction($acc_id) {
 
         $acc = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Account')->find($acc_id);
@@ -29,27 +29,15 @@ class EventApiController extends RESTController implements GenericRestApi {
             $events = $this->getDoctrine()->getManager()
                             ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->findAllByAccount($acc);
         }
-
-        $now = new \DateTime('now');
-        $today = array();
-        if (sizeof($events) > 0) {
-            foreach ($events as $event) {
-                if ($event->getStart()->format('Y-m-d') == $now->format('Y-m-d') &&
-                        $event->getIsShown() == false) {
-                    $today[] = ($event);
-                }
-            }
-        }
-
-        return $this->handle($this->getView(
-                                array('today' => $today, 'events' => $events)));
+        
+        return $this->handle($this->getView($events));
     }
 
     /**
      * @Route("p{acc_id}/events/{id}",requirements={"acc_id" = "\d+"})
      * @Method({"PUT"})
      */
-    public function updateCalendarAction($id) {
+    public function updateCalendarEventAction($id) {
 
         $event = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
@@ -69,7 +57,7 @@ class EventApiController extends RESTController implements GenericRestApi {
      * @Route("p{acc_id}/events/{id}",requirements={"acc_id" = "\d+"})
      * @Method({"DELETE"})
      */
-    public function deleteCalendarAction($id) {
+    public function deleteCalendarEventAction($id) {
 
         $event = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
@@ -88,7 +76,7 @@ class EventApiController extends RESTController implements GenericRestApi {
      * @Route("p{acc_id}/events",requirements={"acc_id" = "\d+"})
      * @Method({"POST"})
      */
-    public function postCalendarAction() {
+    public function postCalendarEventAction() {
 
         $acc = $this->get('security.context')->getToken()->getUser();
         return $this->handle($this->get('event_service')

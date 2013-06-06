@@ -1,11 +1,15 @@
+Date.prototype.sameDateAs = function(pDate) {
+    return ((this.getFullYear() == pDate.getFullYear()) && (this.getMonth() == pDate.getMonth()) && (this.getDate() == pDate.getDate()));
+}
+
 var CalendarEventsView = Backbone.View.extend({
     initialize: function() {
         this.el = $('#calendar');
         _.bindAll(this);
-        
+
         this.acc_id = $('#acc_id').val();
         this.own_id = $('#own_id').val();
-        
+
         this.collection = new CalendarEventsCollection();
         this.collection.bind('reset', this.addAll);
         this.collection.bind('add', this.addOne);
@@ -21,7 +25,6 @@ var CalendarEventsView = Backbone.View.extend({
                 left: 'prev,next today',
                 center: 'title',
                 right: 'month, agendaDay',
-
             },
             eventClick: this.eventClick,
             eventDrop: this.eventDropOrResize,
@@ -34,10 +37,26 @@ var CalendarEventsView = Backbone.View.extend({
 
         var self = this;
         this.collection.url = 'p' + this.acc_id + '/events';
-        this.collection.fetch({success: function(data) {
-                console.log(data);
-               self.hideLoader();
+        this.collection.fetch({success: function(collection) {
+                self.hideLoader();
+                self.showTodayDialog(collection);
             }});
+    },
+    showTodayDialog: function(collection) {
+
+        var self = this;
+        var timeStamp = new Date();
+
+        this.todayCollection = new CalendarEventsCollection();
+        _.each(collection.models, function(event) {
+            var date = new Date(event.get('start'));
+            if (timeStamp.sameDateAs(date) && false === event.get('isShown')) {
+                self.todayCollection.add(event)
+            }
+        }, this);
+        if (this.todayCollection.length > 0) {
+            new DialogTodayView({collection: self.todayCollection}).render();
+        }
     },
     eventClick: function(e) {
 
@@ -53,7 +72,7 @@ var CalendarEventsView = Backbone.View.extend({
         this.el.fullCalendar('renderEvent', event.toJSON());
     },
     change: function(e, d) {
- 
+
         var fcEvent = this.el.fullCalendar('clientEvents', e.get('id'))[0];
         fcEvent.title = e.get('title');
         fcEvent.color = e.get('text');
@@ -86,7 +105,7 @@ var CalendarEventsView = Backbone.View.extend({
         this.el.fullCalendar('removeEvents', event.id);
     },
     eventDropOrResize: function(e, b) {
-    
+
         this.collection.get(e.id).save({start: e.start, end: e.end, allDay: e.allDay});
     },
     showLoader: function() {
