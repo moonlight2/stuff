@@ -64,9 +64,8 @@ class EventService extends CommonService {
                 $acc = $this->context->getToken()->getUser();
                 $acc->addCalendarEvent($event);
                 $em->persist($acc);
-                
+
                 $event->setIsShown(false);
-                
             }
             $event->setAllDay($request->get('allDay'));
             $em->persist($event);
@@ -75,6 +74,7 @@ class EventService extends CommonService {
             if ($request->getMethod() == 'POST') {
                 $acl = $this->injector->getAcl();
                 $acl->grant($event, MaskBuilder::MASK_EDIT);
+                $acl->grant($event, MaskBuilder::MASK_VIEW);
                 $acl->grant($event, MaskBuilder::MASK_DELETE);
             }
         } else {
@@ -83,28 +83,20 @@ class EventService extends CommonService {
         }
         return $view->setData($event);
     }
-    
+
     public function deleteCalendarEvent($event) {
-    
-        
-        $em = $this->injector->getDoctrine()->getManager();
+
         $view = View::create();
+        $em = $this->injector->getDoctrine()->getManager();
 
-        if ($this->context->isGranted('DELETE', $event)) {
-            
-            $acc = $this->context->getToken()->getUser();
-            $acc->removeCalendarEvent($event);
-            $em->persist($acc);
-            $em->persist($event);
-            $em->remove($event);
-            $em->flush();
+        $acc = $this->context->getToken()->getUser();
+        $acc->removeCalendarEvent($event);
+        $em->persist($acc);
+        $em->persist($event);
+        $em->remove($event);
+        $em->flush();
 
-            $resp = array('success' => 'Event was deleted');
-        } else {
-            $resp = array('error' => "Access denied. You don't have enought permissions");
-        }
-        return $view->setData($resp);
-        
+        return $view->setData(array('success' => 'Event was deleted'));
     }
 
     private function validateDate($date) {

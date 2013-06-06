@@ -8,7 +8,6 @@ use Flash\Bundle\DefaultBundle\Entity\Event;
 use Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent;
 use Flash\Bundle\ApiBundle\RESTApi\RESTController;
 use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
-use FOS\RestBundle\View\View;
 
 /**
  * @Route("")
@@ -16,42 +15,38 @@ use FOS\RestBundle\View\View;
 class EventApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("/events")
+     * @Route("p{acc_id}/events",requirements={"acc_id" = "\d+"})
      * @Method({"GET"})
      */
-    public function getCalendarAction($id = null) {
+    public function getCalendarAction($acc_id) {
 
-        $view = View::create();
+        $acc = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Account')->find($acc_id);
 
-        if (NULL != $id) {
-            $event = $this->getDoctrine()->getManager()
-                            ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
-            if (NULL != $event) {
-                $view->setData($event);
-            } else {
-                $view->setData(array('error' => 'Not found'));
-            }
+        if (NULL == $acc) {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
         } else {
-            $events = $this->getDoctrine()->getManager()->
-                            getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->findAll();
-            
-            $now = new \DateTime('now');
-            $today = array();
+            $events = $this->getDoctrine()->getManager()
+                            ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->findAllByAccount($acc);
+        }
+
+        $now = new \DateTime('now');
+        $today = array();
+        if (sizeof($events) > 0) {
             foreach ($events as $event) {
-                if ($event->getStart()->format('Y-m-d') == $now->format('Y-m-d') && 
+                if ($event->getStart()->format('Y-m-d') == $now->format('Y-m-d') &&
                         $event->getIsShown() == false) {
                     $today[] = ($event);
                 }
             }
-           
-            $view->setData(array('today'=>$today, 'events'=>$events));
-            //$view->setData($events);
         }
-        return $this->handle($view);
+
+        return $this->handle($this->getView(
+                                array('today' => $today, 'events' => $events)));
     }
 
     /**
-     * @Route("/events/{id}", requirements={"id" = "\d+"})
+     * @Route("p{acc_id}/events/{id}",requirements={"acc_id" = "\d+"})
      * @Method({"PUT"})
      */
     public function updateCalendarAction($id) {
@@ -60,33 +55,37 @@ class EventApiController extends RESTController implements GenericRestApi {
                         ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
 
         if (NULL != $event) {
-            return $this->handle($this->get('event_service')
-                                    ->processCalendarEventForm($event));
-        } else {
-            return $this->handle(View::create()->setData(array('error' => 'Not found.')));
+            if ($this->get('security.context')->isGranted('EDIT', $event)) {
+                return $this->handle($this->get('event_service')
+                                        ->processCalendarEventForm($event));
+            } else {
+                return $this->handle($this->getView(array('error' => 'Access denied.')));
+            }
         }
+        return $this->handle($this->getView(array('error' => 'Not found.')));
     }
 
     /**
-     * @Route("/events/{id}", requirements={"id" = "\d+"})
+     * @Route("p{acc_id}/events/{id}",requirements={"acc_id" = "\d+"})
      * @Method({"DELETE"})
      */
     public function deleteCalendarAction($id) {
 
-        $em = $this->getDoctrine()->getManager();
         $event = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+
         if (NULL != $event) {
-            /* Comment servise will check your rights to remove photo */
-            return $this->handle($this->get('event_service')->deleteCalendarEvent($event));
-        } else {
-            $view->setData(array('error' => 'Not found'));
-            return $this->handle($view);
+            if ($this->get('security.context')->isGranted('DELETE', $event)) {
+                return $this->handle($this->get('event_service')->deleteCalendarEvent($event));
+            } else {
+                return $this->handle($this->getView(array('error' => 'Access denied.')));
+            }
         }
+        return $this->handle($this->getView(array('error' => 'Not found.')));
     }
 
     /**
-     * @Route("/events")
+     * @Route("p{acc_id}/events",requirements={"acc_id" = "\d+"})
      * @Method({"POST"})
      */
     public function postCalendarAction() {

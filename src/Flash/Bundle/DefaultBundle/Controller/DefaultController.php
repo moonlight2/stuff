@@ -92,12 +92,14 @@ class DefaultController extends Controller {
 
         $em = $this->getDoctrine()->getManager();
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($id);
+        $loggedAcc = $this->get('security.context')->getToken()->getUser();
 
         if (null != $acc) {
             return array(
                 'firstName' => $acc->getFirstName(),
                 'lastName' => $acc->getLastName(),
                 'acc_id' => $acc->getId(),
+                'own_id' => $loggedAcc->getId(),
             );
         } else {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Page not found');

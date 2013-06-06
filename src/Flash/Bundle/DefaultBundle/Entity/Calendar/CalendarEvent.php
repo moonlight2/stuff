@@ -15,10 +15,11 @@ use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
 
 /**
- * Group
+ * CalendarEvent
  *
  * @ORM\Table(name="calendar_events")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\Calendar\CalendarEventRepository")
  * @ExclusionPolicy("all")
  */
 class CalendarEvent  {

@@ -2,6 +2,10 @@ var CalendarEventsView = Backbone.View.extend({
     initialize: function() {
         this.el = $('#calendar');
         _.bindAll(this);
+        
+        this.acc_id = $('#acc_id').val();
+        this.own_id = $('#own_id').val();
+        
         this.collection = new CalendarEventsCollection();
         this.collection.bind('reset', this.addAll);
         this.collection.bind('add', this.addOne);
@@ -29,6 +33,7 @@ var CalendarEventsView = Backbone.View.extend({
         });
 
         var self = this;
+        this.collection.url = 'p' + this.acc_id + '/events';
         this.collection.fetch({success: function(data) {
                 console.log(data);
                self.hideLoader();
@@ -48,10 +53,7 @@ var CalendarEventsView = Backbone.View.extend({
         this.el.fullCalendar('renderEvent', event.toJSON());
     },
     change: function(e, d) {
-        console.log('Change: ');
-        console.log(e);
-        console.log(d);
-        console.log('=============================');
+ 
         var fcEvent = this.el.fullCalendar('clientEvents', e.get('id'))[0];
         fcEvent.title = e.get('title');
         fcEvent.color = e.get('text');
@@ -62,14 +64,13 @@ var CalendarEventsView = Backbone.View.extend({
         var timeStamp = new Date();
         var startDate = new Date(start);
 
-        if (startDate >= timeStamp) {
+        if (startDate >= timeStamp && this.acc_id == this.own_id) {
             var event = new CalendarEventModel({
                 start: start,
                 end: end,
                 allDay: allDay
             });
-            console.log('My model');
-            console.log(event);
+            event.urlRoot = 'p' + this.acc_id + '/events';
             var eventView = new DialogEventView({
                 model: event,
                 collection: this.collection
@@ -85,10 +86,7 @@ var CalendarEventsView = Backbone.View.extend({
         this.el.fullCalendar('removeEvents', event.id);
     },
     eventDropOrResize: function(e, b) {
-        console.log('Drop or resize');
-        console.log(e);
-        console.log(b);
-        console.log('=================');
+    
         this.collection.get(e.id).save({start: e.start, end: e.end, allDay: e.allDay});
     },
     showLoader: function() {

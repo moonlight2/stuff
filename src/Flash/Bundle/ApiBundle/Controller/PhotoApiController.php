@@ -61,18 +61,17 @@ class PhotoApiController extends RESTController implements GenericRestApi {
      */
     public function deleteAction($acc_id, $id = NULL) {
 
-        $em = $this->getDoctrine()->getManager();
-        if (NULL != $id) {
-            $photo = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
-            if (NULL != $photo) {
-                /* Photo servise will check your rights to remove photo */
+        $photo = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Photo')->find($id);
+        if (NULL != $photo) {
+            if ($this->get('security.context')->isGranted('DELETE', $photo)) {
                 return $this->handle($this->get('photo_service')->delete($photo));
             } else {
-                $view->setData(array('error' => 'Not found'));
+                return $this->handle($this->getView(array('error' => 'Access denied.')));
             }
-        } else {
-            $view->setData(array('error' => 'Not found'));
         }
+
+        return $this->handle($this->getView(array('error' => 'Not fond.')));
     }
 
     /**

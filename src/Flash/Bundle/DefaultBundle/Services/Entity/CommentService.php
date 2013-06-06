@@ -51,18 +51,12 @@ class CommentService extends CommonService {
     public function delete($comment) {
 
         $em = $this->injector->getDoctrine()->getManager();
-        $view = View::create();
 
-        if ($this->context->isGranted('DELETE', $comment)) {
-            $em->persist($comment);
-            $em->remove($comment);
-            $em->flush();
+        $em->persist($comment);
+        $em->remove($comment);
+        $em->flush();
 
-            $resp = array('success' => 'Comment was deleted');
-        } else {
-            $resp = array('error' => "Access denied. You don't have enought permissions");
-        }
-        return $view->setData($resp);
+        return View::create()->setData(array('success' => 'Comment was deleted'));
     }
 
 }

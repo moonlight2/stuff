@@ -15,24 +15,21 @@ use FOS\RestBundle\View\View;
 class PhotoCommentApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("/{id}/comment/{comm_id}", requirements={"id" = "\d+"})
+     * @Route("/{id}/comment/{comm_id}", requirements={"id" = "\d+", "comm_id" = "\d+"})
      * @Method({"DELETE"})
      */
-    public function deleteAction($id, $comm_id = null) {
-        
-        
-        $em = $this->getDoctrine()->getManager();
-        if (NULL != $comm_id) {
-            $comment = $em->getRepository('FlashDefaultBundle:Comment\PhotoComment')->find($comm_id);
-            if (NULL != $comment) {
-                /* Comment servise will check your rights to remove photo */
+    public function deleteAction($id, $comm_id = NULL) {
+
+        $comment = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Comment\PhotoComment')->find($comm_id);
+        if (NULL != $comment) {
+            if ($this->get('security.context')->isGranted('DELETE', $comment)) {
                 return $this->handle($this->get('comment_service')->delete($comment));
             } else {
-                $view->setData(array('error' => 'Not found'));
+                return $this->handle($this->getView(array('error' => 'Access denied.')));
             }
-        } else {
-            $view->setData(array('error' => 'Not found'));
         }
+        return $this->handle($this->getView(array('error' => 'Not found.')));
     }
 
     /**

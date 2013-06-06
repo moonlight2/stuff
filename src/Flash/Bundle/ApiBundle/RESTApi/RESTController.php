@@ -4,6 +4,7 @@ namespace Flash\Bundle\ApiBundle\RESTApi;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\RestBundle\View\View;
 
 abstract class RESTController extends FOSRestController implements ClassResourceInterface {
 
@@ -17,8 +18,12 @@ abstract class RESTController extends FOSRestController implements ClassResource
         return $resp;
     }
 
+    protected function getView($array) {
+        return View::create()->setData($array);
+    }
+
     protected function handle($view) {
-        
+
         return $this->get('fos_rest.view_handler')
                         ->createResponse($view, $this->getRequest(), $this->getContentType());
     }
@@ -27,7 +32,7 @@ abstract class RESTController extends FOSRestController implements ClassResource
 
         $formats = $this->getRequest()->getAcceptableContentTypes();
 
-        foreach ($formats as $val=>$format) {
+        foreach ($formats as $val => $format) {
             if ($format == 'application/json') {
                 return 'json';
             } else {

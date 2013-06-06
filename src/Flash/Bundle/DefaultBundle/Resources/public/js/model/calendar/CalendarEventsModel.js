@@ -1,5 +1,8 @@
 var CalendarEventModel = Backbone.Model.extend({
-    urlRoot: 'events',
+    //urlRoot: 'events',
+    urlRoot: function() {
+        return '15/urlRoot';
+    },
     defaults: {
         "id": null,
         "title": "",
