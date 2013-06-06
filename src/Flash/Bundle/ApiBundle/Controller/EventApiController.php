@@ -45,6 +45,7 @@ class EventApiController extends RESTController implements GenericRestApi {
             }
            
             $view->setData(array('today'=>$today, 'events'=>$events));
+            //$view->setData($events);
         }
         return $this->handle($view);
     }

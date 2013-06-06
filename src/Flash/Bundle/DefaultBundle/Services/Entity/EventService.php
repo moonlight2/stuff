@@ -54,7 +54,8 @@ class EventService extends CommonService {
             'text' => $request->get('text'),
             'start' => $start->format('Y-m-d H:i:s'),
             'end' => $end->format('Y-m-d H:i:s'),
-            'isShown' => $request->get('is_shown'),
+            'isShown' => $request->get('isShown'),
+            'allDay' => $request->get('allDay'),
         ));
 
         if ($form->isValid()) {
@@ -65,9 +66,9 @@ class EventService extends CommonService {
                 $em->persist($acc);
                 
                 $event->setIsShown(false);
+                
             }
-            $event->setAllDay(false);
-            
+            $event->setAllDay($request->get('allDay'));
             $em->persist($event);
             $em->flush();
 

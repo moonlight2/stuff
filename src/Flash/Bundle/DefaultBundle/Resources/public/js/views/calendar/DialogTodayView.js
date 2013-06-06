@@ -38,7 +38,7 @@ window.DialogTodayView = Backbone.View.extend({
     },
     confirm: function(e) {
         _.each(this.collection.models, function(event) {
-            event.set({is_shown: true});
+            event.set({isShown: true});
             event.save();
         }, this);
         this.closeDialog();

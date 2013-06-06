@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
 
 /**
@@ -51,14 +52,16 @@ class CalendarEvent  {
     /**
      * @var boolean
      *
-     * @ORM\Column(name="all_day", type="boolean")
+     * @SerializedName("allDay")
      * @Expose
+     * @ORM\Column(name="all_day", type="boolean")
      */
     protected $allDay;
     
     /**
      * @var boolean
-     *
+     * 
+     * @SerializedName("isShown")
      * @ORM\Column(name="is_shown", type="boolean")
      * @Expose
      */

@@ -13,6 +13,7 @@ class CalendarEventType extends AbstractType {
                 ->add('title')
                 ->add('text')
                 ->add('isShown')
+                ->add('allDay')
         ;
         $builder->add('start', 'date', array(
             'widget' => 'single_text',

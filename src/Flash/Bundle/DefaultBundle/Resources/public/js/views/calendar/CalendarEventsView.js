@@ -17,8 +17,7 @@ var CalendarEventsView = Backbone.View.extend({
                 left: 'prev,next today',
                 center: 'title',
                 right: 'month, agendaDay',
-                prev: 'circle-triangle-w',
-                next: 'circle-triangle-e'
+
             },
             eventClick: this.eventClick,
             eventDrop: this.eventDropOrResize,
@@ -48,7 +47,11 @@ var CalendarEventsView = Backbone.View.extend({
 
         this.el.fullCalendar('renderEvent', event.toJSON());
     },
-    change: function(e) {
+    change: function(e, d) {
+        console.log('Change: ');
+        console.log(e);
+        console.log(d);
+        console.log('=============================');
         var fcEvent = this.el.fullCalendar('clientEvents', e.get('id'))[0];
         fcEvent.title = e.get('title');
         fcEvent.color = e.get('text');
@@ -81,8 +84,12 @@ var CalendarEventsView = Backbone.View.extend({
     destroy: function(event) {
         this.el.fullCalendar('removeEvents', event.id);
     },
-    eventDropOrResize: function(e) {
-        this.collection.get(e.id).save({start: e.start, end: e.end});
+    eventDropOrResize: function(e, b) {
+        console.log('Drop or resize');
+        console.log(e);
+        console.log(b);
+        console.log('=================');
+        this.collection.get(e.id).save({start: e.start, end: e.end, allDay: e.allDay});
     },
     showLoader: function() {
         $('#loader').show();
