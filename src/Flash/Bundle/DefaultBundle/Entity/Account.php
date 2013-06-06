@@ -143,7 +143,7 @@ class Account implements AdvancedUserInterface {
      * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", mappedBy="account")
      */
     protected $photoComments;
-    
+
     /**
      * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent", mappedBy="account")
      */
@@ -158,6 +158,17 @@ class Account implements AdvancedUserInterface {
      * @OneToMany(targetEntity="CustomRole", mappedBy="account")
      */
     protected $customRoles;
+
+    /**
+     * @ManyToOne(targetEntity="Account", inversedBy="followers")
+     * @Expose
+     */
+    protected $following;
+
+    /**
+     * @OneToMany(targetEntity="Account", mappedBy="following")
+     */
+    protected $followers;
 
     /**
      * @OneToMany(targetEntity="Video", mappedBy="account")
@@ -176,6 +187,7 @@ class Account implements AdvancedUserInterface {
         $this->videos = new ArrayCollection();
         $this->photoComments = new ArrayCollection();
         $this->calendarEvents = new ArrayCollection();
+        $this->followers = new ArrayCollection();
     }
 
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
@@ -798,17 +810,15 @@ class Account implements AdvancedUserInterface {
         return $this->photoCommentLike;
     }
 
-
     /**
      * Add calendarEvents
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents
      * @return Account
      */
-    public function addCalendarEvent(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents)
-    {
+    public function addCalendarEvent(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents) {
         $this->calendarEvents[] = $calendarEvents;
-    
+
         return $this;
     }
 
@@ -817,8 +827,7 @@ class Account implements AdvancedUserInterface {
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents
      */
-    public function removeCalendarEvent(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents)
-    {
+    public function removeCalendarEvent(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $calendarEvents) {
         $this->calendarEvents->removeElement($calendarEvents);
     }
 
@@ -827,8 +836,64 @@ class Account implements AdvancedUserInterface {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getCalendarEvents()
-    {
+    public function getCalendarEvents() {
         return $this->calendarEvents;
+    }
+
+
+    /**
+     * Set following
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $following
+     * @return Account
+     */
+    public function setFollowing(\Symfony\Component\Security\Core\User\UserInterface $following = null)
+    {
+        $this->following = $following;
+    
+        return $this;
+    }
+
+    /**
+     * Get following
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\Account 
+     */
+    public function getFollowing()
+    {
+        return $this->following;
+    }
+
+    /**
+     * Add followers
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $follower
+     * @return Account
+     */
+    public function addFollower(\Symfony\Component\Security\Core\User\UserInterface $follower)
+    {
+        $this->followers[] = $follower;
+    
+        return $this;
+    }
+
+    /**
+     * Remove followers
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $follower
+     */
+    public function removeFollower(\Symfony\Component\Security\Core\User\UserInterface $follower)
+    {
+        $this->followers->removeElement($follower);
+    }
+
+    /**
+     * Get followers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFollowers()
+    {
+        return $this->followers;
     }
 }
