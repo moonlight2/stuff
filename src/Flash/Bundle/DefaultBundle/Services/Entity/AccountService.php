@@ -68,7 +68,7 @@ class AccountService extends CommonService {
             $view->setStatusCode(400);
             return $view->setData($this->getErrorMessages($form));
         }
-        return $acc;
+        return $view->setData($acc);
     }
 
     public function processFormWithoutPassword($acc) {

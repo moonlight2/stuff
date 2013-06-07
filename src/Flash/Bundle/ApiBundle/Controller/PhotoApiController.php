@@ -10,12 +10,12 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use Flash\Bundle\DefaultBundle\Entity\Photo;
 
 /**
- * @Route("p{acc_id}/photos", requirements={"acc_id" = "\d+"})
+ * @Route("")
  */
 class PhotoApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("/{id}", requirements={"id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+"})
      * @Method({"GET"})
      */
     public function getAction($acc_id, $id = NULL) {
@@ -43,6 +43,7 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
+     * @Route("logged/api/account/{acc_id}/photos", requirements={"acc_id" = "\d+"})
      * @Route("")
      * @Method({"POST"})
      */
@@ -56,7 +57,7 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/{id}", requirements={"id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+"})
      * @Method({"DELETE"})
      */
     public function deleteAction($acc_id, $id = NULL) {
@@ -75,7 +76,7 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/{id}", requirements={"id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+"})
      * @Method({"PUT"})
      */
     public function likeAction($acc_id, $id) {

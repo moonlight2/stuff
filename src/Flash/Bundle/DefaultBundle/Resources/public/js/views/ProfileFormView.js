@@ -36,7 +36,7 @@ window.ProfileFormView = Backbone.View.extend({
     saveAccount: function() {
         var self = this;
         console.log('Save changes');
-        this.model.urlRoot = 'accounts/own/update';
+        this.model.urlRoot = '../logged/api/accounts';
         this.model.set({
             firstName: $('#firstName').val(),
             lastName: $('#lastName').val(),

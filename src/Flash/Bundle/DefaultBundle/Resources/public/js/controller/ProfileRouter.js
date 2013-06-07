@@ -10,7 +10,7 @@ $(document).ready(function() {
             console.log('Starting Profile router');
             var self = this;
             this.acc = new Account();
-            this.acc.urlRoot = 'accounts/own';
+            this.acc.urlRoot = '../logged/api/accounts/own';
             this.acc.fetch({success: function(model) {
                     console.log(model);
                      var form = new ProfileFormView({model: model});

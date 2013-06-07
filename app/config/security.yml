@@ -15,6 +15,7 @@ security:
         ROLE_ADMIN:       ROLE_USER
         ROLE_OPERATOR:    ROLE_USER
         ROLE_CUSTOMER:    ROLE_USER
+        ROLE_SUPER_LEADER:      ROLE_LEADER
         ROLE_LEADER:      ROLE_USER
         ROLE_PARTICIPANT: ROLE_USER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
@@ -24,6 +25,7 @@ security:
             entity: { class: Flash\Bundle\DefaultBundle\Entity\Account }
 
     firewalls:
+
       
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -46,11 +48,13 @@ security:
                 target: _flash_login
 
     access_control:
+         - { path: ^/regist, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+         - { path: ^/api/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+         - { path: ^/logged/api/*, roles: [ ROLE_USER ] }
          - { path: ^/main, roles: ROLE_USER }
          - { path: ^/p*, roles: ROLE_USER }
          - { path: ^/my_group, roles: ROLE_USER }
          - { path: ^/group*, roles: ROLE_USER, methods: [POST, PUT, GET] }
          
-         - { path: ^/rest/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
 #         - { path: ^/admin/, role: ROLE_ADMIN }
 #         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

@@ -1,5 +1,5 @@
 window.Account = Backbone.Model.extend({
-    urlRoot: 'rest/api/accounts',
+    urlRoot: 'api/accounts',
     defaults: {
         "id": null,
         "username": "",
@@ -16,5 +16,5 @@ window.Account = Backbone.Model.extend({
 
 window.AccountList = Backbone.Collection.extend({
     model: Account,
-    url: 'rest/api/accounts'
+    url: 'api/accounts'
 });

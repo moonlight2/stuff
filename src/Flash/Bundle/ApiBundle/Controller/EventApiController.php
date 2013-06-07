@@ -15,26 +15,32 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 class EventApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("p{acc_id}/events",requirements={"acc_id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/calendar/events",requirements={"acc_id" = "\d+"})
      * @Method({"GET"})
      */
     public function getCalendarEventsAction($acc_id) {
 
+        $loggedAcc = $this->get('security.context')->getToken()->getUser();
         $acc = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Account')->find($acc_id);
 
         if (NULL == $acc) {
             throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
         } else {
-            $events = $this->getDoctrine()->getManager()
-                            ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->findAllByAccount($acc);
+            if ($loggedAcc->equals($acc)) {
+                $events = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')
+                        ->findAllByAccount($acc);
+            } else {
+                throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('Access denied');
+            }
         }
-        
+
         return $this->handle($this->getView($events));
     }
 
     /**
-     * @Route("p{acc_id}/events/{id}",requirements={"acc_id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/calendar/events/{id}",requirements={"acc_id" = "\d+", "id" = "\d+"})
      * @Method({"PUT"})
      */
     public function updateCalendarEventAction($id) {
@@ -54,7 +60,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("p{acc_id}/events/{id}",requirements={"acc_id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/calendar/events/{id}",requirements={"acc_id" = "\d+", "id" = "\d+"})
      * @Method({"DELETE"})
      */
     public function deleteCalendarEventAction($id) {
@@ -73,7 +79,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("p{acc_id}/events",requirements={"acc_id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/calendar/events",requirements={"acc_id" = "\d+"})
      * @Method({"POST"})
      */
     public function postCalendarEventAction() {
@@ -82,6 +88,8 @@ class EventApiController extends RESTController implements GenericRestApi {
         return $this->handle($this->get('event_service')
                                 ->processCalendarEventForm(new CalendarEvent($acc)));
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////
 
     /**
      * @Route("/logged/rest/api/events/group")

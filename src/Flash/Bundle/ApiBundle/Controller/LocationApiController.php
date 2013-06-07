@@ -24,7 +24,9 @@ class LocationApiController extends \Symfony\Bundle\FrameworkBundle\Controller\C
      */
     public function getIp() {
 
-        $ip = $this->get('request')->server->get("REMOTE_ADDR");
+        $ip = $this->get('request')->server->get("R    urlRoot: function() {
+//        return '15/urlRoot';
+//    },EMOTE_ADDR");
         return new \Symfony\Component\HttpFoundation\Response($ip);
     }
 

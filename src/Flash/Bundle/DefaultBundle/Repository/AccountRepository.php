@@ -19,6 +19,26 @@ class AccountRepository extends EntityRepository implements GenericRepository, \
         return sizeof($list) > 0;
     }
 
+    public function getExtendedInfo($id) {
+        $sql = "SELECT 
+            id,
+            email, 
+            first_name,
+            last_name,
+            city_id, 
+            country_id 
+        from account WHERE id = :acc_id LIMIT 1";
+
+        $params = array(
+            "acc_id" => $id,
+        );
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute($params);
+        $list = $stmt->fetchAll();
+        return (sizeof($list) > 0) ? $list[0] : null;
+    }
+
     public function existsEmail($email) {
         $list = $this->getEntityManager()
                 ->createQuery('SELECT a FROM FlashDefaultBundle:Account a
@@ -71,7 +91,7 @@ class AccountRepository extends EntityRepository implements GenericRepository, \
     }
 
     public function supportsClass($class) {
-         return $class === 'Flash/Bundle/DefaultBundle/Entity/Account';
+        return $class === 'Flash/Bundle/DefaultBundle/Entity/Account';
     }
 
 }

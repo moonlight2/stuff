@@ -10,7 +10,7 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 use FOS\RestBundle\View\View;
 
 /**
- * @Route("p{acc_id}/photo", requirements={"acc_id" = "\d+"} )
+ * @Route("logged/api/account/{acc_id}/photo", requirements={"acc_id" = "\d+"} )
  */
 class PhotoCommentApiController extends RESTController implements GenericRestApi {
 
@@ -58,7 +58,7 @@ class PhotoCommentApiController extends RESTController implements GenericRestApi
     }
 
     /**
-     * @Route("/comment")
+     * @Route("/{id}/comment")
      * @Method({"POST"})
      */
     public function postAction() {

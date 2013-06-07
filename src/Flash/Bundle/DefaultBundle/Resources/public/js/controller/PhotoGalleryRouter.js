@@ -10,12 +10,16 @@ $(document).ready(function() {
             console.log('Starting gallery router2');
             console.log(this);
             this.uploaderInit();
+
+            this.acc_id = $('#acc_id').val();
+            this.own_id = $('#own_id').val();
         },
         galleryInit: function() {
         },
         showPhotos: function() {
             var self = this;
             this.photos = new PhotoCollection();
+            this.photos.url = '../logged/api/account/' + this.acc_id + '/photos';
             $('#thumbs').html('');
             this.photos.fetch({success: function(data) {
                     $('#thumbs').append(new PhotoListView({model: self.photos}).render().el);
@@ -24,6 +28,7 @@ $(document).ready(function() {
         photoDetails: function(id) {
             this.before(function() {
                 var photo = this.photos.get(id);
+                photo.rootUrl = '../logged/api/account/' + this.acc_id + '/photos';
                 this.showView('#thumbs', new PhotoView({model: photo}));
             });
         },
@@ -40,6 +45,7 @@ $(document).ready(function() {
             } else {
                 this.photos = new PhotoCollection();
                 var self = this;
+                this.photos.url = '../logged/api/account/' + this.acc_id + '/photos';
                 this.photos.fetch({
                     success: function(data) {
                         $('#thumbs').html(new PhotoListView({model: self.photos}).render().el);

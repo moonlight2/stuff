@@ -3,6 +3,9 @@
 window.PhotoView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($('#image-details-tpl').html());
+        
+        this.acc_id = $('#acc_id').val();
+        this.own_id = $('#own_id').val();
     },
     render: function(eventName) {
         $(this.el).html(this.template(this.model.toJSON()));
@@ -20,10 +23,14 @@ window.PhotoView = Backbone.View.extend({
     showComments: function() {
 
         var self = this;
-        this.comments = new PhotoCommentCollection();
-
         var hash = window.location.hash.substring(1);
-        this.comments.url = 'photo/' + (hash.split('/'))[1] + '/comment';
+        this.comments = new PhotoCommentCollection();
+        this.comments.url = '../logged/api/account/'
+                +this.acc_id+
+                '/photo/' + 
+                (hash.split('/'))[1] + 
+                '/comment';
+        console.log(this.comments);
 
         $('#comments').html('');
         this.comments.fetch({success: function(data) {
@@ -48,7 +55,7 @@ window.PhotoView = Backbone.View.extend({
         var comment = this.comments.get(id);
         var hash = window.location.hash.substring(1);
 
-        comment.url = 'photo/' + (hash.split('/'))[1] + '/comment/' + id;
+        comment.url = '../logged/api/account/' +this.acc_id+'/photo/' + (hash.split('/'))[1] + '/comment/' + id;
 
         comment.destroy({
             success: function() {
@@ -86,7 +93,12 @@ window.PhotoView = Backbone.View.extend({
     commentPhoto: function(e) {
 
         var self = this;
+        
+        var hash = window.location.hash.substring(1);
+        
         this.photoComment = new PhotoCommentModel();
+        this.photoComment.url = '../logged/api/account/' +this.acc_id+'/photo/' + (hash.split('/'))[1] + '/comment';
+
         this.button = e.target;
         this.button.disabled = true;
         

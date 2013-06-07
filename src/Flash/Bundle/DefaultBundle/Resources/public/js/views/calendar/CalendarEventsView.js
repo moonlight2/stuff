@@ -36,7 +36,7 @@ var CalendarEventsView = Backbone.View.extend({
         });
 
         var self = this;
-        this.collection.url = 'p' + this.acc_id + '/events';
+        this.collection.url = 'logged/api/account/' + this.acc_id + '/calendar/events';
         this.collection.fetch({success: function(collection) {
                 self.hideLoader();
                 self.showTodayDialog(collection);
@@ -89,7 +89,7 @@ var CalendarEventsView = Backbone.View.extend({
                 end: end,
                 allDay: allDay
             });
-            event.urlRoot = 'p' + this.acc_id + '/events';
+            event.urlRoot =  'logged/api/account/' + this.acc_id + '/calendar/events';
             var eventView = new DialogEventView({
                 model: event,
                 collection: this.collection

@@ -191,7 +191,7 @@ class Account implements AdvancedUserInterface {
     }
 
     public function equals(\Symfony\Component\Security\Core\User\UserInterface $user) {
-        return $this->getUsername() === $user->getUsername();
+        return $this->getEmail() === $user->getEmail();
     }
 
     public function __toString() {
