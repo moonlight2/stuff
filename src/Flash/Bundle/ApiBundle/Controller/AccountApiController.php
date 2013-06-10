@@ -42,29 +42,38 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/api/accounts/leaders/{id}", requirements={"id" = "\d+"})
+     * @Route("/api/accounts/leaders")
      * @Method({"GET"})
      * @param Integer $id
      * @return single Account data or array of accounts
      */
-    public function getLeadersAction($id = null) {
+    public function getLeadersAction() {
 
         $view = View::create();
         $em = $this->getDoctrine()->getManager();
 
-        if (null != $id) {
-            $account = $em->getRepository('FlashDefaultBundle:Account')->find($id);
-
-            if (null != $account) {
-                $view->setData($account);
-            } else {
-                throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
-            }
-        } else {
-            $view->setData($em->getRepository('FlashDefaultBundle:Account')->findAll());
-        }
+        $view->setData($em->getRepository('FlashDefaultBundle:Account')->getLeaders());
 
         return $this->handle($view);
+    }
+
+    /**
+     * @Route("/api/accounts/leaders/country/{country_id}/city/{city_id}")
+     * @Method({"GET"})
+     * @param Integer $id
+     * @return single Account data or array of accounts
+     */
+    public function getLeadersByLocationAction($country_id, $city_id) {
+
+        $view = View::create();
+        $em = $this->getDoctrine()->getManager();
+
+        $leaders = $em->getRepository('FlashDefaultBundle:Account')->getLeadersByLocalion($country_id, $city_id);
+        if (NULL == $leaders) {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+        }
+
+        return $this->handle($this->getView($leaders));
     }
 
     /**

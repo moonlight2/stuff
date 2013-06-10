@@ -60,7 +60,8 @@ Backbone.View.prototype.getSimilarCities = function() {
 
 Backbone.View.prototype.prepareCityInfoToSend = function() {
     console.log('prepare city to send');
-    this.getGroups();
+   // this.getGroups();
+    this.getLeaders();
 };
 Backbone.View.prototype.switchDropdown = function(e) {
     console.log('Switch');
@@ -100,6 +101,9 @@ Backbone.View.prototype.clearCityList = function() {
 };
 Backbone.View.prototype.clearGroupList = function() {
     $('#group select').remove();
+};
+Backbone.View.prototype.clearLeadersList = function() {
+    $('#leaders select').remove();
 };
 Backbone.View.prototype.showCityList = function() {
     $('#city .dropdown-menu').show();

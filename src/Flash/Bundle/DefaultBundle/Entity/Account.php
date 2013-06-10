@@ -167,8 +167,19 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @OneToMany(targetEntity="Account", mappedBy="following")
+     * @Expose
      */
     protected $followers;
+    
+    
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_leader", type="boolean")
+     * @Expose
+     */
+    protected $isLeader = false;
 
     /**
      * @OneToMany(targetEntity="Video", mappedBy="account")
@@ -195,7 +206,7 @@ class Account implements AdvancedUserInterface {
     }
 
     public function __toString() {
-        echo "Account object:  " . $this->username . " " . $this->email;
+        return "Account object:  " . $this->username . " " . $this->email;
     }
 
     /**
@@ -895,5 +906,28 @@ class Account implements AdvancedUserInterface {
     public function getFollowers()
     {
         return $this->followers;
+    }
+
+    /**
+     * Set isLeader
+     *
+     * @param boolean $isLeader
+     * @return Account
+     */
+    public function setIsLeader($isLeader)
+    {
+        $this->isLeader = $isLeader;
+    
+        return $this;
+    }
+
+    /**
+     * Get isLeader
+     *
+     * @return boolean 
+     */
+    public function getIsLeader()
+    {
+        return $this->isLeader;
     }
 }

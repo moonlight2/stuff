@@ -103,4 +103,26 @@ class PhotoApiController extends RESTController implements GenericRestApi {
         return $this->handle($view);
     }
 
+    /**
+     * @Route("/logged/api/account/1/photos/avatar")
+     * @Method({"POST"})
+     */
+    public function postAvatarAction() {
+
+        $acc = $this->get('security.context')->getToken()->getUser();
+        $avatars = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Photo')->getAvatarsByAccount($acc);
+        $em = $this->getDoctrine()->getManager();
+
+        if (NULL != $avatars) {
+            foreach ($avatars as $avatar) {
+                $em->persist($avatar);
+                $em->remove($avatar);
+            }
+            $em->flush();
+        }
+
+        return $this->handle($this->get('photo_service')->processAvatarForm(new Photo()));
+    }
+
 }

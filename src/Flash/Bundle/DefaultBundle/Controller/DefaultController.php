@@ -46,13 +46,13 @@ class DefaultController extends Controller {
     public function testAction() {
 
         $time = '2011-08-12T09:55:03Z';
-        
+
         print_r(new \DateTime($time));
-        
-        echo date("U",strtotime('2011-08-12T09:55:03Z'));
+
+        echo date("U", strtotime('2011-08-12T09:55:03Z'));
         exit();
-        
-        
+
+
         $date = '2011-10-02T23:25:42Z';
         var_dump($this->validateDate($date));
 
@@ -104,6 +104,20 @@ class DefaultController extends Controller {
         } else {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Page not found');
         }
+    }
+
+    /**
+     * @Route("/feed", name="_feed_page")
+     * @Template()
+     */
+    public function feedAction() {
+
+        $acc = $this->get('security.context')->getToken()->getUser();
+        return array(
+            'firstName' => $acc->getFirstName(),
+            'lastName' => $acc->getLastName(),
+            'own_id' => $acc->getId(),
+        );
     }
 
     /**

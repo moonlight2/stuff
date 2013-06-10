@@ -15,6 +15,8 @@
         <script type="text/template" id="country-tpl"><%= name %></script>
 
         <script type="text/template" id="group-tpl"><%= name %></script>
+        
+        <script type="text/template" id="account-tpl"><%= first_name %> <%= last_name %></script>
 
         <script type="text/template" id="form-tpl"> 
         <div class="form-register bs-docs-example form-horizontal">
@@ -80,10 +82,10 @@
                 <span class="help-inline" id='error-city'></span>
             </div>
             
-            <div class="control-group" id='group-block'>
+            <div class="control-group" id='leaders-block' style='display: none'>
                 <label class='control-label'>В Вашем городе есть лидеры:</label>
                 <div class='controls'>
-                    <div class='selector' id='leader'>
+                    <div class='selector' id='leaders'>
                     </div>
                 </div>
                 <span class="help-inline" id='error-leader'></span>

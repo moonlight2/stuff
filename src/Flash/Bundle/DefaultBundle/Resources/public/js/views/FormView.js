@@ -33,6 +33,23 @@ window.FormView = Backbone.View.extend({
                 $('#group-block').hide();
             }});
     },
+    getLeaders: function() {
+        console.log('Get Leaders');
+        var self = this;
+        this.leaders = new AccountList();
+        this.leaders.url = "api/accounts/leaders/country/" + $("#send-country").val() + "/city/" + $("#send-city").val();
+        this.leaders.fetch({processData: true,
+            success: function(data) {
+                self.clearLeadersList();
+                
+                console.log(self.leaders);
+                console.log(new AccountListView({model: self.leaders}).render().el);
+                $('#leaders').append(new AccountListView({model: self.leaders}).render().el);
+                $('#leaders-block').show();
+            }, error: function() {
+                $('#leaders-block').hide();
+            }});
+    },
     saveAccount: function() {
         var self = this;
         this.model.set({
@@ -42,7 +59,8 @@ window.FormView = Backbone.View.extend({
             password: $('#password').val(),
             country: $('#send-country').val(),
             city: $('#send-city').val(),
-            group: $('#group select').val()
+            group: $('#group select').val(),
+            following: $('#leaders select').val()
         });
 
         if (this.model.isNew()) {

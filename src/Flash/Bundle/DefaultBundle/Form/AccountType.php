@@ -16,6 +16,7 @@ class AccountType extends AbstractType {
                 ->add('password')
                 ->add('city')
                 ->add('country')
+                ->add('following')
         ;
     }
 

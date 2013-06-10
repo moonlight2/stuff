@@ -2,7 +2,7 @@
 window.UploaderModel = new qq.FineUploader({
     element: $('#manual-fine-uploader')[0],
     request: {
-        endpoint: 'files',
+        endpoint: '../logged/api/account/1/photos',
         customHeaders: {
             Accept: 'application/json'
         }
@@ -17,13 +17,8 @@ window.UploaderModel = new qq.FineUploader({
     },
     callbacks: {
         onComplete: function(id, fileName, responseJSON) {
-
             var model = responseJSON.photo;
-
             app.photos.add(model);
-
-            console.log(responseJSON.photo);
-            console.log(app.photos);
         }
     }
 });

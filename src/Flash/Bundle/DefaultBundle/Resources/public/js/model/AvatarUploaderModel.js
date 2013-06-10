@@ -2,7 +2,7 @@
 window.AvatarUploaderModel = new qq.FineUploader({
     element: $('#manual-fine-uploader')[0],
     request: {
-        endpoint: 'files/avatar',
+        endpoint: '../logged/api/account/1/photos/avatar',
         customHeaders: {
             Accept: 'application/json'
         }

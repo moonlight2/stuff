@@ -65,6 +65,29 @@ class AccountRepository extends EntityRepository implements GenericRepository, \
                 ->getResult();
         return (sizeof($list) > 0) ? $list : null;
     }
+    
+
+    public function getLeaders() {
+        $list = $this->getEntityManager()
+                ->createQuery("SELECT a FROM FlashDefaultBundle:Account a
+                                WHERE a.isLeader = :isLeader")
+                ->setParameter('isLeader', true)
+                ->getResult();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+    
+    public function getLeadersByLocalion($country_id, $city_id) {
+        $list = $this->getEntityManager()
+                ->createQuery("SELECT a FROM FlashDefaultBundle:Account a
+                                WHERE a.isLeader = :isLeader
+                                AND a.country = :country_id
+                                AND a.city = :city_id")
+                ->setParameter('isLeader', true)
+                ->setParameter('country_id', $country_id)
+                ->setParameter('city_id', $city_id)
+                ->getResult();
+        return (sizeof($list) > 0) ? $list : null;
+    }
 
     public function getByEmail($email) {
         $list = $this->getEntityManager()

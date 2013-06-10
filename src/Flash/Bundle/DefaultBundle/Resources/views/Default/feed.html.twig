@@ -1,0 +1,19 @@
+{% extends "FlashDefaultBundle::logged.html.twig" %}
+
+{% block title "Feed page" %}
+
+
+{% block content %}
+
+    <input type='hidden' id='own_id' value='{{ own_id }}' />
+
+    <h1><b>{{ firstName }} {{ lastName }}</b></h1>
+    <h2>Feed page</h2>
+    <div class='sidebar'>
+
+    </div>
+    <div class='main-content'>
+        <div id='events'></div>
+    </div>
+{% endblock %}
+
