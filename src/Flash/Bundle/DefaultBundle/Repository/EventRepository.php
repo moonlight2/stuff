@@ -20,4 +20,13 @@ class EventRepository extends EntityRepository  {
         return (sizeof($list) > 0) ? $list : null;
     }
 
+    public function findAllInFeed() {
+        $list = $this->getEntityManager()
+                ->createQuery("SELECT e FROM FlashDefaultBundle:Event e
+                                WHERE e.isConfirmed = 1
+                                AND e.type = 'feed'")
+                ->getResult();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+
 }

@@ -9,8 +9,7 @@ use Flash\Bundle\DefaultBundle\Services\CommonService;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class EventService extends CommonService {
-    
-    
+
     private $FEED_EVENT = 'feed';
 
     public function processForm($event) {
@@ -109,11 +108,19 @@ class EventService extends CommonService {
         $form = $this->injector->getForm()->create(new EventType(), $event);
         $view = View::create();
 
-        $form->bind($this->getFromRequest(array('name', 'description')));
+        $date = new \DateTime('now');
+        
+        $form->bind(array(
+            'name' => $request->get('name'),
+            'description' => $request->get('description'),
+            'date' => $date->format('d-m-Y H:i'),
+            'country' => 1,
+            'city' => 2,
+        ));
 
         if ($form->isValid()) {
-
-            $even->setType($this->FEED_EVENT);
+            
+            $event->setType($this->FEED_EVENT);
             $em->persist($event);
             $em->flush();
 
@@ -130,10 +137,6 @@ class EventService extends CommonService {
         return $view->setData($event);
     }
 
-    
-    
-    
-    
     private function validateDate($date) {
         if (preg_match('/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/', $date, $parts) == true) {
             $time = gmmktime($parts[4], $parts[5], $parts[6], $parts[2], $parts[3], $parts[1]);

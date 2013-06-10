@@ -9,16 +9,11 @@ $(document).ready(function() {
         },
         showEvents: function() {
             var details = new FeedEventView({model: new EventModel()});
+            
+            details.getEventList();
+            
             $('#feed').append(details.render().el);
-            console.log(details.render().el);
-            var self = this;
-//
-//            this.events = new EventCollection();
-//            this.events.url = 'logged/api/feed/events';
-//            this.events.fetch({success: function(data) {
-//                    $('#events').append(new EventListView({model: self.events}).render().el);
-//                }});
-
+            
         },
         showErrors: function() {
             console.log('There is some errors');

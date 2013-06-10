@@ -88,7 +88,19 @@ class EventApiController extends RESTController implements GenericRestApi {
         return $this->handle($this->get('event_service')
                                 ->processCalendarEventForm(new CalendarEvent($acc)));
     }
-    
+
+    /**
+     * @Route("logged/api/feed/events")
+     * @Method({"GET"})
+     */
+    public function getFeedEventAction() {
+
+        $events = $this->getDoctrine()->getManager()
+                ->getRepository('FlashDefaultBundle:Event')->findAllInFeed();
+
+        return $this->handle($this->getView($events));
+    }
+
     /**
      * @Route("logged/api/feed/events")
      * @Method({"POST"})

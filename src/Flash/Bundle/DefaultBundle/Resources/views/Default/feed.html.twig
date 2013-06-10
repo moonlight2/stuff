@@ -17,21 +17,28 @@
     <div id='feed'></div>
 </div>
 
+    <script type="text/template" id="events-list-tpl">
+        <h2><%= name %></h2>
+        <p><%= description %></p>
+        <p><%= date %></p>
+    </script>
+
+
     <script type="text/template" id="feed-event-tpl">
         <div class="control-group">
             <label class='control-label'>Заголовок:</label>
             <div class='controls'>
-                <input type="text" id="title" name="title"  value=""/>
+                <input type="text" id="name" name="name"  value=""/>
             </div>
-            <span class="help-inline" id='error-title'></span>
+            <span class="help-inline" id='error-name'></span>
         </div>
 
         <div class="control-group">
             <label class='control-label'>Описание:</label>
             <div class='controls'>
-                <textarea id="about" name="about"  ></textarea>
+                <textarea id="description" name="description"  ></textarea>
             </div>
-            <span class="help-inline" id='error-about'></span>
+            <span class="help-inline" id='error-description'></span>
         </div>
 
         <div class="control-group">
