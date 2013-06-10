@@ -44,6 +44,14 @@ class Event {
      * @Expose
      */
     private $description;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="text", nullable=true)
+     * @Expose
+     */
+    private $type;
 
     /**
      * @var date
@@ -75,6 +83,16 @@ class Event {
      * @Expose
      */
     private $group;
+    
+    
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_confirmed", type="boolean")
+     * @Expose
+     */
+    protected $isConfirmed = false;
 
     /**
      * Get id
@@ -218,5 +236,51 @@ class Event {
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Event
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set isConfirmed
+     *
+     * @param boolean $isConfirmed
+     * @return Event
+     */
+    public function setIsConfirmed($isConfirmed)
+    {
+        $this->isConfirmed = $isConfirmed;
+    
+        return $this;
+    }
+
+    /**
+     * Get isConfirmed
+     *
+     * @return boolean 
+     */
+    public function getIsConfirmed()
+    {
+        return $this->isConfirmed;
     }
 }

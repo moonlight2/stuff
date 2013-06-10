@@ -4,12 +4,17 @@ namespace Flash\Bundle\DefaultBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Photo
  *
  * @ORM\Table(name="event")
  * @ORM\Entity
+ * @ExclusionPolicy("all")
+ * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\EventRepository")
  */
 class Event {
 
@@ -19,6 +24,7 @@ class Event {
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     private $id;
 
@@ -26,39 +32,67 @@ class Event {
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Expose
+     * @Assert\NotBlank(message = "Поле name не может быть пустым")
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
+     * @Expose
      */
     private $description;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="text", nullable=true)
+     * @Expose
+     */
+    private $type;
 
     /**
      * @var date
      *
      * @ORM\Column(name="date", type="datetime")
+     * @Assert\DateTime(message = "Неверные данные date")
+     * @Expose
      */
     private $date;
     
 
     /**
      * @ORM\Column(name="city_id", type="integer")
+     * @Assert\NotBlank(message = "Поле city не может быть пустым")
+     * @Expose
      */
     private $city;
 
     /**
      * @ORM\Column(name="country_id", type="integer")
+     * @Expose
+     * @Assert\NotBlank(message = "Поле country не может быть пустым")
      */
     private $country;
 
     /**
      *
      * @ManyToOne(targetEntity="Group", inversedBy="events")
+     * @Expose
      */
     private $group;
+    
+    
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_confirmed", type="boolean")
+     * @Expose
+     */
+    protected $isConfirmed = false;
 
     /**
      * Get id
@@ -187,7 +221,7 @@ class Event {
      * @param \DateTime $date
      * @return Event
      */
-    public function setDate($date)
+    public function setDate(\DateTime $date)
     {
         $this->date = $date;
     
@@ -202,5 +236,28 @@ class Event {
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Event
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }
