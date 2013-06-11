@@ -40,18 +40,16 @@ var CalendarEventsView = Backbone.View.extend({
             eventDrop: this.eventDropOrResize,
             eventResize: this.eventDropOrResize,
             selectable: true,
-            dayClick: function(date, allDay, jsEvent, view) {
-                if (view.name != 'month')
-                    return;
-
-                self.el.fullCalendar('changeView', 'agendaDay')
-                        .fullCalendar('gotoDate', date);
-            },
+            dayClick: this.onDayClick,
             selectHelper: true,
             editable: true,
             select: this.select,
             theme: false,
-            dayNamesShort: ['Вос', 'Пон', 'Вт', 'Ср', 'Чт', 'Пт', 'Суб'],
+            allDayText: 'Весь день',
+            dayNamesShort: this.getShortDayNames(),
+            monthNames: this.getMonthNames(),
+            monthNamesShort: this.getShortMonthNames(),
+            dayNames: this.getDayNames()
         });
 
         var self = this;
@@ -77,6 +75,31 @@ var CalendarEventsView = Backbone.View.extend({
             new DialogTodayView({collection: self.todayCollection}).render();
         }
     },
+    getMonthNames: function() {
+        return Array (
+            'Январь',
+            'Февраль',
+            'Март',
+            'Апрель',
+            'Май',
+            'Июнь',
+            'Июль',
+            'Август',
+            'Сентябрь',
+            'Октябрь',
+            'Ноябрь',
+            'Декабрь'
+        );
+    },
+    getShortMonthNames: function(){
+        return ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июль', 'Июнь', 'Авг', 'Сен', 'Окт', 'Нояб', 'Дек'];
+    },
+    getDayNames: function(){
+        return ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    },
+    getShortDayNames: function(){
+        return ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Суб'];
+    },
     eventClick: function(e) {
 
         var eventView = new DialogEventView({
@@ -96,6 +119,19 @@ var CalendarEventsView = Backbone.View.extend({
         fcEvent.title = e.get('title');
         fcEvent.color = e.get('text');
         this.el.fullCalendar('updateEvent', fcEvent);
+    },
+    onDayClick: function(date, allDay, jsEvent, view) {
+
+        var timeStamp = new Date();
+        var startDate = new Date(date);
+        var self = this;
+
+        if (view.name != 'month' || startDate <= timeStamp)
+            return;
+
+        self.el.fullCalendar('changeView', 'agendaDay')
+                .fullCalendar('gotoDate', date);
+
     },
     select: function(start, end, allDay, jsEvent, view) {
 
