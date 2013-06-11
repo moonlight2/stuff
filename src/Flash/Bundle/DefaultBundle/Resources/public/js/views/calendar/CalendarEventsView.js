@@ -19,7 +19,7 @@ var CalendarEventsView = Backbone.View.extend({
     render: function() {
 
         this.showLoader();
-
+        var self = this;
         this.el.fullCalendar({
             header: {
                 left: 'prev,next today',
@@ -44,7 +44,7 @@ var CalendarEventsView = Backbone.View.extend({
                 if (view.name != 'month')
                     return;
 
-                $('#calendar').fullCalendar('changeView', 'agendaDay')
+                self.el.fullCalendar('changeView', 'agendaDay')
                         .fullCalendar('gotoDate', date);
             },
             selectHelper: true,
@@ -97,31 +97,26 @@ var CalendarEventsView = Backbone.View.extend({
         fcEvent.color = e.get('text');
         this.el.fullCalendar('updateEvent', fcEvent);
     },
-    select: function(start, end, allDay) {
+    select: function(start, end, allDay, jsEvent, view) {
 
+        if (view.name != 'month') {
 
+            var timeStamp = new Date();
+            var startDate = new Date(start);
 
-        // this.el.fullCalendar(( 'gotoDate', new Date() ));
-        //this.el.fullCalendar( 'changeView', 'agendaDay' );
-        //this.el.fullCalendar('next');
-
-        //return false;
-
-        var timeStamp = new Date();
-        var startDate = new Date(start);
-
-        if (startDate >= timeStamp && this.acc_id == this.own_id) {
-            var event = new CalendarEventModel({
-                start: start,
-                end: end,
-                allDay: allDay
-            });
-            event.urlRoot = 'logged/api/account/' + this.acc_id + '/calendar/events';
-            var eventView = new DialogEventView({
-                model: event,
-                collection: this.collection
-            });
-            eventView.render();
+            if (startDate >= timeStamp && this.acc_id == this.own_id) {
+                var event = new CalendarEventModel({
+                    start: start,
+                    end: end,
+                    allDay: allDay
+                });
+                event.urlRoot = 'logged/api/account/' + this.acc_id + '/calendar/events';
+                var eventView = new DialogEventView({
+                    model: event,
+                    collection: this.collection
+                });
+                eventView.render();
+            }
         }
         return false;
     },
