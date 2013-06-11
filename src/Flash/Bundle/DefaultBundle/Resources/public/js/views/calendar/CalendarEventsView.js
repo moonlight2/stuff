@@ -26,13 +26,32 @@ var CalendarEventsView = Backbone.View.extend({
                 center: 'title',
                 right: 'month, agendaDay',
             },
+            buttonText: {
+                prev: "<span class='fc-text-arrow'>&lsaquo;</span>",
+                next: "<span class='fc-text-arrow'>&rsaquo;</span>",
+                prevYear: "<span class='fc-text-arrow'>&laquo;</span>",
+                nextYear: "<span class='fc-text-arrow'>&raquo;</span>",
+                today: 'Сегодня',
+                month: 'месяц',
+                week: 'неделя',
+                day: 'день'
+            },
             eventClick: this.eventClick,
             eventDrop: this.eventDropOrResize,
             eventResize: this.eventDropOrResize,
             selectable: true,
+            dayClick: function(date, allDay, jsEvent, view) {
+                if (view.name != 'month')
+                    return;
+
+                $('#calendar').fullCalendar('changeView', 'agendaDay')
+                        .fullCalendar('gotoDate', date);
+            },
             selectHelper: true,
             editable: true,
             select: this.select,
+            theme: false,
+            dayNamesShort: ['Вос', 'Пон', 'Вт', 'Ср', 'Чт', 'Пт', 'Суб'],
         });
 
         var self = this;
@@ -80,6 +99,14 @@ var CalendarEventsView = Backbone.View.extend({
     },
     select: function(start, end, allDay) {
 
+
+
+        // this.el.fullCalendar(( 'gotoDate', new Date() ));
+        //this.el.fullCalendar( 'changeView', 'agendaDay' );
+        //this.el.fullCalendar('next');
+
+        //return false;
+
         var timeStamp = new Date();
         var startDate = new Date(start);
 
@@ -89,7 +116,7 @@ var CalendarEventsView = Backbone.View.extend({
                 end: end,
                 allDay: allDay
             });
-            event.urlRoot =  'logged/api/account/' + this.acc_id + '/calendar/events';
+            event.urlRoot = 'logged/api/account/' + this.acc_id + '/calendar/events';
             var eventView = new DialogEventView({
                 model: event,
                 collection: this.collection
