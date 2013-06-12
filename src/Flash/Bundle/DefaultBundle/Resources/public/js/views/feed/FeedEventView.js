@@ -15,8 +15,6 @@ window.FeedEventView = Backbone.View.extend({
         'click #create-event': 'saveEvent',
         'click #show-pre-feed': 'switchFeed',
     },
-    
-    
     switchFeed: function() {
         if (Backbone.history.fragment == '') {
             app.navigate('not_confirmed', true);
@@ -53,6 +51,7 @@ window.FeedEventView = Backbone.View.extend({
     saveEvent: function() {
 
         var self = this;
+        $('#feed')
         this.model.url = this.url;
         this.model.set({
             name: $('#name').val(),
@@ -61,8 +60,12 @@ window.FeedEventView = Backbone.View.extend({
         if (this.model.isNew()) {
             this.model.save(null, {
                 success: function(model, response) {
-                    //alert('Event has been created');
                     app.navigate('success', true);
+                    if ($('#pre-feed').length == 1) {
+                        view = new EventListItemView({model: model});
+                        view.template = _.template($('#pre-events-list-tpl').html());
+                        $('#pre-feed').attr('class', 'events-list').append(view.render().el);
+                    }
                 },
                 error: function(model, response) {
                     self.showErrors(response.responseText);

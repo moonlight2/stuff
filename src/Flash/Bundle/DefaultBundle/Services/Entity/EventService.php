@@ -113,6 +113,7 @@ class EventService extends CommonService {
         $form->bind(array(
             'name' => $request->get('name'),
             'description' => $request->get('description'),
+            'isConfirmed' => $request->get('is_confirmed'),
             'date' => $date->format('d-m-Y H:i'),
             'country' => 1,
             'city' => 2,

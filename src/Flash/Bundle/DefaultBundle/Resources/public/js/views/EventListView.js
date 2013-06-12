@@ -6,9 +6,28 @@ window.EventListView = Backbone.View.extend({
         console.log(this);
         this.model.bind('reset', this.render, this);
     },
-            
-            
-            
+    events: {
+        'click #confirm-event': 'confirmEvent',
+    },
+    confirmEvent: function(e) {
+
+        var id = $(e.currentTarget).attr('val');
+        var self = this;
+        this.event = this.model.get(id);
+        this.event.set({is_confirmed: true});
+        
+         this.event.save(null, {
+                success: function(model, response) {
+                    self.event.trigger('destroy', event);
+                    view = new EventListItemView({model: model});
+                    $('#feed').attr('class', 'events-list').append(view.render().el);
+                },
+                error: function(model, response) {
+                    app.navigate('error', true);
+                }
+            })
+        return this;
+    },
     render: function() {
         console.log('Here is EventListView')
         if (true == this.confirmed) {
@@ -35,6 +54,7 @@ window.EventListItemView = Backbone.View.extend({
         return this;
     },
     initialize: function() {
-        this.model.bind('change', this.render, this);
+        this.model.bind("change", this.render, this);
+        this.model.bind("destroy", this.close, this);
     },
 });

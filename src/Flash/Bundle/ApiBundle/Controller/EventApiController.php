@@ -96,11 +96,11 @@ class EventApiController extends RESTController implements GenericRestApi {
     public function getFeedEventAction() {
 
         $events = $this->getDoctrine()->getManager()
-                ->getRepository('FlashDefaultBundle:Event')->findAllConfirmedInFeed();
+                        ->getRepository('FlashDefaultBundle:Event')->findAllConfirmedInFeed();
 
         return $this->handle($this->getView($events));
     }
-    
+
     /**
      * @Route("moderator/api/feed/events")
      * @Method({"GET"})
@@ -108,7 +108,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     public function getNotConfirmedFeedEventAction() {
 
         $events = $this->getDoctrine()->getManager()
-                ->getRepository('FlashDefaultBundle:Event')->findAllNotConfirmedInFeed();
+                        ->getRepository('FlashDefaultBundle:Event')->findAllNotConfirmedInFeed();
 
         return $this->handle($this->getView($events));
     }
@@ -122,6 +122,23 @@ class EventApiController extends RESTController implements GenericRestApi {
         $acc = $this->get('security.context')->getToken()->getUser();
         return $this->handle($this->get('event_service')
                                 ->processFeedEventForm(new Event($acc)));
+    }
+
+    /**
+     * @Route("moderator/api/feed/events/{id}")
+     * @Method({"PUT"})
+     */
+    public function putFeedEventAction($id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('FlashDefaultBundle:Event')->find($id);
+        if (NULL === $event)
+            return array('error' => 'Not found');
+        
+        //print_r($event->getName());
+        //exit();
+        return $this->handle($this->get('event_service')
+                                ->processFeedEventForm($event));
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
