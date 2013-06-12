@@ -28,7 +28,7 @@ window.FeedEventView = Backbone.View.extend({
         this.events = new EventCollection();
         this.events.url = this.url;
         this.events.fetch({success: function(data) {
-                var view = new EventListView({model: self.events});
+                var view = new EventListView({collection: self.events});
                 view.confirmed = true;
                 $('#feed').append(view.render().el);
                 self.getPreEventList();
@@ -38,10 +38,10 @@ window.FeedEventView = Backbone.View.extend({
 
         if ($('#pre-feed').length == 1) {
             var self = this;
-            this.events = new EventCollection();
-            this.events.url = this.modUrl;
-            this.events.fetch({success: function(data) {
-                    var view = new EventListView({model: self.events});
+            this.preEvents = new EventCollection();
+            this.preEvents.url = this.modUrl;
+            this.preEvents.fetch({success: function(data) {
+                    var view = new EventListView({collection: self.preEvents});
                     view.confirmed = false;
                     $('#pre-feed').append(view.render().el);
                 }});
@@ -51,7 +51,7 @@ window.FeedEventView = Backbone.View.extend({
     saveEvent: function() {
 
         var self = this;
-        $('#feed')
+
         this.model.url = this.url;
         this.model.set({
             name: $('#name').val(),
@@ -61,10 +61,8 @@ window.FeedEventView = Backbone.View.extend({
             this.model.save(null, {
                 success: function(model, response) {
                     app.navigate('success', true);
-                    if ($('#pre-feed').length == 1) {
-                        view = new EventListItemView({model: model});
-                        view.template = _.template($('#pre-events-list-tpl').html());
-                        $('#pre-feed').attr('class', 'events-list').append(view.render().el);
+                    if ($('#pre-feed').length == 1) {                       
+                        self.preEvents.add(model);
                     }
                 },
                 error: function(model, response) {

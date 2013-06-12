@@ -101,6 +101,19 @@ class EventService extends CommonService {
         return $view->setData(array('success' => 'Event was deleted'));
     }
 
+    
+    public function delete($event) {
+        
+        $view = View::create();
+        $em = $this->injector->getDoctrine()->getManager();
+
+        $em->persist($event);
+        $em->remove($event);
+        $em->flush();
+
+        return $view->setData(array('success' => 'Event was deleted'));
+    }
+    
     public function processFeedEventForm($event) {
 
         $request = $this->injector->getRequest();

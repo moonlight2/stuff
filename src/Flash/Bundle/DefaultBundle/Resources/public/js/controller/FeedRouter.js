@@ -15,8 +15,6 @@ $(document).ready(function() {
             return false;
         },
         showEvents: function() {
-            //$('#feed').html('');
-            //$('#pre-feed').html('');
             $('#pre-feed').css('display', 'none');
             $('#feed').css('display', 'block');
 

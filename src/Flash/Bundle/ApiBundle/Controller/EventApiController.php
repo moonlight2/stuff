@@ -126,6 +126,24 @@ class EventApiController extends RESTController implements GenericRestApi {
 
     /**
      * @Route("moderator/api/feed/events/{id}")
+     * @Method({"DELETE"})
+     */
+    public function deleteFeedEventAction($id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('FlashDefaultBundle:Event')->find($id);
+        if (NULL === $event)
+            return $this->handle($this->getView(array('error' => 'Not found')));
+
+        $securityContext = $this->container->get('security.context');
+        if ($securityContext->isGranted('ROLE_MODERATOR')) {
+            return $this->handle($this->get('event_service')->delete($event));
+        }
+        return $this->handle($this->getView(array('error' => 'Access denied')));
+    }
+
+    /**
+     * @Route("moderator/api/feed/events/{id}")
      * @Method({"PUT"})
      */
     public function putFeedEventAction($id) {
@@ -134,9 +152,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         $event = $em->getRepository('FlashDefaultBundle:Event')->find($id);
         if (NULL === $event)
             return array('error' => 'Not found');
-        
-        //print_r($event->getName());
-        //exit();
+
         return $this->handle($this->get('event_service')
                                 ->processFeedEventForm($event));
     }
