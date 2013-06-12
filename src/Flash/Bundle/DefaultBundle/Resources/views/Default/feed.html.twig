@@ -13,7 +13,12 @@
 
 </div>
 <div class='main-content'>
-
+    <div id='feed-form'></div>
+    {% if is_granted('ROLE_MODERATOR') %}
+    
+    <div id='pre-feed'></div>
+</div>
+    {% endif %}
     <div id='feed'></div>
 </div>
 
@@ -22,9 +27,29 @@
         <p><%= description %></p>
         <p><%= date %></p>
     </script>
+    <script type="text/template" id="pre-events-list-tpl">
+
+        <p><a href='p<%= account.id %>'><%= account.first_name %> <%= account.last_name %></a> пишет:</p>
+        <h2><%= name %></h2>
+        <p><%= description %></p>
+        <p><%= date %></p>
+        <div class="control-group">
+            <div class="controls">
+                <button id='confirm-event' class="btn">Подтвердить</button>
+                <button id='reject-event' class="btn">Отклонить</button>
+            </div>
+        </div>
+    </script>
 
 
     <script type="text/template" id="feed-event-tpl">
+        {% if is_granted('ROLE_MODERATOR') %}
+            <div class="control-group">
+                <div class="controls">
+                    <button id='show-pre-feed' class="btn">Показать предложения</button>
+                </div>
+            </div>
+        {% endif %}
         <div class="control-group">
             <label class='control-label'>Заголовок:</label>
             <div class='controls'>
@@ -45,9 +70,6 @@
             <div class="controls">
                 <button id='create-event' class="btn">Создать</button>
             </div>
-        </div>
-        </div>
-            <div id='events'></div>
         </div>
     </script>
 {% endblock %}

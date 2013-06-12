@@ -96,7 +96,19 @@ class EventApiController extends RESTController implements GenericRestApi {
     public function getFeedEventAction() {
 
         $events = $this->getDoctrine()->getManager()
-                ->getRepository('FlashDefaultBundle:Event')->findAllInFeed();
+                ->getRepository('FlashDefaultBundle:Event')->findAllConfirmedInFeed();
+
+        return $this->handle($this->getView($events));
+    }
+    
+    /**
+     * @Route("moderator/api/feed/events")
+     * @Method({"GET"})
+     */
+    public function getNotConfirmedFeedEventAction() {
+
+        $events = $this->getDoctrine()->getManager()
+                ->getRepository('FlashDefaultBundle:Event')->findAllNotConfirmedInFeed();
 
         return $this->handle($this->getView($events));
     }
@@ -109,7 +121,7 @@ class EventApiController extends RESTController implements GenericRestApi {
 
         $acc = $this->get('security.context')->getToken()->getUser();
         return $this->handle($this->get('event_service')
-                                ->processFeedEventForm(new Event()));
+                                ->processFeedEventForm(new Event($acc)));
     }
 
     ///////////////////////////////////////////////////////////////////////////////////

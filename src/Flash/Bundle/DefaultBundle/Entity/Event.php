@@ -44,7 +44,7 @@ class Event {
      * @Expose
      */
     private $description;
-    
+
     /**
      * @var string
      *
@@ -61,7 +61,6 @@ class Event {
      * @Expose
      */
     private $date;
-    
 
     /**
      * @ORM\Column(name="city_id", type="integer")
@@ -83,9 +82,7 @@ class Event {
      * @Expose
      */
     private $group;
-    
-    
-    
+
     /**
      * @var boolean
      *
@@ -94,6 +91,18 @@ class Event {
      */
     protected $isConfirmed = false;
 
+    /**
+     * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="calendarEvents")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Expose
+     */
+    protected $account;
+    
+    public function __construct(\Symfony\Component\Security\Core\User\UserInterface $account) {
+        $this->account = $account;
+    }
+    
+    
     /**
      * Get id
      *
@@ -208,9 +217,7 @@ class Event {
         return $this->country;
     }
 
-
-    public function setUpdated()
-    {
+    public function setUpdated() {
         // will NOT be saved in the database
         $this->updated->modify("now");
     }
@@ -221,10 +228,9 @@ class Event {
      * @param \DateTime $date
      * @return Event
      */
-    public function setDate(\DateTime $date)
-    {
+    public function setDate(\DateTime $date) {
         $this->date = $date;
-    
+
         return $this;
     }
 
@@ -233,8 +239,7 @@ class Event {
      *
      * @return \DateTime 
      */
-    public function getDate()
-    {
+    public function getDate() {
         return $this->date;
     }
 
@@ -244,10 +249,9 @@ class Event {
      * @param string $type
      * @return Event
      */
-    public function setType($type)
-    {
+    public function setType($type) {
         $this->type = $type;
-    
+
         return $this;
     }
 
@@ -256,8 +260,7 @@ class Event {
      *
      * @return string 
      */
-    public function getType()
-    {
+    public function getType() {
         return $this->type;
     }
 
@@ -267,10 +270,9 @@ class Event {
      * @param boolean $isConfirmed
      * @return Event
      */
-    public function setIsConfirmed($isConfirmed)
-    {
+    public function setIsConfirmed($isConfirmed) {
         $this->isConfirmed = $isConfirmed;
-    
+
         return $this;
     }
 
@@ -279,8 +281,31 @@ class Event {
      *
      * @return boolean 
      */
-    public function getIsConfirmed()
-    {
+    public function getIsConfirmed() {
         return $this->isConfirmed;
+    }
+
+
+    /**
+     * Set account
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
+     * @return Event
+     */
+    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null)
+    {
+        $this->account = $account;
+    
+        return $this;
+    }
+
+    /**
+     * Get account
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\Account 
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 }

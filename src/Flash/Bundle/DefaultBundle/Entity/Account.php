@@ -74,6 +74,7 @@ class Account implements AdvancedUserInterface {
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="Account")
+     * @Expose
      */
     protected $roles;
 

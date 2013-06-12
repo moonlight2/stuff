@@ -224,8 +224,12 @@ class AccountApiController extends RESTController implements GenericRestApi {
         $em = $this->getDoctrine()->getManager();
 
         $account = $em->getRepository('FlashDefaultBundle:Account')->find($this->getRequest()->get('account_id'));
-        $role = $em->getRepository('FlashDefaultBundle:Role')->find($this->getRequest('role_id'));
+        $role = $em->getRepository('FlashDefaultBundle:Role')->find($this->getRequest()->get('role_id'));
 
+        
+        //var_dump($this->getRequest()->get('rol_id'));
+       // exit();
+        
         $account->addRole($role);
 
         $em->persist($account);

@@ -16,6 +16,13 @@ root {
 
 }
 
+#feed-form {
+    padding: 15px;
+    border: 1px solid;
+    border-radius: 7px;
+    margin: 0 0 10px 0;
+}
+
 #loader {
     display: none;
     width: 100px;

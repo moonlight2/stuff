@@ -12,13 +12,16 @@ security:
             iterations:        1
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_USER, ROLE_MODERATOR ]
+        ROLE_ADMIN:      [ ROLE_USER, ROLE_MODERATOR ]
+        ROLE_MODERATOR:   ROLE_USER
+        
         ROLE_OPERATOR:    ROLE_USER
         ROLE_CUSTOMER:    ROLE_USER
         ROLE_SUPER_LEADER:      ROLE_LEADER
         ROLE_LEADER:      ROLE_USER
         ROLE_PARTICIPANT: ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        
 
     providers:
         administrators:
@@ -51,10 +54,11 @@ security:
          - { path: ^/regist, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
          - { path: ^/api/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
          - { path: ^/logged/api/*, roles: [ ROLE_USER ] }
+         - { path: ^/moderator/api/*, roles: [ ROLE_MODERATOR ] }
+         - { path: ^/admin/api/*, roles: [ ROLE_ADMIN ] }
          - { path: ^/main, roles: ROLE_USER }
+         
          - { path: ^/p*, roles: ROLE_USER }
          - { path: ^/my_group, roles: ROLE_USER }
          - { path: ^/group*, roles: ROLE_USER, methods: [POST, PUT, GET] }
          
-#         - { path: ^/admin/, role: ROLE_ADMIN }
-#         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
