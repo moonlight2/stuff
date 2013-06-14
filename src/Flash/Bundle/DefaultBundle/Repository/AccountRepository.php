@@ -57,6 +57,7 @@ class AccountRepository extends EntityRepository implements GenericRepository, \
         return (sizeof($list) > 0) ? $list[0] : null;
     }
 
+
     public function getByRole($role) {
         $list = $this->getEntityManager()
                 ->createQuery("SELECT a FROM FlashDefaultBundle:Account a

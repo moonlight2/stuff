@@ -16,10 +16,11 @@ window.FeedEventView = Backbone.View.extend({
         'click #show-pre-feed': 'switchFeed',
     },
     switchFeed: function() {
-        if (Backbone.history.fragment == '') {
-            app.navigate('not_confirmed', true);
-        } else {
+
+        if (Backbone.history.fragment == 'not_confirmed') {
             app.navigate('', true);
+        } else {
+            app.navigate('not_confirmed', true);
         }
     },
     getEventList: function() {
@@ -61,9 +62,11 @@ window.FeedEventView = Backbone.View.extend({
             this.model.save(null, {
                 success: function(model, response) {
                     app.navigate('success', true);
-                    if ($('#pre-feed').length == 1) {                       
+                    if ($('#pre-feed').length == 1) {
                         self.preEvents.add(model);
                     }
+                    self.close();
+                    console.log(self);
                 },
                 error: function(model, response) {
                     self.showErrors(response.responseText);

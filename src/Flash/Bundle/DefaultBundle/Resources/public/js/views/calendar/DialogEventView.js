@@ -10,11 +10,10 @@ window.DialogEventView = Backbone.View.extend({
         _.extend(self.buttons, {'Cancel': this.closeDialog});
         if (!this.model.isNew()) {
             _.extend(self.buttons, {'Delete': this.destroy});
+            if (is_leader == 1) {
+                _.extend(self.buttons, {'Share': this.share});
+            }
         }
-
-        console.log('Current dialog model');
-        console.log(this.model);
-
         this.el.dialog({
             modal: true,
             title: (this.model.isNew() ? 'Новое' : 'Редактипрвать') + ' событие',
@@ -79,8 +78,20 @@ window.DialogEventView = Backbone.View.extend({
                 app.navigate('error', true);
             }
         })
-
-
-
+    },
+    share: function() {
+        
+        this.model.url = 'logged/api/account/' + own_id + '/calendar/events/' + this.model.get('id') + '/share';
+        var self = this;
+        this.model.save(null, {
+            success: function(model, response) {
+                self.closeDialog();
+                app.navigate('success', true);
+            },
+            error: function(model, response) {
+                self.showErrors(response.responseText);
+                app.navigate('error', true);
+            }
+        })
     }
 });

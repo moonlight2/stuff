@@ -131,7 +131,7 @@ class Account implements AdvancedUserInterface {
     protected $photoCommentLike;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Event", inversedBy="Account")
+     * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Event", mappedBy="account")
      */
     protected $events;
 
@@ -146,7 +146,8 @@ class Account implements AdvancedUserInterface {
     protected $photoComments;
 
     /**
-     * @OneToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent", mappedBy="account")
+     * @Expose
+     * @ORM\ManyToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent", inversedBy="\Flash\Bundle\DefaultBundle\Entity\Account")
      */
     protected $calendarEvents;
 

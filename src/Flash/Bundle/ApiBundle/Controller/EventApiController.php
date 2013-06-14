@@ -28,15 +28,52 @@ class EventApiController extends RESTController implements GenericRestApi {
             throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
         } else {
             if ($loggedAcc->equals($acc)) {
-                $events = $this->getDoctrine()->getManager()
-                        ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')
-                        ->findAllByAccount($acc);
+                  $events = $acc->getCalendarEvents()->getValues();
             } else {
                 throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('Access denied');
             }
         }
 
         return $this->handle($this->getView($events));
+    }
+
+    /**
+     * @Route("logged/api/account/{acc_id}/calendar/events/{id}/share",requirements={"acc_id" = "\d+", "id" = "\d+"})
+     * @Method({"PUT"})
+     */
+    public function shareEventAction($acc_id, $id) {
+
+        
+        $loggedAcc = $this->get('security.context')->getToken()->getUser();
+        $acc = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+        
+        
+        $event = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        
+        if (NULL == $event)
+            return $this->handle($this->getView(array('error' => 'Not found.')));
+
+        if ($loggedAcc->equals($acc) && $acc->getIsLeader()) {
+            
+            $followers = $acc->getFollowers()->getValues();
+            
+            foreach ($followers as $follower) {
+                
+                $follower->addCalendarEvent($event);
+                
+                $em->persist($follower);
+                $em->persist($event);
+                $em->flush();
+            }
+        } else {
+            return $this->handle($this->getView(array('error' => 'Access denied.')));
+        }
+        return $this->handle($this->getView($event));
+        
     }
 
     /**
@@ -82,11 +119,10 @@ class EventApiController extends RESTController implements GenericRestApi {
      * @Route("logged/api/account/{acc_id}/calendar/events",requirements={"acc_id" = "\d+"})
      * @Method({"POST"})
      */
-    public function postCalendarEventAction() {
-
-        $acc = $this->get('security.context')->getToken()->getUser();
+    public function postCalendarEventAction() {        
+        
         return $this->handle($this->get('event_service')
-                                ->processCalendarEventForm(new CalendarEvent($acc)));
+                                ->processCalendarEventForm(new CalendarEvent()));
     }
 
     /**
@@ -107,6 +143,7 @@ class EventApiController extends RESTController implements GenericRestApi {
      */
     public function getNotConfirmedFeedEventAction() {
 
+        
         $events = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Event')->findAllNotConfirmedInFeed();
 

@@ -90,6 +90,14 @@ class Event {
      * @Expose
      */
     protected $isConfirmed = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_shared", type="boolean")
+     * @Expose
+     */
+    protected $isShared = false;
 
     /**
      * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="calendarEvents")
@@ -307,5 +315,28 @@ class Event {
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * Set isShared
+     *
+     * @param boolean $isShared
+     * @return Event
+     */
+    public function setIsShared($isShared)
+    {
+        $this->isShared = $isShared;
+    
+        return $this;
+    }
+
+    /**
+     * Get isShared
+     *
+     * @return boolean 
+     */
+    public function getIsShared()
+    {
+        return $this->isShared;
     }
 }

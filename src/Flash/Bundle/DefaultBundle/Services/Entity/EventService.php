@@ -61,18 +61,19 @@ class EventService extends CommonService {
         ));
 
         if ($form->isValid()) {
-
+            
             if ($request->getMethod() == 'POST') {
                 $acc = $this->context->getToken()->getUser();
                 $acc->addCalendarEvent($event);
-                $em->persist($acc);
-
+                $em->persist($acc);               
+                
                 $event->setIsShown(false);
             }
             $event->setAllDay($request->get('allDay'));
             $em->persist($event);
+            
             $em->flush();
-
+      
             if ($request->getMethod() == 'POST') {
                 $acl = $this->injector->getAcl();
                 $acl->grant($event, MaskBuilder::MASK_EDIT);
@@ -83,6 +84,7 @@ class EventService extends CommonService {
             $view->setStatusCode(400);
             return $view->setData($this->getErrorMessages($form));
         }
+ 
         return $view->setData($event);
     }
 

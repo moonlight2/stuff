@@ -85,17 +85,14 @@ class CalendarEvent  {
      */
     protected $end;
 
+    
     /**
-     * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="calendarEvents")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var account
+     *
      * @Expose
      */
+    
     protected $account;
-
-
-    public function __construct(\Symfony\Component\Security\Core\User\UserInterface $account) {
-        $this->account = $account;
-    }
 
 
     /**
@@ -200,28 +197,6 @@ class CalendarEvent  {
         return $this->dateEnd;
     }
 
-    /**
-     * Set account
-     *
-     * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
-     * @return CalendarEvent
-     */
-    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null)
-    {
-        $this->account = $account;
-    
-        return $this;
-    }
-
-    /**
-     * Get account
-     *
-     * @return \Flash\Bundle\DefaultBundle\Entity\Account 
-     */
-    public function getAccount()
-    {
-        return $this->account;
-    }
 
     /**
      * Set start
