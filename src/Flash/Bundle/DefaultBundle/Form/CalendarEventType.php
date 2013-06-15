@@ -11,6 +11,7 @@ class CalendarEventType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('title')
+                ->add('color')
                 ->add('text')
                 ->add('isShown')
                 ->add('allDay')

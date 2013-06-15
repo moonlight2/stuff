@@ -8,6 +8,7 @@ var CalendarEventModel = Backbone.Model.extend({
         "end": "",
         "allDay": "",
         "isShown": false,
+        "color": 'green'
     }
 });
 

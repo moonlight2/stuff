@@ -11,13 +11,15 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
 
 /**
- * Group
+ * CalendarEvent
  *
  * @ORM\Table(name="calendar_events")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\Calendar\CalendarEventRepository")
  * @ExclusionPolicy("all")
  */
 class CalendarEvent  {
@@ -41,6 +43,14 @@ class CalendarEvent  {
      */
     protected $title;
     
+    /**
+     * @var string
+     * @Type("string")
+     * @ORM\Column(name="color", type="string", length=255, nullable=true)
+     * @Expose
+     */
+    protected $color;
+    
     
     /**
      * @ORM\Column(type="text")
@@ -51,14 +61,16 @@ class CalendarEvent  {
     /**
      * @var boolean
      *
-     * @ORM\Column(name="all_day", type="boolean")
+     * @SerializedName("allDay")
      * @Expose
+     * @ORM\Column(name="all_day", type="boolean")
      */
-    protected $allDay = false;
+    protected $allDay;
     
     /**
      * @var boolean
-     *
+     * 
+     * @SerializedName("isShown")
      * @ORM\Column(name="is_shown", type="boolean")
      * @Expose
      */
@@ -81,17 +93,14 @@ class CalendarEvent  {
      */
     protected $end;
 
+    
     /**
-     * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="calendarEvents")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var account
+     *
      * @Expose
      */
+    
     protected $account;
-
-
-    public function __construct(\Symfony\Component\Security\Core\User\UserInterface $account) {
-        $this->account = $account;
-    }
 
 
     /**
@@ -196,28 +205,6 @@ class CalendarEvent  {
         return $this->dateEnd;
     }
 
-    /**
-     * Set account
-     *
-     * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
-     * @return CalendarEvent
-     */
-    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null)
-    {
-        $this->account = $account;
-    
-        return $this;
-    }
-
-    /**
-     * Get account
-     *
-     * @return \Flash\Bundle\DefaultBundle\Entity\Account 
-     */
-    public function getAccount()
-    {
-        return $this->account;
-    }
 
     /**
      * Set start
@@ -263,5 +250,74 @@ class CalendarEvent  {
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * Set allDay
+     *
+     * @param boolean $allDay
+     * @return CalendarEvent
+     */
+    public function setAllDay($allDay)
+    {
+        $this->allDay = $allDay;
+    
+        return $this;
+    }
+
+    /**
+     * Get allDay
+     *
+     * @return boolean 
+     */
+    public function getAllDay()
+    {
+        return $this->allDay;
+    }
+
+    /**
+     * Set isShown
+     *
+     * @param boolean $isShown
+     * @return CalendarEvent
+     */
+    public function setIsShown($isShown)
+    {
+        $this->isShown = $isShown;
+    
+        return $this;
+    }
+
+    /**
+     * Get isShown
+     *
+     * @return boolean 
+     */
+    public function getIsShown()
+    {
+        return $this->isShown;
+    }
+
+    /**
+     * Set color
+     *
+     * @param string $color
+     * @return CalendarEvent
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+    
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return string 
+     */
+    public function getColor()
+    {
+        return $this->color;
     }
 }

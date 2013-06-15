@@ -51,7 +51,8 @@ class EventApiController extends RESTController implements GenericRestApi {
         
         $event = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
-
+        $event->setColor($this->getRequest()->get('color'));
+        
         $em = $this->getDoctrine()->getManager();
         
         if (NULL == $event)

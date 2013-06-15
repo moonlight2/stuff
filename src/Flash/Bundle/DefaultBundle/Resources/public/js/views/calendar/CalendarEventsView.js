@@ -36,6 +36,7 @@ var CalendarEventsView = Backbone.View.extend({
                 week: 'неделя',
                 day: 'день'
             },
+            eventColor: 'green',
             eventClick: this.eventClick,
             eventDrop: this.eventDropOrResize,
             eventResize: this.eventDropOrResize,
@@ -110,14 +111,17 @@ var CalendarEventsView = Backbone.View.extend({
         eventView.render();
     },
     addOne: function(event) {
-
         this.el.fullCalendar('renderEvent', event.toJSON());
     },
     change: function(e, d) {
 
+        console.log('Change');
+        console.log(e);
+
         var fcEvent = this.el.fullCalendar('clientEvents', e.get('id'))[0];
         fcEvent.title = e.get('title');
-        fcEvent.color = e.get('text');
+        fcEvent.text = e.get('text');
+        fcEvent.color = '#FF0000';
         this.el.fullCalendar('updateEvent', fcEvent);
     },
     onDayClick: function(date, allDay, jsEvent, view) {

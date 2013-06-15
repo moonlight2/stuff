@@ -54,6 +54,7 @@ class EventService extends CommonService {
         $form->bind(array(
             'title' => $request->get('title'),
             'text' => $request->get('text'),
+            'color' => $request->get('color'),
             'start' => $start->format('Y-m-d H:i:s'),
             'end' => $end->format('Y-m-d H:i:s'),
             'isShown' => $request->get('isShown'),

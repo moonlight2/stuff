@@ -43,6 +43,14 @@ class CalendarEvent  {
      */
     protected $title;
     
+    /**
+     * @var string
+     * @Type("string")
+     * @ORM\Column(name="color", type="string", length=255, nullable=true)
+     * @Expose
+     */
+    protected $color;
+    
     
     /**
      * @ORM\Column(type="text")
@@ -288,5 +296,28 @@ class CalendarEvent  {
     public function getIsShown()
     {
         return $this->isShown;
+    }
+
+    /**
+     * Set color
+     *
+     * @param string $color
+     * @return CalendarEvent
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+    
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return string 
+     */
+    public function getColor()
+    {
+        return $this->color;
     }
 }

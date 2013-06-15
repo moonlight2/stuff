@@ -39,10 +39,6 @@ window.DialogEventView = Backbone.View.extend({
 
         var self = this;
         if (this.model.isNew()) {
-
-            console.log('Model of dialog:');
-            console.log(this.model);
-
             this.model.save(null, {
                 success: function(model, response) {
                     self.collection.add(model, {success: self.closeDialog()});
@@ -83,6 +79,7 @@ window.DialogEventView = Backbone.View.extend({
         
         this.model.url = 'logged/api/account/' + own_id + '/calendar/events/' + this.model.get('id') + '/share';
         var self = this;
+        this.model.set({color: '#FF0000'});
         this.model.save(null, {
             success: function(model, response) {
                 self.closeDialog();
