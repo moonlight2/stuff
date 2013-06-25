@@ -1,6 +1,9 @@
 Date.prototype.sameDateAs = function(pDate) {
     return ((this.getFullYear() == pDate.getFullYear()) && (this.getMonth() == pDate.getMonth()) && (this.getDate() == pDate.getDate()));
 }
+Date.prototype.more = function(pDate) {
+    return ((this.getFullYear() >= pDate.getFullYear()) && (this.getMonth() >= pDate.getMonth()) && (this.getDate() > pDate.getDate()));
+}
 
 var CalendarEventsView = Backbone.View.extend({
     initialize: function() {
@@ -77,28 +80,28 @@ var CalendarEventsView = Backbone.View.extend({
         }
     },
     getMonthNames: function() {
-        return Array (
-            'Январь',
-            'Февраль',
-            'Март',
-            'Апрель',
-            'Май',
-            'Июнь',
-            'Июль',
-            'Август',
-            'Сентябрь',
-            'Октябрь',
-            'Ноябрь',
-            'Декабрь'
-        );
+        return Array(
+                'Январь',
+                'Февраль',
+                'Март',
+                'Апрель',
+                'Май',
+                'Июнь',
+                'Июль',
+                'Август',
+                'Сентябрь',
+                'Октябрь',
+                'Ноябрь',
+                'Декабрь'
+                );
     },
-    getShortMonthNames: function(){
+    getShortMonthNames: function() {
         return ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июль', 'Июнь', 'Авг', 'Сен', 'Окт', 'Нояб', 'Дек'];
     },
-    getDayNames: function(){
+    getDayNames: function() {
         return ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
     },
-    getShortDayNames: function(){
+    getShortDayNames: function() {
         return ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Суб'];
     },
     eventClick: function(e) {
@@ -113,11 +116,14 @@ var CalendarEventsView = Backbone.View.extend({
         this.el.fullCalendar('renderEvent', event.toJSON());
     },
     change: function(e, d) {
+
         var fcEvent = this.el.fullCalendar('clientEvents', e.get('id'))[0];
-        fcEvent.title = e.get('title');
-        fcEvent.text = e.get('text');
-        fcEvent.color = '#FF0000';
-        this.el.fullCalendar('updateEvent', fcEvent);
+        if (typeof (fcEvent) != 'undefined') {
+            fcEvent.title = e.get('title');
+            fcEvent.text = e.get('text');
+            fcEvent.color = '#FF0000';
+            this.el.fullCalendar('updateEvent', fcEvent);
+        }
     },
     onDayClick: function(date, allDay, jsEvent, view) {
 
@@ -156,6 +162,16 @@ var CalendarEventsView = Backbone.View.extend({
         return false;
     },
     addAll: function() {
+
+        var self = this;
+        var timeStamp = new Date();
+        _.each(this.collection.models, function(event) {
+            var date = new Date(event.get('start'));
+            if (timeStamp.more(date)) {
+                event.set({color: "gray"});
+            }
+        }, this);
+
         this.el.fullCalendar('addEventSource', this.collection.toJSON());
     },
     destroy: function(event) {
