@@ -2,6 +2,7 @@ window.DialogEventView = Backbone.View.extend({
     initialize: function() {
         this.el = $('#eventDialog');
         _.bindAll(this);
+        this.url = 'logged/api/account/' + acc_id + '/calendar/events';
     },
     render: function() {
 
@@ -10,7 +11,7 @@ window.DialogEventView = Backbone.View.extend({
         _.extend(self.buttons, {'Cancel': this.closeDialog});
         if (!this.model.isNew()) {
             _.extend(self.buttons, {'Delete': this.destroy});
-            if (is_leader == 1) {
+            if (1 == is_leader && false == this.model.get('isShared')) {
                 _.extend(self.buttons, {'Share': this.share});
             }
         }
@@ -20,7 +21,7 @@ window.DialogEventView = Backbone.View.extend({
             buttons: self.buttons,
             open: this.onOpen,
         });
-
+        this.getFollowers();
         return this;
     },
     onOpen: function() {
@@ -28,6 +29,19 @@ window.DialogEventView = Backbone.View.extend({
         $('#end').val(this.model.get('end'));
         $('#title').val(this.model.get('title'));
         $('#text').val(this.model.get('text'));
+    },
+    getFollowers: function() {
+
+        var self = this;
+        console.log(app.followers);
+        if (typeof(app.followers) == 'undefined') {
+            app.followers = new AccountList();
+            app.followers.url = 'logged/api/account/' + acc_id + '/followers';
+            app.followers.fetch({success: function(data) {
+                    $('#followers').append(new AccountListView({model: app.followers}).render().el);
+                }});
+        }
+        return false;
     },
     save: function(e) {
 
@@ -77,13 +91,24 @@ window.DialogEventView = Backbone.View.extend({
     },
     share: function() {
         
+        var followers = [];
+        
+        $("input:checkbox[name=followers]:checked").each(function()
+        {
+            followers.push($(this).val());
+        });
+
         this.model.url = 'logged/api/account/' + own_id + '/calendar/events/' + this.model.get('id') + '/share';
         var self = this;
         this.model.set({color: '#FF0000'});
+        this.model.set({sharedFor: followers});
+
         this.model.save(null, {
             success: function(model, response) {
                 self.closeDialog();
+                self.model.url = self.url + '/' + self.model.get('id');
                 app.navigate('success', true);
+
             },
             error: function(model, response) {
                 self.showErrors(response.responseText);

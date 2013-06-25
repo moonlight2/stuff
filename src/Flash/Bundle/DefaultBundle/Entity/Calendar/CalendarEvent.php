@@ -76,6 +76,16 @@ class CalendarEvent  {
      */
     protected $isShown = false;
     
+    /**
+     * @var boolean
+     * 
+     * @SerializedName("isShared")
+     * @ORM\Column(name="is_shared", type="boolean")
+     * @Expose
+     */
+    protected $isShared = false;
+    
+    
 
     /**
      * @var date
@@ -101,6 +111,11 @@ class CalendarEvent  {
      */
     
     protected $account;
+    
+    public function equals(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $event) {
+        
+        return $event->getId() == $this->getId();
+    }
 
 
     /**
@@ -319,5 +334,28 @@ class CalendarEvent  {
     public function getColor()
     {
         return $this->color;
+    }
+
+    /**
+     * Set isShared
+     *
+     * @param boolean $isShared
+     * @return CalendarEvent
+     */
+    public function setIsShared($isShared)
+    {
+        $this->isShared = $isShared;
+    
+        return $this;
+    }
+
+    /**
+     * Get isShared
+     *
+     * @return boolean 
+     */
+    public function getIsShared()
+    {
+        return $this->isShared;
     }
 }

@@ -102,7 +102,6 @@ var CalendarEventsView = Backbone.View.extend({
         return ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Суб'];
     },
     eventClick: function(e) {
-
         var eventView = new DialogEventView({
             model: this.collection.get(e.id),
             collection: this.collection
@@ -114,10 +113,6 @@ var CalendarEventsView = Backbone.View.extend({
         this.el.fullCalendar('renderEvent', event.toJSON());
     },
     change: function(e, d) {
-
-        console.log('Change');
-        console.log(e);
-
         var fcEvent = this.el.fullCalendar('clientEvents', e.get('id'))[0];
         fcEvent.title = e.get('title');
         fcEvent.text = e.get('text');
@@ -167,7 +162,6 @@ var CalendarEventsView = Backbone.View.extend({
         this.el.fullCalendar('removeEvents', event.id);
     },
     eventDropOrResize: function(e, b) {
-
         this.collection.get(e.id).save({start: e.start, end: e.end, allDay: e.allDay});
     },
     showLoader: function() {

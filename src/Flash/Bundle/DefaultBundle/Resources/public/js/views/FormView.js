@@ -37,14 +37,14 @@ window.FormView = Backbone.View.extend({
         console.log('Get Leaders');
         var self = this;
         this.leaders = new AccountList();
+        
         this.leaders.url = "api/accounts/leaders/country/" + $("#send-country").val() + "/city/" + $("#send-city").val();
         this.leaders.fetch({processData: true,
             success: function(data) {
                 self.clearLeadersList();
-                
-                console.log(self.leaders);
-                console.log(new AccountListView({model: self.leaders}).render().el);
-                $('#leaders').append(new AccountListView({model: self.leaders}).render().el);
+                var leadersView = new AccountListView({model: self.leaders});
+                leadersView.tagName = 'select';
+                $('#leaders').append(leadersView.render().el);
                 $('#leaders-block').show();
             }, error: function() {
                 $('#leaders-block').hide();
