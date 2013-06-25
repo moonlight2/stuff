@@ -12,8 +12,6 @@
     window.own_id = {{ own_id }};
     window.acc_id = {{ acc_id }};
 </script>
-    <input type='hidden' id='acc_id' value='{{ acc_id }}' />
-    <input type='hidden' id='own_id' value='{{ own_id }}' />
 
     <script type="text/template" id="user-event-list-tpl">
         <div class='event'>
@@ -31,13 +29,19 @@
 
       <div id='eventDialog' style = 'display: none' class='dialog ui-helper-hidden di'>
             <form>
-                <div>
-                    <label>Title:</label>
-                    <input id='title' class="field" type="text"></input>
+                <div class="control-group title">
+                    <label class='control-label'>Title:</label>
+                    <div class='controls'>
+                        <input id='title' class="field" type="text"></input>
+                    </div>
+                    <span class="help-inline" id='error-title'></span>
                 </div>
-                <div>
-                    <label>Text:</label>
-                    <input id='text' class="field" type="text"></input>
+                <div class="control-group text">
+                    <label class='control-label'>Text:</label>
+                    <div class='controls'>
+                        <input id='text' class="field" type="text"></input>
+                    </div>
+                    <span class="help-inline" id='error-text'></span>
                 </div>
                     <input type='hidden' id='start' />
                     <input type='hidden' id='end' />

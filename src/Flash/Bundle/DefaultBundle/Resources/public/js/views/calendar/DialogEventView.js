@@ -21,7 +21,9 @@ window.DialogEventView = Backbone.View.extend({
             buttons: self.buttons,
             open: this.onOpen,
         });
-        this.getFollowers();
+        if (1 == is_leader) {
+            this.getFollowers();
+        }
         return this;
     },
     onOpen: function() {
@@ -43,29 +45,40 @@ window.DialogEventView = Backbone.View.extend({
         }
         return false;
     },
+    showErrors: function(errors) {
+        _.each(errors, function(error) {
+            var controlGroup = $('.' + error.name);
+            controlGroup.addClass('error');
+            controlGroup.find('.help-inline').text(error.message);
+        }, this);
+    },
+    hideErrors: function() {
+        $('.control-group').removeClass('error');
+        $('.help-inline').text('');
+    },
     save: function(e) {
 
-        this.model.set({title: $('#title').val()});
-        this.model.set({text: $('#text').val()});
-        this.model.set({start: $('#start').val()});
-        this.model.set({end: $('#end').val()});
-        this.model.set({isShown: false});
-
         var self = this;
-        if (this.model.isNew()) {
-            this.model.save(null, {
-                success: function(model, response) {
-                    self.collection.add(model, {success: self.closeDialog()});
-                    app.navigate('success', true);
-                },
-                error: function(model, response) {
-                    self.showErrors(response.responseText);
-                    app.navigate('error', true);
-                }
-            })
-        } else {
-            this.model.save({}, {success: this.closeDialog()});
-        }
+
+        var options = {
+            success: function(model, response) {
+                self.collection.add(model, {success: self.closeDialog()});
+                self.hideErrors();
+            },
+            error: function(model, errors) {
+                self.showErrors(errors);
+            }
+        };
+
+        var feedback = {
+            title: $('#title').val(),
+            text: $('#text').val(),
+            start: $('#start').val(),
+            end: $('#end').val(),
+            isShown: false
+        };
+
+        this.model.save(feedback, options);
     },
     closeDialog: function() {
         this.el.dialog('close');
@@ -90,11 +103,10 @@ window.DialogEventView = Backbone.View.extend({
         })
     },
     share: function() {
-        
+
         var followers = [];
-        
-        $("input:checkbox[name=followers]:checked").each(function()
-        {
+
+        $("input:checkbox[name=followers]:checked").each(function() {
             followers.push($(this).val());
         });
 

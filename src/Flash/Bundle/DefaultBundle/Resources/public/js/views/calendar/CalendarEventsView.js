@@ -10,9 +10,6 @@ var CalendarEventsView = Backbone.View.extend({
         this.el = $('#calendar');
         _.bindAll(this);
 
-        this.acc_id = $('#acc_id').val();
-        this.own_id = $('#own_id').val();
-
         this.collection = new CalendarEventsCollection();
         this.collection.bind('reset', this.addAll);
         this.collection.bind('add', this.addOne);
@@ -57,7 +54,7 @@ var CalendarEventsView = Backbone.View.extend({
         });
 
         var self = this;
-        this.collection.url = 'logged/api/account/' + this.acc_id + '/calendar/events';
+        this.collection.url = 'logged/api/account/' + acc_id + '/calendar/events';
         this.collection.fetch({success: function(collection) {
                 self.hideLoader();
                 self.showTodayDialog(collection);
@@ -145,13 +142,13 @@ var CalendarEventsView = Backbone.View.extend({
             var timeStamp = new Date();
             var startDate = new Date(start);
 
-            if (startDate >= timeStamp && this.acc_id == this.own_id) {
+            if (startDate >= timeStamp && acc_id == own_id) {
                 var event = new CalendarEventModel({
                     start: start,
                     end: end,
                     allDay: allDay
                 });
-                event.urlRoot = 'logged/api/account/' + this.acc_id + '/calendar/events';
+                event.urlRoot = 'logged/api/account/' + acc_id + '/calendar/events';
                 var eventView = new DialogEventView({
                     model: event,
                     collection: this.collection
@@ -167,9 +164,8 @@ var CalendarEventsView = Backbone.View.extend({
         var timeStamp = new Date();
         _.each(this.collection.models, function(event) {
             var date = new Date(event.get('start'));
-            if (timeStamp.more(date)) {
-                event.set({color: "gray"});
-            }
+            if (timeStamp.more(date))
+                event.set({color: "#cdcdc1"});
         }, this);
 
         this.el.fullCalendar('addEventSource', this.collection.toJSON());
