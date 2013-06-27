@@ -4,7 +4,7 @@ window.DialogTodayView = Backbone.View.extend({
         _.bindAll(this);
     },
     render: function() {
-
+я
         var self = this;
         this.buttons = {'Ok': this.confirm};
 

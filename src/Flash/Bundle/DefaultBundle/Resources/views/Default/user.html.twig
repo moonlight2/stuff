@@ -49,20 +49,33 @@
             <div id='followers'></div>
         </div>
     
-      <div id='todayEventDialog' style = 'display: none' class='dialog ui-helper-hidden di'>
-            <form>
-                <div>
-                    <p>У нас есть события!</p>
-                    <div id='today-events-list'></div>
+        <div id='todayEventDialog' style = 'display: none' class='dialog ui-helper-hidden di'>
+              <form>
+                  <div>
+                      <p>У нас есть события!</p>
+                      <div id='today-events-list'></div>
+                  </div>
+              </form>
+        </div>
+    
+        <div id='taskEventDialog' style = 'display: none' class='dialog ui-helper-hidden di'>
+              <form>
+                <div class="control-group text">
+                    <label class='control-label'>Вам добавлено событие от лидера!</label>
+                    <div class='controls'>
+                        <p>Задание выполнено на <span class='count'>0</span> процентов</p>
+                    </div>
+                    <div id='task-events-list' style='margin: 50px 0 0 0'></div>
+                    <span class="help-inline" id='error-text'></span>
                 </div>
-            </form>
+              </form>
         </div>
     
     <h1>Cтраница пользователя <b>{{ firstName }} {{ lastName }}</b></h1>
     <div class='sidebar'>
         <div id='loader'>Loading....</div>
     </div>
-    <div class='main-content'>
+    <div class='main-content'>        
         <div id='calendar'></div>
         <div id='events'></div>
     </div>

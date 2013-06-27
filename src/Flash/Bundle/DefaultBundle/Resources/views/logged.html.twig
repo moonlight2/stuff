@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/bootstrap.css') }}" />
 <link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/fullcalendar.css') }}" />
 <link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/smoothness/jquery-ui-1.9.2.custom.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/nouislider.fox.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/nouislider.space.css') }}" />
 <script src="{{ asset('bundles/acmedemo/js/lib/jquery-1.7.1.min.js') }}"></script>
 <script src="{{ asset('bundles/acmedemo/js/lib/underscore-min.js') }}"></script>
 <script src="{{ asset('bundles/acmedemo/js/lib/backbone-min.js') }}"></script>
@@ -36,6 +38,8 @@
          {% block content %}{% endblock %}
     </div>
 
+    <script src="{{ asset('bundles/flashdefault/js/lib/jquery.nouislider.min.js') }}"></script>  
+    
     <script src="{{ asset('bundles/flashdefault/js/common/BasicViewExtend.js') }}"></script>   
     <script src="{{ asset('bundles/flashdefault/js/common/BasicRouterExtend.js') }}"></script>   
     <script src="{{ asset('bundles/flashdefault/js/common/LocationViewExtend.js') }}"></script>     
@@ -51,6 +55,7 @@
     <script src="{{ asset('bundles/flashdefault/js/model/AccountModel.js') }}"></script>
     <script src="{{ asset('bundles/flashdefault/js/model/calendar/CalendarEventsModel.js') }}"></script>
     <script src="{{ asset('bundles/flashdefault/js/views/calendar/CalendarEventsView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/calendar/DialogTaskView.js') }}"></script>
     <script src="{{ asset('bundles/flashdefault/js/views/calendar/AccountListView.js') }}"></script>
     <script src="{{ asset('bundles/flashdefault/js/views/calendar/DialogEventView.js') }}"></script>
     <script src="{{ asset('bundles/flashdefault/js/views/calendar/DialogTodayView.js') }}"></script>

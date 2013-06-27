@@ -22,7 +22,7 @@ use JMS\Serializer\Annotation\Type;
  * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\Calendar\CalendarEventRepository")
  * @ExclusionPolicy("all")
  */
-class CalendarEvent  {
+class CalendarEvent {
 
     /**
      * @var integer
@@ -34,7 +34,6 @@ class CalendarEvent  {
      */
     protected $id;
 
-    
     /**
      * @var string
      * @Type("string")
@@ -42,7 +41,7 @@ class CalendarEvent  {
      * @Expose
      */
     protected $title;
-    
+
     /**
      * @var string
      * @Type("string")
@@ -50,14 +49,13 @@ class CalendarEvent  {
      * @Expose
      */
     protected $color;
-    
-    
+
     /**
      * @ORM\Column(type="text")
      * @Expose
      */
     protected $text;
-    
+
     /**
      * @var boolean
      *
@@ -66,7 +64,7 @@ class CalendarEvent  {
      * @ORM\Column(name="all_day", type="boolean")
      */
     protected $allDay;
-    
+
     /**
      * @var boolean
      * 
@@ -75,7 +73,7 @@ class CalendarEvent  {
      * @Expose
      */
     protected $isShown = false;
-    
+
     /**
      * @var boolean
      * 
@@ -84,8 +82,6 @@ class CalendarEvent  {
      * @Expose
      */
     protected $isShared = false;
-    
-    
 
     /**
      * @var date
@@ -94,7 +90,7 @@ class CalendarEvent  {
      * @Expose
      */
     protected $start;
-    
+
     /**
      * @var date
      *
@@ -103,28 +99,41 @@ class CalendarEvent  {
      */
     protected $end;
 
-    
     /**
      * @var account
      *
      * @Expose
      */
-    
     protected $account;
-    
-    public function equals(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $event) {
-        
-        return $event->getId() == $this->getId();
+
+    /**
+     * @Expose
+     * @ORM\ManyToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent")
+     */
+    protected $confirmed;
+
+    /**
+     * @Expose
+     * @ORM\ManyToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent")
+     */
+    protected $rejected;
+
+    protected function __construct() {
+        $this->confirmed = new ArrayCollection();
+        $this->rejected = new ArrayCollection();
     }
 
+    public function equals(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $event) {
+
+        return $event->getId() == $this->getId();
+    }
 
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -134,10 +143,9 @@ class CalendarEvent  {
      * @param string $title
      * @return CalendarEvent
      */
-    public function setTitle($title)
-    {
+    public function setTitle($title) {
         $this->title = $title;
-    
+
         return $this;
     }
 
@@ -146,8 +154,7 @@ class CalendarEvent  {
      *
      * @return string 
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
@@ -157,10 +164,9 @@ class CalendarEvent  {
      * @param string $text
      * @return CalendarEvent
      */
-    public function setText($text)
-    {
+    public function setText($text) {
         $this->text = $text;
-    
+
         return $this;
     }
 
@@ -169,8 +175,7 @@ class CalendarEvent  {
      *
      * @return string 
      */
-    public function getText()
-    {
+    public function getText() {
         return $this->text;
     }
 
@@ -180,10 +185,9 @@ class CalendarEvent  {
      * @param \DateTime $dateStart
      * @return CalendarEvent
      */
-    public function setDateStart($dateStart)
-    {
+    public function setDateStart($dateStart) {
         $this->dateStart = $dateStart;
-    
+
         return $this;
     }
 
@@ -192,8 +196,7 @@ class CalendarEvent  {
      *
      * @return \DateTime 
      */
-    public function getDateStart()
-    {
+    public function getDateStart() {
         return $this->dateStart;
     }
 
@@ -203,10 +206,9 @@ class CalendarEvent  {
      * @param \DateTime $dateEnd
      * @return CalendarEvent
      */
-    public function setDateEnd($dateEnd)
-    {
+    public function setDateEnd($dateEnd) {
         $this->dateEnd = $dateEnd;
-    
+
         return $this;
     }
 
@@ -215,11 +217,9 @@ class CalendarEvent  {
      *
      * @return \DateTime 
      */
-    public function getDateEnd()
-    {
+    public function getDateEnd() {
         return $this->dateEnd;
     }
-
 
     /**
      * Set start
@@ -227,10 +227,9 @@ class CalendarEvent  {
      * @param \DateTime $start
      * @return CalendarEvent
      */
-    public function setStart($start)
-    {
+    public function setStart($start) {
         $this->start = $start;
-    
+
         return $this;
     }
 
@@ -239,8 +238,7 @@ class CalendarEvent  {
      *
      * @return \DateTime 
      */
-    public function getStart()
-    {
+    public function getStart() {
         return $this->start;
     }
 
@@ -250,10 +248,9 @@ class CalendarEvent  {
      * @param \DateTime $end
      * @return CalendarEvent
      */
-    public function setEnd($end)
-    {
+    public function setEnd($end) {
         $this->end = $end;
-    
+
         return $this;
     }
 
@@ -262,8 +259,7 @@ class CalendarEvent  {
      *
      * @return \DateTime 
      */
-    public function getEnd()
-    {
+    public function getEnd() {
         return $this->end;
     }
 
@@ -273,10 +269,9 @@ class CalendarEvent  {
      * @param boolean $allDay
      * @return CalendarEvent
      */
-    public function setAllDay($allDay)
-    {
+    public function setAllDay($allDay) {
         $this->allDay = $allDay;
-    
+
         return $this;
     }
 
@@ -285,8 +280,7 @@ class CalendarEvent  {
      *
      * @return boolean 
      */
-    public function getAllDay()
-    {
+    public function getAllDay() {
         return $this->allDay;
     }
 
@@ -296,10 +290,9 @@ class CalendarEvent  {
      * @param boolean $isShown
      * @return CalendarEvent
      */
-    public function setIsShown($isShown)
-    {
+    public function setIsShown($isShown) {
         $this->isShown = $isShown;
-    
+
         return $this;
     }
 
@@ -308,8 +301,7 @@ class CalendarEvent  {
      *
      * @return boolean 
      */
-    public function getIsShown()
-    {
+    public function getIsShown() {
         return $this->isShown;
     }
 
@@ -319,10 +311,9 @@ class CalendarEvent  {
      * @param string $color
      * @return CalendarEvent
      */
-    public function setColor($color)
-    {
+    public function setColor($color) {
         $this->color = $color;
-    
+
         return $this;
     }
 
@@ -331,8 +322,29 @@ class CalendarEvent  {
      *
      * @return string 
      */
-    public function getColor()
-    {
+    public function getColor() {
         return $this->color;
     }
+
+    /**
+     * Set isShared
+     *
+     * @param boolean $isShared
+     * @return CalendarEvent
+     */
+    public function setIsShared($isShared) {
+        $this->isShared = $isShared;
+
+        return $this;
+    }
+
+    /**
+     * Get isShared
+     *
+     * @return boolean 
+     */
+    public function getIsShared() {
+        return $this->isShared;
+    }
+
 }

@@ -58,7 +58,23 @@ var CalendarEventsView = Backbone.View.extend({
         this.collection.fetch({success: function(collection) {
                 self.hideLoader();
                 self.showTodayDialog(collection);
+                self.showTaskDialog(collection);
             }});
+    },
+    showTaskDialog: function(collection) {
+
+        var self = this;
+
+        this.taskCollection = new CalendarEventsCollection();
+        _.each(collection.models, function(event) {
+            if (event.get('isShared') == true) {
+                self.taskCollection.add(event)
+            }
+        }, this);
+        if (self.taskCollection.length > 0) {
+            new DialogTaskView({collection: self.taskCollection}).render();
+        }
+
     },
     showTodayDialog: function(collection) {
 
@@ -113,12 +129,15 @@ var CalendarEventsView = Backbone.View.extend({
         this.el.fullCalendar('renderEvent', event.toJSON());
     },
     change: function(e, d) {
-
         var fcEvent = this.el.fullCalendar('clientEvents', e.get('id'))[0];
+
         if (typeof (fcEvent) != 'undefined') {
             fcEvent.title = e.get('title');
             fcEvent.text = e.get('text');
-            fcEvent.color = '#FF0000';
+
+            if (fcEvent.isShared == true) {
+                fcEvent.color = '#FF0000';
+            }
             this.el.fullCalendar('updateEvent', fcEvent);
         }
     },
@@ -164,8 +183,10 @@ var CalendarEventsView = Backbone.View.extend({
         var timeStamp = new Date();
         _.each(this.collection.models, function(event) {
             var date = new Date(event.get('start'));
-            if (timeStamp.more(date))
+            if (timeStamp.more(date)) {
                 event.set({color: "#cdcdc1"});
+                event.set({isActive: false});
+            }
         }, this);
 
         this.el.fullCalendar('addEventSource', this.collection.toJSON());

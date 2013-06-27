@@ -38,6 +38,129 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
+     * @Route("logged/api/calendar/events/{id}/confirmed",requirements={"id" = "\d+"})
+     * @Method({"GET"})
+     */
+    public function getConfirmedEventsAction($id) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $event = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+
+        if (NULL == $event)
+            return $this->handle($this->getView(array('error' => 'Not found.')));
+
+        $events = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->isConfirmed($id);
+
+        return $this->handle($this->getView(array('result' => $events)));
+    }
+
+    /**
+     * @Route("logged/api/account/{acc_id}/calendar/events/{id}/confirm",requirements={"id" = "\d+", "acc_id" = "\d+"})
+     * @Method({"POST"})
+     */
+    public function confirmEventAction($acc_id, $id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+
+        if (NULL == $event)
+            return $this->handle($this->getView(array('error' => 'Not found.')));
+
+        $loggedAcc = $this->get('security.context')->getToken()->getUser();
+        $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+
+        if ($loggedAcc->equals($acc)) {
+            if($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->confirm($acc_id, $id)) {
+                return $this->handle($this->getView(array('success' => 'confirmed')));
+            }
+        } else {
+            return $this->handle($this->getView(array('error' => 'Access denied.')));
+        }
+        return $this->handle($this->getView(array('error' => 'Event didnt confirm')));
+    }
+    
+    /**
+     * @Route("logged/api/account/{acc_id}/calendar/events/{id}/reject",requirements={"id" = "\d+", "acc_id" = "\d+"})
+     * @Method({"POST"})
+     */
+    public function rejectEventAction($acc_id, $id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+
+        if (NULL == $event)
+            return $this->handle($this->getView(array('error' => 'Not found.')));
+
+        $loggedAcc = $this->get('security.context')->getToken()->getUser();
+        $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+
+        if ($loggedAcc->equals($acc)) {
+            if($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->reject($acc_id, $id)) {
+                return $this->handle($this->getView(array('success' => 'rejected')));
+            }
+        } else {
+            return $this->handle($this->getView(array('error' => 'Access denied.')));
+        }
+        return $this->handle($this->getView(array('error' => 'Event didn\'t reject')));
+    }
+    
+    /**
+     * @Route("logged/api/account/{acc_id}/calendar/events/{id}/watch",requirements={"id" = "\d+", "acc_id" = "\d+"})
+     * @Method({"POST"})
+     */
+    public function watchEventAction($acc_id, $id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+
+        if (NULL == $event)
+            return $this->handle($this->getView(array('error' => 'Not found.')));
+
+        $loggedAcc = $this->get('security.context')->getToken()->getUser();
+        $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+
+        if ($loggedAcc->equals($acc)) {
+            if($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->watch($acc_id, $id)) {
+                return $this->handle($this->getView(array('success' => 'watched')));
+            }
+        } else {
+            return $this->handle($this->getView(array('error' => 'Access denied.')));
+        }
+        return $this->handle($this->getView(array('error' => 'Event didn\'t watch')));
+    }
+    
+    /**
+     * @Route("logged/api/account/{acc_id}/calendar/events/{id}/percent",requirements={"id" = "\d+", "acc_id" = "\d+"})
+     * @Method({"POST"})
+     */
+    public function setPercentAction($acc_id, $id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+        $percent = $this->getRequest()->get('percent');
+        
+        if ($percent < 0 || $percent > 100 || !is_int($percent)) {
+            return $this->handle($this->getView(array('error' => 'Data error')));
+        }
+        
+        if (NULL == $event)
+            return $this->handle($this->getView(array('error' => 'Not found.')));
+
+        $loggedAcc = $this->get('security.context')->getToken()->getUser();
+        $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+
+        if ($loggedAcc->equals($acc)) {
+            if($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->setPercent($acc_id, $id, $percent)) {
+                return $this->handle($this->getView(array('success' => 'saved')));
+            }
+        } else {
+            return $this->handle($this->getView(array('error' => 'Access denied.')));
+        }
+        return $this->handle($this->getView(array('error' => 'Event didn\'t save')));
+    }
+
+    /**
      * @Route("logged/api/account/{acc_id}/followers",requirements={"acc_id" = "\d+"})
      * @Method({"GET"})
      */

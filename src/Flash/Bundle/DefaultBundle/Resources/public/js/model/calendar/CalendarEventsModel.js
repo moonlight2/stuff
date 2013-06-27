@@ -9,6 +9,7 @@ var CalendarEventModel = Backbone.Model.extend({
         "allDay": "",
         "isShown": false,
         "isShared": false,
+        "isActive": true,
         "color": 'green',
         "sharedFor": ""
     },

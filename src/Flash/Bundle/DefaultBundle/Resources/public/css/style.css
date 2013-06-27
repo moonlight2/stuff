@@ -16,6 +16,16 @@ root {
 
 }
 
+.noUiSlider {
+    float: left;
+}
+
+.ui-dialog-titlebar-close {
+    display: block;
+    float: right;
+}
+
+
 #feed-form {
     padding: 15px;
     border: 1px solid;
