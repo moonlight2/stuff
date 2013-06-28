@@ -67,11 +67,18 @@ class EventApiController extends RESTController implements GenericRestApi {
         if (NULL == $event)
             return $this->handle($this->getView(array('error' => 'Not found.')));
 
+        $percent = $this->getRequest()->get('percent');
+
+        if ($percent < 0 || $percent > 100 || !is_int($percent) || null == $percent) {
+            return $this->handle($this->getView(array('error' => 'Data error')));
+        }
+
         $loggedAcc = $this->get('security.context')->getToken()->getUser();
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
 
         if ($loggedAcc->equals($acc)) {
-            if($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->confirm($acc_id, $id)) {
+            if ($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->confirm($acc_id, $id)) {
+                $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->setPercent($acc_id, $id, $percent);
                 return $this->handle($this->getView(array('success' => 'confirmed')));
             }
         } else {
@@ -79,7 +86,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         }
         return $this->handle($this->getView(array('error' => 'Event didnt confirm')));
     }
-    
+
     /**
      * @Route("logged/api/account/{acc_id}/calendar/events/{id}/reject",requirements={"id" = "\d+", "acc_id" = "\d+"})
      * @Method({"POST"})
@@ -96,7 +103,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
 
         if ($loggedAcc->equals($acc)) {
-            if($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->reject($acc_id, $id)) {
+            if ($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->reject($acc_id, $id)) {
                 return $this->handle($this->getView(array('success' => 'rejected')));
             }
         } else {
@@ -104,7 +111,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         }
         return $this->handle($this->getView(array('error' => 'Event didn\'t reject')));
     }
-    
+
     /**
      * @Route("logged/api/account/{acc_id}/calendar/events/{id}/watch",requirements={"id" = "\d+", "acc_id" = "\d+"})
      * @Method({"POST"})
@@ -121,7 +128,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
 
         if ($loggedAcc->equals($acc)) {
-            if($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->watch($acc_id, $id)) {
+            if ($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->watch($acc_id, $id)) {
                 return $this->handle($this->getView(array('success' => 'watched')));
             }
         } else {
@@ -129,21 +136,25 @@ class EventApiController extends RESTController implements GenericRestApi {
         }
         return $this->handle($this->getView(array('error' => 'Event didn\'t watch')));
     }
-    
+
     /**
      * @Route("logged/api/account/{acc_id}/calendar/events/{id}/percent",requirements={"id" = "\d+", "acc_id" = "\d+"})
      * @Method({"POST"})
      */
     public function setPercentAction($acc_id, $id) {
-
-        $em = $this->getDoctrine()->getManager();
-        $event = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
         $percent = $this->getRequest()->get('percent');
-        
+
         if ($percent < 0 || $percent > 100 || !is_int($percent)) {
             return $this->handle($this->getView(array('error' => 'Data error')));
         }
-        
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+        $percent = $this->getRequest()->get('percent');
+
+        if ($percent < 0 || $percent > 100 || !is_int($percent)) {
+            return $this->handle($this->getView(array('error' => 'Data error')));
+        }
+
         if (NULL == $event)
             return $this->handle($this->getView(array('error' => 'Not found.')));
 
@@ -151,7 +162,7 @@ class EventApiController extends RESTController implements GenericRestApi {
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
 
         if ($loggedAcc->equals($acc)) {
-            if($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->setPercent($acc_id, $id, $percent)) {
+            if ($em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->setPercent($acc_id, $id, $percent)) {
                 return $this->handle($this->getView(array('success' => 'saved')));
             }
         } else {

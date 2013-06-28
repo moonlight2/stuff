@@ -21,6 +21,20 @@
         <p class='strong'><%= title %></p>
         <p><%= description %></p>
         </div>
+    </script>
+    
+    <script type="text/template" id="task-event-list-tpl">
+        <div class='event' style='width: 475px'>
+            <p>Event <%= title %> состоится <%= start %></p>
+            <p><p>Задание выполнено на <span class='count'>0</span> процентов</p></p>
+            <div class="input-append">
+                <div class="noUiSlider"></div>
+                <div class="btn-group">
+                    <button class="btn confirm" type="button">Принять</button>
+                    <button class="btn reject" type="button">Отказаться</button>\n\
+                </div>
+            </div>
+        </div>
     </script>    
     
     <script type="text/template" id="account-tpl">
@@ -63,7 +77,7 @@
                 <div class="control-group text">
                     <label class='control-label'>Вам добавлено событие от лидера!</label>
                     <div class='controls'>
-                        <p>Задание выполнено на <span class='count'>0</span> процентов</p>
+                        
                     </div>
                     <div id='task-events-list' style='margin: 50px 0 0 0'></div>
                     <span class="help-inline" id='error-text'></span>

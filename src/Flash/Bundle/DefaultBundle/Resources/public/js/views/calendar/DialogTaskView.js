@@ -2,7 +2,7 @@ window.DialogTaskView = Backbone.View.extend({
     initialize: function() {
         this.el = $('#taskEventDialog');
         _.bindAll(this);
-        this.sliderInit();
+
     },
     render: function() {
 
@@ -16,7 +16,7 @@ window.DialogTaskView = Backbone.View.extend({
             buttons: self.buttons,
             open: this.onOpen,
             height: 'auto',
-            width: 500
+            width: 540
         });
 
         return this;
@@ -29,37 +29,15 @@ window.DialogTaskView = Backbone.View.extend({
             handles: 1,
             slide: function() {
                 var values = $(this).val();
-                $(".count").text(values);
+                var el = this[0];
+                var parent = $(el).parent().parent();
+                parent.find("span").text(values);
             }
         });
     },
     onOpen: function() {
-
-        $('#div .ui-menu').width(300);
-        _.each(this.collection.models, function(event) {
-            console.log(event);
-
-            var d = new Date(event.attributes.start);
-            $('#task-events-list').append(
-                    '<p>' + event.attributes.title
-                    + ' at '
-                    + d.getDate()
-                    + '-' + d.getMonth()
-                    + '-' + d.getFullYear()
-                    + ' in '
-                    + d.getHours()
-                    + ':' + d.getMinutes()
-                    + '<div class="input-append"><div class="noUiSlider"></div><div class="btn-group"><button class="btn" type="button">Принять</button><button class="btn" type="button">Отказаться</button></div></div>');
-        }, this);
-
+        $('#task-events-list').append(new TaskListView({model: this.collection}).render().el);
         this.sliderInit();
-    },
-    confirm: function(e) {
-        _.each(this.collection.models, function(event) {
-//            event.set({isShown: true});
-//            event.save();
-        }, this);
-        this.closeDialog();
     },
     closeDialog: function() {
         this.el.dialog('close');
