@@ -58,7 +58,9 @@ var CalendarEventsView = Backbone.View.extend({
         this.collection.fetch({success: function(collection) {
                 self.hideLoader();
                 self.showTodayDialog(collection);
-                self.showTaskDialog(collection);
+                if (false == is_leader) {
+                    self.showTaskDialog(collection);
+                }
             }});
     },
     showTaskDialog: function(collection) {
@@ -68,12 +70,50 @@ var CalendarEventsView = Backbone.View.extend({
         this.taskCollection = new CalendarEventsCollection();
         _.each(collection.models, function(event) {
             if (event.get('isShared') == true) {
-                self.taskCollection.add(event)
+                //self.setConfirmed(event);
+                self.taskCollection.add(event);
             }
         }, this);
+
+        var ids = [];
+
+        _.each(self.taskCollection.models, function(event) {
+            ids.push(event.get('id'));
+        }, this);
+
+        this.isConfirmed(ids);
+        console.log(ids);
+        return false;
+
         if (self.taskCollection.length > 0) {
             new DialogTaskView({collection: self.taskCollection}).render();
         }
+
+    },
+    isConfirmed: function(ids) {
+
+        var self = this;
+
+        var dataToSend = {
+            events: ids
+        };
+
+        $.ajax({
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            type: "POST",
+            url: 'logged/api/account/' + own_id + '/calendar/events/is_confirmed',
+            data: JSON.stringify(dataToSend),
+            dataType: "json",
+            success: function(response) {
+                console.log(response.confirmed);
+                if (1 != response.confirmed) {
+                    self.taskCollection.add(event);
+                    new DialogTaskView({collection: self.taskCollection}).render();
+                }
+            }});
 
     },
     showTodayDialog: function(collection) {

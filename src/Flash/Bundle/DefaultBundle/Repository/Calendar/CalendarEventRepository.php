@@ -93,7 +93,7 @@ class CalendarEventRepository extends EntityRepository {
         return  $stmt->execute($params);
     }
 
-    public function isConfirmed($id) {
+    public function getAllConfirmed($id) {
 
         $sql = "SELECT 
             account_id, 
@@ -112,6 +112,25 @@ class CalendarEventRepository extends EntityRepository {
         $stmt->execute($params);
         $list = $stmt->fetchAll();
         return (sizeof($list) > 0) ? $list : null;
+    }
+    
+    public function isConfirmed($acc_id, $event_id) {
+
+        $sql = "SELECT 
+            confirmed
+            from account_calendarevent
+            WHERE account_id = :acc_id   
+            AND calendarevent_id = :event_id LIMIT 1";
+
+        $params = array(
+            "acc_id" => $acc_id,
+            "event_id" => $event_id,
+        );
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute($params);
+        $list = $stmt->fetchAll();
+        return (sizeof($list) > 0) ? $list[0] : null;
     }
 
 }

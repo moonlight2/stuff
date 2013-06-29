@@ -26,6 +26,7 @@ window.TaskListItemView = Backbone.View.extend({
         var el = $(this.el).find(".noUiSlider");
         var percent = el.val();
         var data = '{"percent": ' + percent + '}';
+        var self = this;
 
         $.ajax({
             headers: {
@@ -37,10 +38,12 @@ window.TaskListItemView = Backbone.View.extend({
             data: data,
             dataType: "json",
             success: function(response) {
-
+                self.close();
             }});
     },
     reject: function() {
+        
+        var self = this;
         $.ajax({
             headers: {
                 Accept: "application/json",
@@ -50,7 +53,7 @@ window.TaskListItemView = Backbone.View.extend({
             url: 'logged/api/account/' + own_id + '/calendar/events/' + this.model.get('id') + '/reject',
             dataType: "json",
             success: function(response) {
-
+                self.close();
             }});
     },
     initialize: function() {

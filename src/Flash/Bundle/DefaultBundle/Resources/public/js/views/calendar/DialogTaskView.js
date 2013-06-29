@@ -2,7 +2,6 @@ window.DialogTaskView = Backbone.View.extend({
     initialize: function() {
         this.el = $('#taskEventDialog');
         _.bindAll(this);
-
     },
     render: function() {
 

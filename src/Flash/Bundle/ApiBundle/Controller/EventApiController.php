@@ -54,6 +54,28 @@ class EventApiController extends RESTController implements GenericRestApi {
 
         return $this->handle($this->getView(array('result' => $events)));
     }
+    
+    
+    /**
+     * @Route("logged/api/account/{acc_id}/calendar/events/is_confirmed",requirements={"acc_id" = "\d+"})
+     * @Method({"POST"})
+     */
+    public function isConfirmedAction($acc_id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $events = $this->getRequest()->get('events');
+        var_dump($events);
+        exit();
+
+        $event = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+
+        if (NULL == $event)
+            return $this->handle($this->getView(array('error' => 'Not found.')));
+
+        $is_confirmed = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->isConfirmed($acc_id, $id);
+        //var_dump($is_confirmed);
+        return $this->handle($this->getView($is_confirmed));
+    }
 
     /**
      * @Route("logged/api/account/{acc_id}/calendar/events/{id}/confirm",requirements={"id" = "\d+", "acc_id" = "\d+"})
@@ -69,7 +91,7 @@ class EventApiController extends RESTController implements GenericRestApi {
 
         $percent = $this->getRequest()->get('percent');
 
-        if ($percent < 0 || $percent > 100 || !is_int($percent) || null == $percent) {
+        if ($percent < 0 || $percent > 100 || !is_int($percent) || NULL == $percent) {
             return $this->handle($this->getView(array('error' => 'Data error')));
         }
 
