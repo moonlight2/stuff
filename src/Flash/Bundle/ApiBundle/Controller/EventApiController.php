@@ -71,9 +71,22 @@ class EventApiController extends RESTController implements GenericRestApi {
         }
         $eventStr = substr($eventStr, 0, -2);
 
-        $is_confirmed = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->isConfirmed($acc_id, $eventStr);
+        $eventsWithStatus = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->getEventsStatus($acc_id, $eventStr);
 
-        return $this->handle($this->getView(array('events'=>$is_confirmed)));
+        return $this->handle($this->getView(array('events'=>$eventsWithStatus)));
+    }
+    
+    /**
+     * @Route("logged/api/calendar/events/{id}/check_status",requirements={"id" = "\d+"})
+     * @Method({"POST"})
+     */
+    public function checkSingleEventStatusAction($id) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $st = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->getSingleEventStatus($id);
+
+        return $this->handle($this->getView(array('event'=>$st)));
     }
 
     /**

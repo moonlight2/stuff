@@ -115,7 +115,29 @@ class CalendarEventRepository extends EntityRepository {
         return (sizeof($list) > 0) ? $list : null;
     }
     
-    public function isConfirmed($acc_id, $eventStr) {
+    public function getSingleEventStatus($id) {
+
+        $sql = "SELECT 
+            account_calendarevent.confirmed,
+            account_calendarevent.rejected,
+            account_calendarevent.account_id, 
+            account_calendarevent.percent,
+            account.first_name, 
+            account.last_name
+            from account_calendarevent, account
+            WHERE account_calendarevent.account_id = account.id
+            AND account_calendarevent.calendarevent_id = :id";
+        
+        $params = array(
+            "id" => $id
+        );
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute($params);
+        $list = $stmt->fetchAll();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+    public function getEventsStatus($acc_id, $eventStr) {
 
         $sql = "SELECT 
             confirmed,

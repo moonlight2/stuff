@@ -82,12 +82,8 @@ var CalendarEventsView = Backbone.View.extend({
         }, this);
 
         this.isConfirmed(ids);
-        console.log(ids);
-        return false;
 
-        if (self.taskCollection.length > 0) {
-            new DialogTaskView({collection: self.taskCollection}).render();
-        }
+        return false;
 
     },
     isConfirmed: function(array) {

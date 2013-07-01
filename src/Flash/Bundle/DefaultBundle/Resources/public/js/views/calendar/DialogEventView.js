@@ -3,7 +3,6 @@ window.DialogEventView = Backbone.View.extend({
         this.el = $('#eventDialog');
         _.bindAll(this);
         this.url = 'logged/api/account/' + acc_id + '/calendar/events';
-
     },
     render: function() {
         var self = this;
@@ -28,7 +27,9 @@ window.DialogEventView = Backbone.View.extend({
         });
         if (1 == is_leader) {
             this.getFollowers();
+
         }
+        this.getEventStatus();
         return this;
     },
     onOpen: function() {
@@ -36,6 +37,51 @@ window.DialogEventView = Backbone.View.extend({
         $('#end').val(this.model.get('end'));
         $('#title').val(this.model.get('title'));
         $('#text').val(this.model.get('text'));
+    },
+    getEventStatus: function() {
+
+        var self = this;
+        this.accList = new AccountList();
+
+        if (true == this.model.get('isShared') && true == this.model.get('isActive')) {
+            $.ajax({
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                type: "POST",
+                url: 'logged/api/calendar/events/' + this.model.get('id') + '/check_status',
+                dataType: "json",
+                success: function(response) {
+                    _.each(response.event, function(data) {
+                        var acc = new Account();
+                        acc.set({id: data.account_id});
+                        if (typeof (data.confirmed) != 'undefined') {
+                            acc.set({confirmed: data.confirmed});
+                        } else {
+                            acc.set({confirmed: -1});
+                        }
+                        if (typeof (data.confirmed) != 'undefined') {
+                            acc.set({rejected: data.rejected});
+                        } else {
+                            acc.set({rejected: -1});
+                        }
+                        if (typeof (data.percent) != 'undefined') {
+                        acc.set({percent: data.percent});
+                        } else {
+                            acc.set({percent: -1});
+                        }
+                        acc.set({first_name: data.first_name});
+                        acc.set({last_name: data.last_name});
+                        
+                        self.accList.add(acc);
+                    }, this);
+                    $('#response-events-list').html('');
+                    $('#response-events-list').append(new ResponseListView({model: self.accList}).render().el);
+                }});
+
+
+        }
     },
     getFollowers: function() {
 

@@ -31,7 +31,31 @@
                 </div>
             </div>
         </div>
-    </script>    
+    </script>
+
+        <script type="text/template" id="response-event-list-tpl">
+            <div class='event' style='width: 250px'>
+                <div class="user">
+                    Пользователь <%= first_name %> <%= last_name %> 
+                    <%  if (1 == confirmed) { %> 
+                        Выплолнил задание на <%= percent %> процента.
+                    <% } %>
+                    <%  if (1 == rejected) { %> 
+                        отказался от выполнения задания.
+                    <% } %>
+                    <%  if (-1 == rejected || -1 == confirmed) { %> 
+                        еще не дал подтверждения.
+                    <% } %>
+                </div>
+                <div class="input-append">
+                    <div class="btn-group">
+                        <button class="btn delete" type="button">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </script>    
+
+
     
     <script type="text/template" id="account-tpl">
         <p><input type="checkbox" class='checkbox' name="followers" value="<%= id %>" ><%= first_name %> <%= last_name %></p>
@@ -57,6 +81,7 @@
                     <input type='hidden' id='end' />
             </form>
             <div id='followers'></div>
+            <div id='response-events-list'></div>
         </div>
     
         <div id='todayEventDialog' style = 'display: none' class='dialog ui-helper-hidden di'>
@@ -78,17 +103,18 @@
                     <div id='task-events-list' style='margin: 50px 0 0 0'></div>
                     <span class="help-inline" id='error-text'></span>
                 </div>
+                
               </form>
         </div>
     
-    <h1>Cтраница пользователя <b>{{ firstName }} {{ lastName }}</b></h1>
-    <div class='sidebar'>
-        <div id='loader'>Loading....</div>
-    </div>
-    <div class='main-content'>        
-        <div id='calendar'></div>
-        <div id='events'></div>
-    </div>
+        <h1>Cтраница пользователя <b>{{ firstName }} {{ lastName }}</b></h1>
+        <div class='sidebar'>
+            <div id='loader'>Loading....</div>
+        </div>
+        <div class='main-content'>        
+            <div id='calendar'></div>
+            <div id='events'></div>
+        </div>
     
     
     

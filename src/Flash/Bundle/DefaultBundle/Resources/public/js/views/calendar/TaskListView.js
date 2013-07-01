@@ -8,7 +8,7 @@ window.TaskListView = Backbone.View.extend({
             $(this.el).attr('name', 'event').append(new TaskListItemView({model: event}).render().el);
         }, this);
         return this;
-    },
+    }
 });
 
 window.TaskListItemView = Backbone.View.extend({
