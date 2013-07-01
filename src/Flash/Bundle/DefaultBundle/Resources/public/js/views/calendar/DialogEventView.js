@@ -5,6 +5,9 @@ window.DialogEventView = Backbone.View.extend({
         this.url = 'logged/api/account/' + acc_id + '/calendar/events';
     },
     render: function() {
+
+        $('#response-events-list').html('');
+        
         var self = this;
         this.isActive = this.model.get('isActive');
         this.buttons = {};
@@ -27,9 +30,9 @@ window.DialogEventView = Backbone.View.extend({
         });
         if (1 == is_leader) {
             this.getFollowers();
-
+            this.getEventStatus();
         }
-        this.getEventStatus();
+
         return this;
     },
     onOpen: function() {
@@ -55,26 +58,29 @@ window.DialogEventView = Backbone.View.extend({
                 success: function(response) {
                     _.each(response.event, function(data) {
                         var acc = new Account();
-                        acc.set({id: data.account_id});
-                        if (typeof (data.confirmed) != 'undefined') {
-                            acc.set({confirmed: data.confirmed});
-                        } else {
-                            acc.set({confirmed: -1});
+                        console.log(data.account_id);
+                        if (own_id != data.account_id) {
+                            acc.set({id: data.account_id});
+                            if (typeof (data.confirmed) != 'undefined') {
+                                acc.set({confirmed: data.confirmed});
+                            } else {
+                                acc.set({confirmed: -1});
+                            }
+                            if (typeof (data.confirmed) != 'undefined') {
+                                acc.set({rejected: data.rejected});
+                            } else {
+                                acc.set({rejected: -1});
+                            }
+                            if (typeof (data.percent) != 'undefined') {
+                                acc.set({percent: data.percent});
+                            } else {
+                                acc.set({percent: -1});
+                            }
+                            acc.set({first_name: data.first_name});
+                            acc.set({last_name: data.last_name});
+
+                            self.accList.add(acc);
                         }
-                        if (typeof (data.confirmed) != 'undefined') {
-                            acc.set({rejected: data.rejected});
-                        } else {
-                            acc.set({rejected: -1});
-                        }
-                        if (typeof (data.percent) != 'undefined') {
-                        acc.set({percent: data.percent});
-                        } else {
-                            acc.set({percent: -1});
-                        }
-                        acc.set({first_name: data.first_name});
-                        acc.set({last_name: data.last_name});
-                        
-                        self.accList.add(acc);
                     }, this);
                     $('#response-events-list').html('');
                     $('#response-events-list').append(new ResponseListView({model: self.accList}).render().el);

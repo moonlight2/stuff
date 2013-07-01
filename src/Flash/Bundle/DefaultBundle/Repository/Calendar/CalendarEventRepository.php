@@ -121,6 +121,7 @@ class CalendarEventRepository extends EntityRepository {
             account_calendarevent.confirmed,
             account_calendarevent.rejected,
             account_calendarevent.account_id, 
+            account_calendarevent.calendarevent_id, 
             account_calendarevent.percent,
             account.first_name, 
             account.last_name
