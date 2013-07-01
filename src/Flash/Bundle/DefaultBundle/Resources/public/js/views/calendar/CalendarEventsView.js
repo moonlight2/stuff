@@ -2,7 +2,8 @@ Date.prototype.sameDateAs = function(pDate) {
     return ((this.getFullYear() == pDate.getFullYear()) && (this.getMonth() == pDate.getMonth()) && (this.getDate() == pDate.getDate()));
 }
 Date.prototype.more = function(pDate) {
-    return ((this.getFullYear() >= pDate.getFullYear()) && (this.getMonth() >= pDate.getMonth()) && (this.getDate() > pDate.getDate()));
+    return this.getTime() > pDate.getTime();
+
 }
 
 var CalendarEventsView = Backbone.View.extend({
@@ -70,7 +71,6 @@ var CalendarEventsView = Backbone.View.extend({
         this.taskCollection = new CalendarEventsCollection();
         _.each(collection.models, function(event) {
             if (event.get('isShared') == true) {
-                //self.setConfirmed(event);
                 self.taskCollection.add(event);
             }
         }, this);
@@ -90,12 +90,12 @@ var CalendarEventsView = Backbone.View.extend({
         }
 
     },
-    isConfirmed: function(ids) {
+    isConfirmed: function(array) {
 
         var self = this;
 
         var dataToSend = {
-            events: ids
+            events: array
         };
 
         $.ajax({
@@ -104,17 +104,20 @@ var CalendarEventsView = Backbone.View.extend({
                 "Content-Type": "application/json"
             },
             type: "POST",
-            url: 'logged/api/account/' + own_id + '/calendar/events/is_confirmed',
+            url: 'logged/api/account/' + own_id + '/calendar/events/check_status',
             data: JSON.stringify(dataToSend),
             dataType: "json",
             success: function(response) {
-                console.log(response.confirmed);
-                if (1 != response.confirmed) {
-                    self.taskCollection.add(event);
+                _.each(response.events, function(event) {
+                    if (1 == event.confirmed || 1 == event.rejected) {
+                        self.taskCollection.remove(self.taskCollection.get(event.calendarevent_id));
+                    }
+                }, this);
+
+                if (self.taskCollection.length > 0) {
                     new DialogTaskView({collection: self.taskCollection}).render();
                 }
             }});
-
     },
     showTodayDialog: function(collection) {
 
@@ -133,20 +136,7 @@ var CalendarEventsView = Backbone.View.extend({
         }
     },
     getMonthNames: function() {
-        return Array(
-                'Январь',
-                'Февраль',
-                'Март',
-                'Апрель',
-                'Май',
-                'Июнь',
-                'Июль',
-                'Август',
-                'Сентябрь',
-                'Октябрь',
-                'Ноябрь',
-                'Декабрь'
-                );
+        return Array('Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь');
     },
     getShortMonthNames: function() {
         return ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июль', 'Июнь', 'Авг', 'Сен', 'Окт', 'Нояб', 'Дек'];
@@ -218,12 +208,13 @@ var CalendarEventsView = Backbone.View.extend({
         return false;
     },
     addAll: function() {
-
+console.log('Add all');
         var self = this;
         var timeStamp = new Date();
         _.each(this.collection.models, function(event) {
             var date = new Date(event.get('start'));
             if (timeStamp.more(date)) {
+                console.log('more');
                 event.set({color: "#cdcdc1"});
                 event.set({isActive: false});
             }

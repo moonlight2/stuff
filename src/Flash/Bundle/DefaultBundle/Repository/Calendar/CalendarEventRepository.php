@@ -4,6 +4,7 @@ namespace Flash\Bundle\DefaultBundle\Repository\Calendar;
 
 use Doctrine\ORM\EntityRepository;
 
+
 /**
  * CalendarEventRepository
  *
@@ -114,23 +115,24 @@ class CalendarEventRepository extends EntityRepository {
         return (sizeof($list) > 0) ? $list : null;
     }
     
-    public function isConfirmed($acc_id, $event_id) {
+    public function isConfirmed($acc_id, $eventStr) {
 
         $sql = "SELECT 
-            confirmed
+            confirmed,
+            rejected,
+            account_id, 
+            calendarevent_id
             from account_calendarevent
-            WHERE account_id = :acc_id   
-            AND calendarevent_id = :event_id LIMIT 1";
-
+            WHERE account_id = :acc_id and calendarevent_id in (".$eventStr.")";
+        
         $params = array(
-            "acc_id" => $acc_id,
-            "event_id" => $event_id,
+            "acc_id" => $acc_id
         );
 
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->execute($params);
         $list = $stmt->fetchAll();
-        return (sizeof($list) > 0) ? $list[0] : null;
+        return (sizeof($list) > 0) ? $list : null;
     }
 
 }

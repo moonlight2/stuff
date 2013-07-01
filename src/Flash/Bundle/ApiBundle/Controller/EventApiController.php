@@ -57,24 +57,23 @@ class EventApiController extends RESTController implements GenericRestApi {
     
     
     /**
-     * @Route("logged/api/account/{acc_id}/calendar/events/is_confirmed",requirements={"acc_id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/calendar/events/check_status",requirements={"acc_id" = "\d+"})
      * @Method({"POST"})
      */
-    public function isConfirmedAction($acc_id) {
+    public function checkStatusAction($acc_id) {
 
         $em = $this->getDoctrine()->getManager();
         $events = $this->getRequest()->get('events');
-        var_dump($events);
-        exit();
+        
+        $eventStr = '';
+        foreach ($events as $event) {
+            $eventStr.= $event. ', ';
+        }
+        $eventStr = substr($eventStr, 0, -2);
 
-        $event = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->find($id);
+        $is_confirmed = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->isConfirmed($acc_id, $eventStr);
 
-        if (NULL == $event)
-            return $this->handle($this->getView(array('error' => 'Not found.')));
-
-        $is_confirmed = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->isConfirmed($acc_id, $id);
-        //var_dump($is_confirmed);
-        return $this->handle($this->getView($is_confirmed));
+        return $this->handle($this->getView(array('events'=>$is_confirmed)));
     }
 
     /**
