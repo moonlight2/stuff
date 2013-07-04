@@ -5,8 +5,7 @@ window.EventListViewForAll = Backbone.View.extend({
         this.confirmed = false;
         this.collection.bind('reset', this.render, this);
         this.collection.bind('add', this.addOne, this);
-        this.url = 'logged/api/feed/events';
-        this.modUrl = 'moderator/api/feed/events';
+        this.url = 'api/all_events';
     },
     events: {
         'click #confirm-event': 'confirmEvent',

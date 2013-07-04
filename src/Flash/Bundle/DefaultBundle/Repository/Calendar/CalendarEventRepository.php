@@ -115,6 +115,32 @@ class CalendarEventRepository extends EntityRepository {
         return (sizeof($list) > 0) ? $list : null;
     }
     
+    public function getAllByYearAndMonth($acc_id, $year, $month) {
+
+        $sql = "select 
+            ce.id, 
+            ce.title, 
+            ce.text, 
+            ce.start, 
+            ce.end  
+            from account_calendarevent as ac
+                join calendar_events as ce
+                on ce.id = ac.calendarevent_id 
+                join account as a 
+                on a.id = ac.account_id 
+            and a.id = :acc_id 
+            and ce.start like '".$year."-".$month."%'";
+
+        $params = array(
+            "acc_id" => $acc_id,
+        );
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute($params);
+        $list = $stmt->fetchAll();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+    
     public function getSingleEventStatus($id) {
 
         $sql = "SELECT 

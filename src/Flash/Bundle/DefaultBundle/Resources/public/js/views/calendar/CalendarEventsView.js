@@ -16,6 +16,9 @@ var CalendarEventsView = Backbone.View.extend({
         this.collection.bind('add', this.addOne);
         this.collection.bind('change', this.change);
         this.collection.bind('destroy', this.destroy);
+
+        this.url = 'logged/api/account/' + acc_id + '/calendar/events';
+
     },
     render: function() {
 
@@ -55,14 +58,52 @@ var CalendarEventsView = Backbone.View.extend({
         });
 
         var self = this;
-        this.collection.url = 'logged/api/account/' + acc_id + '/calendar/events';
+        var date = new Date();
+        var dateString = ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear();
+        this.collection.url = this.url + '/' + dateString;
         this.collection.fetch({success: function(collection) {
+                self.collection.url = self.url;
                 self.hideLoader();
                 self.showTodayDialog(collection);
                 if (false == is_leader) {
                     self.showTaskDialog(collection);
                 }
+
             }});
+        this.initButtonsEvents();
+    },
+    resetCollection: function() {
+
+        var self = this;
+        self.collection.reset();
+        self.removeAllEvents();
+        var date = self.el.fullCalendar('getDate');
+        var dateString = ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear();
+
+        self.collection.url = self.url + '/' + dateString;
+        self.collection.fetch({success: function(collection) {
+                self.collection.url = self.url;
+                self.hideLoader();
+                self.showTodayDialog(collection);
+                if (false == is_leader) {
+                    self.showTaskDialog(collection);
+                }
+
+            }});
+    },
+    initButtonsEvents: function() {
+        var self = this;
+        $('.fc-button-prev').click(function() {
+            self.resetCollection();
+        });
+
+        $('.fc-button-next').click(function() {
+            self.resetCollection();
+        });
+        
+        $('.fc-button-today').click(function() {
+            self.resetCollection();
+        });
     },
     showTaskDialog: function(collection) {
 
@@ -132,7 +173,7 @@ var CalendarEventsView = Backbone.View.extend({
         }
     },
     getMonthNames: function() {
-        return Array('Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь');
+        return Array('Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь');
     },
     getShortMonthNames: function() {
         return ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июль', 'Июнь', 'Авг', 'Сен', 'Окт', 'Нояб', 'Дек'];
@@ -150,6 +191,9 @@ var CalendarEventsView = Backbone.View.extend({
         });
 
         eventView.render();
+    },
+    removeAllEvents: function() {
+        this.el.fullCalendar('removeEvents').fullCalendar('removeEventSources');
     },
     addOne: function(event) {
         this.el.fullCalendar('renderEvent', event.toJSON());
@@ -204,7 +248,7 @@ var CalendarEventsView = Backbone.View.extend({
         return false;
     },
     addAll: function() {
-console.log('Add all');
+        console.log('Add all');
         var self = this;
         var timeStamp = new Date();
         _.each(this.collection.models, function(event) {

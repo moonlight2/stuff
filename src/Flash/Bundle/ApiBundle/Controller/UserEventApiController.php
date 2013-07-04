@@ -14,14 +14,18 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 class UserEventApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("api/all_events")
+     * @Route("api/all_events/{from}/{to}",requirements={"from" = "\d+", "to" = "\d+"})
      * @Method({"GET"})
      */
-    public function getAction($acc_id = null) {
+    public function getAction($from = NULL, $to = NULL) {
 
-        $events = $this->getDoctrine()->getManager()
-                        ->getRepository('FlashDefaultBundle:UserEvent')->findAll();
-
+        if (NULL != $from && NULL != $to) {
+            $events = $this->getDoctrine()->getManager()
+                            ->getRepository('FlashDefaultBundle:UserEvent')->findAllByLimit($from, $to);
+        } else {
+            $events = $this->getDoctrine()->getManager()
+                            ->getRepository('FlashDefaultBundle:UserEvent')->findAll();
+        }
         return $this->handle($this->getView($events));
     }
 

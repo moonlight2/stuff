@@ -145,6 +145,7 @@ window.DialogEventView = Backbone.View.extend({
     destroy: function() {
 
         var self = this;
+        this.model.url = this.url + "/" + this.model.get('id');
         this.model.destroy({
             success: function(model, response) {
                 self.closeDialog();

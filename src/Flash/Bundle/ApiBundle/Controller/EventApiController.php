@@ -15,20 +15,27 @@ use Flash\Bundle\ApiBundle\RESTApi\GenericRestApi;
 class EventApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("logged/api/account/{acc_id}/calendar/events",requirements={"acc_id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/calendar/events/{month}/{year}",requirements={"acc_id" = "\d+"})
      * @Method({"GET"})
      */
-    public function getCalendarEventsAction($acc_id) {
+    public function getCalendarEventsAction($acc_id, $year = NULL, $month = NULL) {
 
+        $em = $this->getDoctrine()->getManager();
         $loggedAcc = $this->get('security.context')->getToken()->getUser();
-        $acc = $this->getDoctrine()->getManager()
-                        ->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+        $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+
+
 
         if (NULL == $acc) {
             throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
         } else {
             if ($loggedAcc->equals($acc)) {
-                $events = $acc->getCalendarEvents()->getValues();
+                if (NULL == $year || NULL == $month) {
+                    $events = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->findAllByAccount($acc);
+                } else {
+                    $events = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')
+                            ->getAllByYearAndMonth($acc_id, $year, $month);
+                }
             } else {
                 throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('Access denied');
             }
@@ -54,8 +61,7 @@ class EventApiController extends RESTController implements GenericRestApi {
 
         return $this->handle($this->getView(array('result' => $events)));
     }
-    
-    
+
     /**
      * @Route("logged/api/account/{acc_id}/calendar/events/check_status",requirements={"acc_id" = "\d+"})
      * @Method({"POST"})
@@ -64,18 +70,18 @@ class EventApiController extends RESTController implements GenericRestApi {
 
         $em = $this->getDoctrine()->getManager();
         $events = $this->getRequest()->get('events');
-        
+
         $eventStr = '';
         foreach ($events as $event) {
-            $eventStr.= $event. ', ';
+            $eventStr.= $event . ', ';
         }
         $eventStr = substr($eventStr, 0, -2);
 
         $eventsWithStatus = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->getEventsStatus($acc_id, $eventStr);
 
-        return $this->handle($this->getView(array('events'=>$eventsWithStatus)));
+        return $this->handle($this->getView(array('events' => $eventsWithStatus)));
     }
-    
+
     /**
      * @Route("logged/api/calendar/events/{id}/check_status",requirements={"id" = "\d+"})
      * @Method({"POST"})
@@ -86,7 +92,7 @@ class EventApiController extends RESTController implements GenericRestApi {
 
         $st = $em->getRepository('FlashDefaultBundle:Calendar\CalendarEvent')->getSingleEventStatus($id);
 
-        return $this->handle($this->getView(array('event'=>$st)));
+        return $this->handle($this->getView(array('event' => $st)));
     }
 
     /**
