@@ -3,39 +3,39 @@
 namespace Flash\Bundle\DefaultBundle\Services;
 
 class UserEventFactory {
+
     
-    
-    private $context;
-    
+    const NEW_USER = 'new_user';
+    const NEW_PHOTO = 'new_photo';
 
-    public function __construct(\Symfony\Component\Security\Core\SecurityContext $context) {
-        $this->context = $context;
-    }
+    public static function get($eName, \Symfony\Component\Security\Core\User\UserInterface $acc, $obj = null) {
 
-    public static function get($eventName, $acc, $obj = null) {
+        $uEvent = new \Flash\Bundle\DefaultBundle\Entity\UserEvent();
 
-        $userEvent = new \Flash\Bundle\DefaultBundle\Entity\UserEvent();
-
-        switch ($eventName) {
+        switch ($eName) {
             case 'new_user':
-                $userEvent->setTitle($acc->getFirstName() . " " . $acc->getLastName() . ' только что присоеденился к ресурсу.');
-                $userEvent->setDescription('Поздравляем с регистрацией!');
-                $userEvent->setAccount($acc);
+                $uEvent->setTitle(
+                        "<a href='p" . $acc->getId() . "'>"
+                        . $acc->getFirstName() . " " . $acc->getLastName() . "</a>" .
+                        ' только что присоеденился к ресурсу.'
+                );
+                $uEvent->setDescription('Поздравляем с регистрацией!  Пригласите его в свою группу.');
+                $uEvent->setAccount($acc);
                 break;
             case 'add_event':
-                $userEvent->setTitle($acc->getUsername() . ' создал в группе новое событие.');
-                $userEvent->setDescription('Парам-пам-пам!');
-                $userEvent->setAccount($acc);
+                $uEvent->setTitle($acc->getUsername() . ' создал в группе новое событие.');
+                $uEvent->setDescription('Парам-пам-пам!');
+                $uEvent->setAccount($acc);
                 break;
             case 'new_group':
-                $userEvent->setTitle($acc->getUsername() . ' создал группу ' . $obj->getName());
-                $userEvent->setDescription('Поздравляем с новой группой!');
-                $userEvent->setAccount($acc);
+                $uEvent->setTitle($acc->getUsername() . ' создал группу ' . $obj->getName());
+                $uEvent->setDescription('Поздравляем с новой группой!');
+                $uEvent->setAccount($acc);
                 break;
             default :
                 break;
         }
-        return $userEvent;
+        return $uEvent;
     }
 
 }

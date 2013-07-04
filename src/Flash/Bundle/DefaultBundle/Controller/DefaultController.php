@@ -122,6 +122,20 @@ class DefaultController extends Controller {
             'own_id' => $acc->getId(),
         );
     }
+    
+    /**
+     * @Route("/feed2", name="_feed2_page")
+     * @Template()
+     */
+    public function feed2Action() {
+
+        $acc = $this->get('security.context')->getToken()->getUser();
+        return array(
+            'firstName' => $acc->getFirstName(),
+            'lastName' => $acc->getLastName(),
+            'own_id' => $acc->getId(),
+        );
+    }
 
     /**
      * @Route("/p{id}/profile",  requirements={"id" = "\d+"}, name="_userp_profile__page")

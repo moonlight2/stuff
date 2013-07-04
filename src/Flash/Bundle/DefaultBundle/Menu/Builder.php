@@ -37,6 +37,7 @@ class Builder extends ContainerAware {
 
         $menu->addChild('Home', array('route' => 'main_page'));
         $menu->addChild('Feed', array('route' => '_feed_page'));
+        $menu->addChild('Feed2', array('route' => '_feed2_page'));
         
         if (NULL != $acc->getGroup()) {
             $menu->addChild('My Group', array('route' => '_group_page',

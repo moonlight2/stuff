@@ -45,29 +45,12 @@ class AccountService extends CommonService {
                     }
 
                     $acc->setUsername($request->get('email'));
-//                    $group = $request->get('group');
-//
-//                    $group = $em->getRepository('FlashDefaultBundle:Group')->find($request->get('group'));
-//                    if (!$group) {
-//                        return array('error' => 'Group not found.');
-//                    }
-//
-//
-//                    $acc->setGroup($group);
-//                    $em->persist($group);
-//                    $cRole = new \Flash\Bundle\DefaultBundle\Entity\CustomRole($acc);
-//                    $acc->addCustomRole($cRole);
-//                    $em->persist($cRole);
 
-
-                    $userEvent = $this->injector->getUserEvent()->get('new_user', $acc);
+                    $uEventFactory = $this->injector->getUserEventFactory();
 
                     $role = $em->getRepository('FlashDefaultBundle:Role')->getByName('ROLE_USER');
 
                     $acc->addRole($role);
-                    $userEvent->setAccount($acc);
-
-                    $em->persist($userEvent);
                     $em->persist($role);
                 }
 
@@ -78,6 +61,10 @@ class AccountService extends CommonService {
             $view->setStatusCode(400);
             return $view->setData($this->getErrorMessages($form));
         }
+        $uEvent = $uEventFactory->get($uEventFactory::NEW_USER, $acc);
+        $em->persist($uEvent);
+        $em->flush();
+
         return $view->setData($acc);
     }
 

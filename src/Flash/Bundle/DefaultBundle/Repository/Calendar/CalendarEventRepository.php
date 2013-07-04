@@ -118,16 +118,17 @@ class CalendarEventRepository extends EntityRepository {
     public function getSingleEventStatus($id) {
 
         $sql = "SELECT 
-            account_calendarevent.confirmed,
-            account_calendarevent.rejected,
-            account_calendarevent.account_id, 
-            account_calendarevent.calendarevent_id, 
-            account_calendarevent.percent,
-            account.first_name, 
-            account.last_name
-            from account_calendarevent, account
-            WHERE account_calendarevent.account_id = account.id
-            AND account_calendarevent.calendarevent_id = :id";
+            ac.confirmed,
+            ac.rejected,
+            ac.account_id, 
+            ac.calendarevent_id, 
+            ac.percent,
+            a.first_name, 
+            a.last_name
+            from account_calendarevent as ac, 
+            account as a
+            WHERE ac.account_id = a.id
+            AND ac.calendarevent_id = :id";
         
         $params = array(
             "id" => $id

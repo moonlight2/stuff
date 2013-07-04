@@ -30,7 +30,7 @@ class RequestInjector {
         return $this->container->get('security.encoder_factory');
     }
     
-    public function getUserEvent() {
-        return $this->container->get('user_event');
+    public function getUserEventFactory() {
+        return $this->container->get('user_event_service');
     }
 }

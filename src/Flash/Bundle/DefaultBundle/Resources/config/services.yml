@@ -21,9 +21,13 @@ services:
         arguments:    ['@service_container']
   
     common_service:
-        abstract: true
+        abstract:     true
+        class:         %common_service.class%
+        arguments:    ["@security.context", "@request_injector"]        
+        
+    user_event_service:
         class:        %user_event.class%
-        arguments:    [@security.context, @request_injector]
+        parent:       common_service
         
     event_service:
         class:        %event_service.class%
@@ -47,14 +51,14 @@ services:
         
     user_event:
         class:        %user_event.class%
-        arguments:    [@security.context]
+        arguments:    ['@security.context']
         
     acl_service:
         class:        %acl_service.class%
-        arguments:    [@security.context, @security.acl.provider]
+        arguments:    ['@security.context', '@security.acl.provider']
         
     acl_manager:
         class:        %acl_manager.class%
-        arguments:    [@security.acl.provider, @security.context]
+        arguments:    ['@security.acl.provider', '@security.context']
         
 
