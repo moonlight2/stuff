@@ -329,13 +329,17 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("logged/api/feed/events")
+     * @Route("logged/api/feed/events/{for}/{to}",requirements={"for" = "\d+", "to" = "\d+"})
      * @Method({"GET"})
      */
-    public function getFeedEventAction() {
+    public function getFeedEventAction($for, $to) {
 
+        if ($for < 0) {
+            return $this->handle($this->getView(array('error'=>'Wrong data')));
+        }
+        
         $events = $this->getDoctrine()->getManager()
-                        ->getRepository('FlashDefaultBundle:Event')->findAllConfirmedInFeed();
+                        ->getRepository('FlashDefaultBundle:Event')->findAllConfirmedInFeed($for, $to);
 
         return $this->handle($this->getView($events));
     }

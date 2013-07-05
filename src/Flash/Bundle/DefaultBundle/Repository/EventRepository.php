@@ -8,8 +8,7 @@ use Doctrine\ORM\EntityRepository;
  * EventRepository
  *
  */
-class EventRepository extends EntityRepository  {
-
+class EventRepository extends EntityRepository {
 
     public function getByGroup($group) {
         $list = $this->getEntityManager()
@@ -20,15 +19,17 @@ class EventRepository extends EntityRepository  {
         return (sizeof($list) > 0) ? $list : null;
     }
 
-    public function findAllConfirmedInFeed() {
+    public function findAllConfirmedInFeed($from, $to) {
         $list = $this->getEntityManager()
                 ->createQuery("SELECT e FROM FlashDefaultBundle:Event e
                                 WHERE e.isConfirmed = 1
-                                AND e.type = 'feed'")
+                                AND e.type = 'feed' ORDER BY e.id DESC")
+                ->setFirstResult($from)
+                ->setMaxResults($to)
                 ->getResult();
         return (sizeof($list) > 0) ? $list : null;
     }
-    
+
     public function findAllNotConfirmedInFeed() {
         $list = $this->getEntityManager()
                 ->createQuery("SELECT e FROM FlashDefaultBundle:Event e

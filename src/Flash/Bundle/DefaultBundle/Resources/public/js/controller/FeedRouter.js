@@ -8,12 +8,14 @@ $(document).ready(function() {
         },
         initialize: function() {
             console.log('Starting Feed router');
+            
         },
         showNotConfirmed: function() {
             $('#pre-feed').css('display', 'block');
             $('#feed').css('display', 'none');
             return false;
         },
+
         showEvents: function() {
             $('#pre-feed').css('display', 'none');
             $('#feed').css('display', 'block');

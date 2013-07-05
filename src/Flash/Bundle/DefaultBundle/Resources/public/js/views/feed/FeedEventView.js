@@ -27,7 +27,7 @@ window.FeedEventView = Backbone.View.extend({
 
         var self = this;
         this.events = new EventCollection();
-        this.events.url = this.url;
+        this.events.url = this.url + "/0/2";
         this.events.fetch({success: function(data) {
                 var view = new EventListView({collection: self.events});
                 view.confirmed = true;
