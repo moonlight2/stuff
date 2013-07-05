@@ -13,7 +13,7 @@ window.UploaderModel = new qq.FineUploader({
         sizeLimit: 512000 // 50 kB = 50 * 1024 bytes
     },
     text: {
-        uploadButton: '<i class="icon-plus icon-white"></i> Select Files'
+        uploadButton: '<i class="icon-plus icon-white"></i> Выберите файл'
     },
     callbacks: {
         onComplete: function(id, fileName, responseJSON) {

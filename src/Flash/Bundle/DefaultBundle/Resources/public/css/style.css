@@ -16,6 +16,16 @@ root {
 
 }
 
+#uploader {
+    width: 150px;
+    float: right;
+}
+
+.qq-upload-list ul {
+    height: 20px;
+width: 180px;
+}
+
 .noUiSlider {
     float: left;
 }

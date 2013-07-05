@@ -8,14 +8,20 @@ $(document).ready(function() {
         },
         initialize: function() {
             console.log('Starting Feed router');
-            
+            this.uploaderInit();
         },
         showNotConfirmed: function() {
             $('#pre-feed').css('display', 'block');
             $('#feed').css('display', 'none');
             return false;
         },
-
+        uploaderInit: function() {
+            var self = this;
+            $('#triggerUpload').click(function() {
+                UploaderModel.setEndpoint('newendpoint');
+                UploaderModel.uploadStoredFiles();
+            });
+        },
         showEvents: function() {
             $('#pre-feed').css('display', 'none');
             $('#feed').css('display', 'block');
