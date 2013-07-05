@@ -71,6 +71,10 @@ class EventApiController extends RESTController implements GenericRestApi {
         $em = $this->getDoctrine()->getManager();
         $events = $this->getRequest()->get('events');
 
+        if (sizeof($events) == 0) {
+            return $this->handle($this->getView(array('events' => 'Empty data')));
+        }
+        
         $eventStr = '';
         foreach ($events as $event) {
             $eventStr.= $event . ', ';

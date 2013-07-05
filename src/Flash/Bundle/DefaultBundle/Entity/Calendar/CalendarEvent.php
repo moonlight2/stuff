@@ -106,22 +106,7 @@ class CalendarEvent {
      */
     protected $account;
 
-//    /**
-//     * @Expose
-//     * @ORM\ManyToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent")
-//     */
-//    protected $confirmed;
-//
-//    /**
-//     * @Expose
-//     * @ORM\ManyToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent")
-//     */
-//    protected $rejected;
 
-    public function __construct() {
-//        $this->confirmed = new ArrayCollection();
-//        $this->rejected = new ArrayCollection();
-    }
 
     public function equals(\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent $event) {
 

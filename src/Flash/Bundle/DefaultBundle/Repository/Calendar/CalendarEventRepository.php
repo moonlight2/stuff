@@ -122,7 +122,11 @@ class CalendarEventRepository extends EntityRepository {
             ce.title, 
             ce.text, 
             ce.start, 
-            ce.end  
+            ce.end,  
+            ce.color,  
+            ce.all_day,  
+            ce.is_shown as isShown,  
+            ce.is_shared as isShared  
             from account_calendarevent as ac
                 join calendar_events as ce
                 on ce.id = ac.calendarevent_id 
