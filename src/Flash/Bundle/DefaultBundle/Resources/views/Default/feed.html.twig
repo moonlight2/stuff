@@ -21,8 +21,7 @@
     {% if is_granted('ROLE_MODERATOR') %}
         <div id='pre-feed'></div>
     {% endif %}
-    <div id='feed'>
-    </div>
+    <div id='feed'></div>
     <p>
       <button class="btn btn-large btn-primary" id = 'more' type="button">Увидеть больше</button>
     </p>
@@ -59,6 +58,12 @@
                 </div>
             </div>
         {% endif %}
+        <div id='uploader'>
+            <div id="manual-fine-uploader"></div>
+            <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+                <i class="icon-upload icon-white"></i> Добавить фото
+        </div>
+        </div>
         <div class="control-group">
             <label class='control-label'>Заголовок:</label>
             <div class='controls'>

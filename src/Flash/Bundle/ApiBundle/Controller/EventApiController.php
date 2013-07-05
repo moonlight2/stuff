@@ -329,7 +329,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("logged/api/feed/events/{for}/{to}",requirements={"for" = "\d+", "to" = "\d+"})
+     * @Route("api/feed/events/{for}/{to}",requirements={"for" = "\d+", "to" = "\d+"})
      * @Method({"GET"})
      */
     public function getFeedEventAction($for, $to) {
@@ -358,7 +358,7 @@ class EventApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("logged/api/feed/events")
+     * @Route("api/feed/events")
      * @Method({"POST"})
      */
     public function postFeedEventAction() {

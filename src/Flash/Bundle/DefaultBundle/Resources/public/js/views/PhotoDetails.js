@@ -3,9 +3,6 @@
 window.PhotoView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($('#image-details-tpl').html());
-        
-        this.acc_id = $('#acc_id').val();
-        this.own_id = $('#own_id').val();
     },
     render: function(eventName) {
         $(this.el).html(this.template(this.model.toJSON()));
@@ -26,7 +23,7 @@ window.PhotoView = Backbone.View.extend({
         var hash = window.location.hash.substring(1);
         this.comments = new PhotoCommentCollection();
         this.comments.url = '../logged/api/account/'
-                +this.acc_id+
+                + acc_id +
                 '/photo/' + 
                 (hash.split('/'))[1] + 
                 '/comment';
@@ -42,9 +39,7 @@ window.PhotoView = Backbone.View.extend({
 
         var id = $(e.currentTarget).attr('val');
         var acc = this.comments.get(id).attributes.account;
-        
-        console.log(acc.first_name);
-        console.log(acc.last_name);
+
         $('textarea#comment').val('');
         $('textarea#comment').val(acc.first_name + ' ' + acc.last_name + ', ');
         
@@ -55,7 +50,7 @@ window.PhotoView = Backbone.View.extend({
         var comment = this.comments.get(id);
         var hash = window.location.hash.substring(1);
 
-        comment.url = '../logged/api/account/' +this.acc_id+'/photo/' + (hash.split('/'))[1] + '/comment/' + id;
+        comment.url = '../logged/api/account/' + acc_id +'/photo/' + (hash.split('/'))[1] + '/comment/' + id;
 
         comment.destroy({
             success: function() {
@@ -97,7 +92,7 @@ window.PhotoView = Backbone.View.extend({
         var hash = window.location.hash.substring(1);
         
         this.photoComment = new PhotoCommentModel();
-        this.photoComment.url = '../logged/api/account/' +this.acc_id+'/photo/' + (hash.split('/'))[1] + '/comment';
+        this.photoComment.url = '../logged/api/account/' + acc_id +'/photo/' + (hash.split('/'))[1] + '/comment';
 
         this.button = e.target;
         this.button.disabled = true;

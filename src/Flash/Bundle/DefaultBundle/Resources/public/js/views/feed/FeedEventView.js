@@ -2,7 +2,7 @@
 window.FeedEventView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($('#feed-event-tpl').html());
-        this.url = 'logged/api/feed/events';
+        this.url = 'api/feed/events';
         this.modUrl = 'moderator/api/feed/events';
         this.rendered = false;
     },
@@ -58,6 +58,7 @@ window.FeedEventView = Backbone.View.extend({
             name: $('#name').val(),
             description: $('#description').val(),
         });
+
         if (this.model.isNew()) {
             this.model.save(null, {
                 success: function(model, response) {

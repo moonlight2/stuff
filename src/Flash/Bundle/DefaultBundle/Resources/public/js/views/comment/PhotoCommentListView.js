@@ -3,11 +3,10 @@ window.PhotoCommentListView = Backbone.View.extend({
     initialize: function() {
         this.model.bind('reset', this.render, this);
         this.model.bind('add', this.appendLast, this);
-//        this.model.bind('remove', this.deleteElement, this);
     },
     render: function() {
         _.each(this.model.models, function(comment) {
-            if ($('#own_id').val() == comment.attributes.account.id) {
+            if (own_id == comment.attributes.account.id) {
                 $(this.el).attr('class', 'comment-list').append(new OwnPhotoCommentListItemView({model: comment}).render().el);
             } else {
                 $(this.el).attr('class', 'comment-list').append(new PhotoCommentListItemView({model: comment}).render().el);
@@ -24,7 +23,7 @@ window.PhotoCommentListView = Backbone.View.extend({
     },
     appendLast: function() {
         var comment = this.model.models[this.model.length - 1];
-        if ($('#own_id').val() == comment.attributes.account.id) {
+        if (own_id == comment.attributes.account.id) {
             $(this.el).attr('class', 'comment-list').append(new OwnPhotoCommentListItemView({model: comment}).render().el);
         } else {
             $(this.el).attr('class', 'comment-list').append(new PhotoCommentListItemView({model: comment}).render().el);

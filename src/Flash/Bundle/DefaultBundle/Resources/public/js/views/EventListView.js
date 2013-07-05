@@ -5,8 +5,8 @@ window.EventListView = Backbone.View.extend({
         this.confirmed = false;
         this.collection.bind('reset', this.render, this);
         this.collection.bind('add', this.addOne, this);
-        this.url = 'logged/api/feed/events';
-        this.modUrl = 'modurlerator/api/feed/events';
+        this.url = 'api/feed/events';
+        this.modUrl = 'moderator/api/feed/events';
         this.initEvents();
         this.count = 0;
     },
