@@ -16,9 +16,10 @@ use JMS\Serializer\Annotation\Expose;
  * @ORM\Table(name="photo_album")
  * @ORM\Entity
  * @ExclusionPolicy("all")
+ * @ORM\HasLifecycleCallbacks
  */
 class PhotoAlbum {
-    
+
     /**
      * @var integer
      *
@@ -38,11 +39,16 @@ class PhotoAlbum {
      */
     protected $name;
 
-
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="photoAlbum")
      */
     protected $photos;
+
+    /**
+     *
+     * @ManyToOne(targetEntity="Account", inversedBy="photoAlbums")
+     */
+    protected $account;
 
     /**
      * @var date
@@ -52,8 +58,6 @@ class PhotoAlbum {
      */
     protected $dateRegist;
 
-
-
     public function __construct($name) {
         $this->name = $name;
         $this->setDateRegist(new \DateTime("now"));
@@ -61,12 +65,42 @@ class PhotoAlbum {
     }
 
     /**
+     * @ORM\PrePersist()
+     */
+    public function createAlbum() {
+
+        if (!file_exists($this->getUploadRootDir())) {
+            mkdir($this->getUploadRootDir());
+        }
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload() {
+
+        rmdir($this->getUploadRootDir());
+    }
+
+    public function getUploadRootDir() {
+        // the absolute directory path where uploaded
+        // documents should be saved
+
+        return __DIR__ . '/../../../../uploads/' . $this->getUploadDir();
+    }
+
+    protected function getUploadDir() {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'photos/' . $this->getAccount()->getId() . "/" . $this->getName();
+    }
+
+    /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -76,10 +110,9 @@ class PhotoAlbum {
      * @param string $name
      * @return PhotoAlbum
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -88,8 +121,7 @@ class PhotoAlbum {
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -99,10 +131,9 @@ class PhotoAlbum {
      * @param \DateTime $dateRegist
      * @return PhotoAlbum
      */
-    public function setDateRegist($dateRegist)
-    {
+    public function setDateRegist($dateRegist) {
         $this->dateRegist = $dateRegist;
-    
+
         return $this;
     }
 
@@ -111,8 +142,7 @@ class PhotoAlbum {
      *
      * @return \DateTime 
      */
-    public function getDateRegist()
-    {
+    public function getDateRegist() {
         return $this->dateRegist;
     }
 
@@ -122,10 +152,9 @@ class PhotoAlbum {
      * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photos
      * @return PhotoAlbum
      */
-    public function addPhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos)
-    {
+    public function addPhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos) {
         $this->photos[] = $photos;
-    
+
         return $this;
     }
 
@@ -134,8 +163,7 @@ class PhotoAlbum {
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photos
      */
-    public function removePhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos)
-    {
+    public function removePhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos) {
         $this->photos->removeElement($photos);
     }
 
@@ -144,8 +172,29 @@ class PhotoAlbum {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPhotos()
-    {
+    public function getPhotos() {
         return $this->photos;
     }
+
+    /**
+     * Set account
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
+     * @return Photo
+     */
+    public function setAccount(\Symfony\Component\Security\Core\User\UserInterface $account = null) {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * Get account
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\Account 
+     */
+    public function getAccount() {
+        return $this->account;
+    }
+
 }

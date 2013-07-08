@@ -155,6 +155,11 @@ class Account implements AdvancedUserInterface {
      * @OneToMany(targetEntity="Photo", mappedBy="account")
      */
     protected $photos;
+    
+    /**
+     * @OneToMany(targetEntity="PhotoAlbum", mappedBy="account")
+     */
+    protected $photoAlbums;
 
     /**
      * @OneToMany(targetEntity="CustomRole", mappedBy="account")
@@ -199,6 +204,7 @@ class Account implements AdvancedUserInterface {
         $this->photos = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->photoComments = new ArrayCollection();
+        $this->photoAlbums = new ArrayCollection();
         $this->calendarEvents = new ArrayCollection();
         $this->followers = new ArrayCollection();
     }
@@ -931,5 +937,38 @@ class Account implements AdvancedUserInterface {
     public function getIsLeader()
     {
         return $this->isLeader;
+    }
+
+    /**
+     * Add photoAlbums
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\PhotoAlbum $photoAlbums
+     * @return Account
+     */
+    public function addPhotoAlbum(\Flash\Bundle\DefaultBundle\Entity\PhotoAlbum $photoAlbums)
+    {
+        $this->photoAlbums[] = $photoAlbums;
+    
+        return $this;
+    }
+
+    /**
+     * Remove photoAlbums
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\PhotoAlbum $photoAlbums
+     */
+    public function removePhotoAlbum(\Flash\Bundle\DefaultBundle\Entity\PhotoAlbum $photoAlbums)
+    {
+        $this->photoAlbums->removeElement($photoAlbums);
+    }
+
+    /**
+     * Get photoAlbums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhotoAlbums()
+    {
+        return $this->photoAlbums;
     }
 }

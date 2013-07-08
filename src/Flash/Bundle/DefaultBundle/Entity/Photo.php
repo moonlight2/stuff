@@ -235,11 +235,11 @@ class Photo implements Estimable {
 
     protected function getUploadDir() {
         
-        $dir = (NULL != $this->getAlbum())? "/".$this->album : "";
+        //$dir = (NULL != $this->getAlbum())? "/".$this->album : "";
         
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        return 'photos/' . $this->getAccount()->getId().$dir;;
+        return 'photos/' . $this->getAccount()->getId(). "/" .$this->getPhotoAlbum()->getName();;
     }
 
     /**

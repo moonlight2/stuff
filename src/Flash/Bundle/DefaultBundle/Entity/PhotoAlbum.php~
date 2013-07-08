@@ -18,7 +18,7 @@ use JMS\Serializer\Annotation\Expose;
  * @ExclusionPolicy("all")
  */
 class PhotoAlbum {
-    
+
     /**
      * @var integer
      *
@@ -38,11 +38,16 @@ class PhotoAlbum {
      */
     protected $name;
 
-
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="photoAlbum")
      */
     protected $photos;
+
+    /**
+     *
+     * @ManyToOne(targetEntity="Account", inversedBy="photoAlbums")
+     */
+    protected $account;
 
     /**
      * @var date
@@ -52,10 +57,137 @@ class PhotoAlbum {
      */
     protected $dateRegist;
 
-
-
-    public function __construct() {
+    public function __construct($name) {
+        $this->name = $name;
         $this->setDateRegist(new \DateTime("now"));
         $this->photos = new ArrayCollection();
     }
+
+    public function getAbsolutePath() {
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
+    }
+
+    public function getAbsoluteAlbumPath($aName) {
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $aName . '/' . $this->path;
+    }
+
+    public function getWebPath() {
+        return null === $this->path ? null : 'image' . '/' . $this->getAccount()->getId() . '/' . $this->path;
+    }
+
+    public function getUploadRootDir() {
+        // the absolute directory path where uploaded
+        // documents should be saved
+
+        return __DIR__ . '/../../../../uploads/' . $this->getUploadDir();
+    }
+
+    protected function getUploadDir() {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'photos/' . $this->getAccount()->getId() . "/" . $this->name;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return PhotoAlbum
+     */
+    public function setName($name) {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName() {
+        return $this->name;
+    }
+
+    /**
+     * Set dateRegist
+     *
+     * @param \DateTime $dateRegist
+     * @return PhotoAlbum
+     */
+    public function setDateRegist($dateRegist) {
+        $this->dateRegist = $dateRegist;
+
+        return $this;
+    }
+
+    /**
+     * Get dateRegist
+     *
+     * @return \DateTime 
+     */
+    public function getDateRegist() {
+        return $this->dateRegist;
+    }
+
+    /**
+     * Add photos
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photos
+     * @return PhotoAlbum
+     */
+    public function addPhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos) {
+        $this->photos[] = $photos;
+
+        return $this;
+    }
+
+    /**
+     * Remove photos
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photos
+     */
+    public function removePhoto(\Flash\Bundle\DefaultBundle\Entity\Photo $photos) {
+        $this->photos->removeElement($photos);
+    }
+
+    /**
+     * Get photos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhotos() {
+        return $this->photos;
+    }
+
+    /**
+     * Set account
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
+     * @return Photo
+     */
+    public function setAccount(\Symfony\Component\Security\Core\User\UserInterface $account = null) {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * Get account
+     *
+     * @return \Flash\Bundle\DefaultBundle\Entity\Account 
+     */
+    public function getAccount() {
+        return $this->account;
+    }
+
 }

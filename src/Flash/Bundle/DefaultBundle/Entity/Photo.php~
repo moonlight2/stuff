@@ -466,4 +466,27 @@ class Photo implements Estimable {
         return $this->avatar;
     }
 
+
+    /**
+     * Set photoAlbum
+     *
+     * @param string $photoAlbum
+     * @return Photo
+     */
+    public function setPhotoAlbum($photoAlbum)
+    {
+        $this->photoAlbum = $photoAlbum;
+    
+        return $this;
+    }
+
+    /**
+     * Get photoAlbum
+     *
+     * @return string 
+     */
+    public function getPhotoAlbum()
+    {
+        return $this->photoAlbum;
+    }
 }

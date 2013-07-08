@@ -87,6 +87,47 @@ class PhotoService extends CommonService {
         return $view->setData(array('success' => 'true', 'photo' => $photo));
     }
 
+    public function createAlbum($aName) {
+
+        $view = View::create();
+        $em = $this->injector->getDoctrine()->getManager();
+        $acc = $this->context->getToken()->getUser();
+
+        $album = new \Flash\Bundle\DefaultBundle\Entity\PhotoAlbum($aName);
+        $album->setAccount($acc);
+        $acc->addPhotoAlbum($album);
+
+        $em->persist($album);
+        $em->persist($acc);
+        $em->flush();
+
+        $acl = $this->injector->getAcl();
+        $acl->grant($album, MaskBuilder::MASK_EDIT);
+        $acl->grant($album, MaskBuilder::MASK_VIEW);
+        $acl->grant($album, MaskBuilder::MASK_DELETE);
+
+        return $view->setData(array('success' => 'true'));
+    }
+
+    public function deleteAlbum($album) {
+
+        $em = $this->injector->getDoctrine()->getManager();
+        $view = View::create();
+
+//        $photos = $album->getPhotos()->getValues();
+//        if ($album->getPhotos()->count() > 0) {
+//            foreach ($photos as $photo) {
+//                $this->delete($photo);
+//            }
+//        }
+
+        $em->persist($album);
+        $em->remove($album);
+        $em->flush();
+        
+        return $view->setData(array('success'=>'Album was deleted'));
+    }
+
     public function like($photo) {
 
         $em = $this->injector->getDoctrine()->getManager();

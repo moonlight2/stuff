@@ -134,7 +134,6 @@ class PhotoApiController extends RESTController implements GenericRestApi {
 
         return $this->handle($this->get('photo_service')->processAvatarForm(new Photo()));
     }
-    
 
     /**
      * @Route("/logged/api/account/{acc_id}/photos/album/{aName}", requirements={"acc_id" = "\d+"})
@@ -142,25 +141,33 @@ class PhotoApiController extends RESTController implements GenericRestApi {
      */
     public function createAlbumAction($acc_id, $aName) {
 
-        $photo = new Photo();
-        $photo->setAccount($this->get('security.context')->getToken()->getUser());
-        $photo->createAlbum($aName);
-        return $this->handle($this->getView(array('success'=>'Album '.$aName.' was created' )));
+        $acc = $this->get('security.context')->getToken()->getUser();
+
+        return $this->handle($this->get('photo_service')->createAlbum($aName));
     }
-    
+
     /**
-     * @Route("/logged/api/account/{acc_id}/photos/album/{aName}", requirements={"acc_id" = "\d+"})
+     * @Route("/logged/api/account/{acc_id}/photos/album/{id}", requirements={"acc_id" = "\d+"})
      * @Method({"DELETE"})
      */
-    public function deleteAlbumAction($acc_id, $aName) {
+    public function deleteAlbumAction($acc_id, $id) {
 
-        if ($aName == 'avatar' || $aName == 'thumb') {
-            return $this->handle($this->getView(array('error'=>'Access denied')));
+//        if ($aName == 'avatar' || $aName == 'thumb') {
+//            return $this->handle($this->getView(array('error' => 'Access denied')));
+//        }
+
+        $album = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:PhotoAlbum')->find($id);
+        
+        if (NULL == $album) {
+             return $this->handle($this->getView(array('error' => 'Album not found.')));
         }
-        $photo = new Photo();
-        $photo->setAccount($this->get('security.context')->getToken()->getUser());
-        $photo->createAlbum($aName);
-        return $this->handle($this->getView(array('success'=>'Album '.$aName.' was created' )));
+        
+        if ($this->get('security.context')->isGranted('DELETE', $album)) {
+            return $this->handle($this->get('photo_service')->deleteAlbum($album));
+        } else {
+            return $this->handle($this->getView(array('error' => 'Access denied.')));
+        }
     }
 
 }
