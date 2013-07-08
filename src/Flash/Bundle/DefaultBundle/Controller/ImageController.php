@@ -48,7 +48,7 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         }
 
         header('Content-Type: image/jpeg');
-        readfile($image->getAbsoluteThumbnailPath());
+        readfile($image->getAbsoluteAlbumPath('thumb'));
         exit();
     }
     
@@ -70,7 +70,7 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         }
 
         header('Content-Type: image/jpeg');
-        readfile($image->getAbsoluteAvatarPath());
+        readfile($image->getAbsoluteAlbumPath('avatar'));
         exit();
     }
 

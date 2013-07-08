@@ -49,8 +49,18 @@ class PhotoApiController extends RESTController implements GenericRestApi {
      */
     public function postAction() {
 
-        return $this->handle($this->get('photo_service')->processForm(new Photo()));
+        return $this->handle($this->get('photo_service')->processForm(new Photo(), 'busssik'));
     }
+
+//    /**
+//     * @Route("logged/api/account/{acc_id}/photos/album/{albumName}", requirements={"acc_id" = "\d+"})
+//     * @Route("")
+//     * @Method({"POST"})
+//     */
+//    public function postToEventAction($albumName) {
+//
+//        return $this->handle($this->get('photo_service')->processForm(new Photo()));
+//    }
 
     public function putAction($id) {
         
@@ -123,6 +133,34 @@ class PhotoApiController extends RESTController implements GenericRestApi {
         }
 
         return $this->handle($this->get('photo_service')->processAvatarForm(new Photo()));
+    }
+    
+
+    /**
+     * @Route("/logged/api/account/{acc_id}/photos/album/{aName}", requirements={"acc_id" = "\d+"})
+     * @Method({"POST"})
+     */
+    public function createAlbumAction($acc_id, $aName) {
+
+        $photo = new Photo();
+        $photo->setAccount($this->get('security.context')->getToken()->getUser());
+        $photo->createAlbum($aName);
+        return $this->handle($this->getView(array('success'=>'Album '.$aName.' was created' )));
+    }
+    
+    /**
+     * @Route("/logged/api/account/{acc_id}/photos/album/{aName}", requirements={"acc_id" = "\d+"})
+     * @Method({"DELETE"})
+     */
+    public function deleteAlbumAction($acc_id, $aName) {
+
+        if ($aName == 'avatar' || $aName == 'thumb') {
+            return $this->handle($this->getView(array('error'=>'Access denied')));
+        }
+        $photo = new Photo();
+        $photo->setAccount($this->get('security.context')->getToken()->getUser());
+        $photo->createAlbum($aName);
+        return $this->handle($this->getView(array('success'=>'Album '.$aName.' was created' )));
     }
 
 }

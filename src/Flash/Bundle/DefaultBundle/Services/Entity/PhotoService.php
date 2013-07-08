@@ -9,7 +9,7 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class PhotoService extends CommonService {
 
-    public function processForm($photo) {
+    public function processForm($photo, $albumName = NULL) {
 
         $request = $this->injector->getRequest();
         $em = $this->injector->getDoctrine()->getManager();
@@ -28,6 +28,10 @@ class PhotoService extends CommonService {
             $photo->setFile($file);
             $photo->setAccount($acc);
 
+            if (NULL != $albumName) {
+                $photo->setAlbum($albumName);
+            }
+
             $em->persist($photo);
             $em->flush();
 
@@ -44,8 +48,7 @@ class PhotoService extends CommonService {
         }
         return $view->setData(array('success' => 'true', 'photo' => $photo));
     }
-    
-    
+
     public function processAvatarForm($photo) {
 
         $request = $this->injector->getRequest();
@@ -67,7 +70,7 @@ class PhotoService extends CommonService {
             $photo->setAvatar(true);
 
             $em->persist($photo);
-            
+
             $em->flush();
 
             if ($request->getMethod() == 'POST') {
@@ -112,7 +115,7 @@ class PhotoService extends CommonService {
         $view = View::create();
 
         if ($this->context->isGranted('DELETE', $photo)) {
-            
+
             if ($photo->getRating()->count() > 0) {
                 $accs = $photo->getRating()->getValues();
                 foreach ($accs as $acc) {

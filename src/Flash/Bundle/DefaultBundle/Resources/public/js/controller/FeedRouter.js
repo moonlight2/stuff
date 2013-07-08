@@ -18,7 +18,7 @@ $(document).ready(function() {
         uploaderInit: function() {
             var self = this;
             $('#triggerUpload').click(function() {
-                UploaderModel.setEndpoint('newendpoint');
+                UploaderModel.setEndpoint('logged/api/account/'+own_id+'/photos/album/garbage');
                 UploaderModel.uploadStoredFiles();
             });
         },

@@ -53,6 +53,14 @@ class Photo implements Estimable {
      * @Expose
      */
     protected $path;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="album", type="string", length=255)
+     * @Expose
+     */
+    protected $photoAlbum;
 
     /**
      * @OneToMany(targetEntity="Account", mappedBy="photoLike")
@@ -71,6 +79,12 @@ class Photo implements Estimable {
      * @ManyToOne(targetEntity="Account", inversedBy="photos")
      */
     protected $account;
+    
+    /**
+     *
+     * @ManyToOne(targetEntity="PhotoAlbum", inversedBy="photos")
+     */
+    protected $album;
 
     /**
      * @var boolean
@@ -115,7 +129,7 @@ class Photo implements Estimable {
         // be automatically thrown by move(). This will properly prevent
         // the entity from being persisted to the database on error
 
-        $this->getFile()->move($this->getUploadRootDir(), $this->path);
+        $this->getFile()->move($this->getUploadRootDir(), $this->path); 
 
         // check if we have an old image
 //        if (isset($this->temp)) {
@@ -138,27 +152,37 @@ class Photo implements Estimable {
     }
 
     public function createThumbnail() {
-
-        if (!file_exists($this->getUploadRootDir() . '/thumb')) {
-            mkdir($this->getUploadRootDir() . '/thumb');
-        }
+        
+        $this->createAlbum('thumb');
 
         $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
         $image->load($this->getAbsolutePath());
         $image->resizeToWidth(150);
-        $image->save($this->getAbsoluteThumbnailPath());
+        $image->save($this->getAbsoluteAlbumPath('thumb'));
+    }
+
+    public function createAlbum($aName) {
+        
+        if (!file_exists($this->getUploadRootDir() . '/' . $aName)) {
+            mkdir($this->getUploadRootDir() . '/' . $aName);
+        }
+    }
+    
+    public function deleteAlbum($aName) {
+        
+        if (!file_exists($this->getUploadRootDir() . '/' . $aName)) {
+            mkdir($this->getUploadRootDir() . '/' . $aName);
+        }
     }
 
     public function createAvatar() {
 
-        if (!file_exists($this->getUploadRootDir() . '/avatar')) {
-            mkdir($this->getUploadRootDir() . '/avatar');
-        }
+        $this->createAlbum('avatar');
 
         $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
         $image->load($this->getAbsolutePath());
         $image->resizeToWidth(150);
-        $image->save($this->getAbsoluteAvatarPath());
+        $image->save($this->getAbsoluteAlbumPath('avatar'));
     }
 
     /**
@@ -167,38 +191,35 @@ class Photo implements Estimable {
     public function removeUpload() {
 
         if ($this->isAvatar() == TRUE) {
-            if ($file = $this->getAbsoluteAvatarPath()) {
+            if ($file = $this->getAbsoluteAlbumPath('avatar')) {
                 unlink($file);
             }
         } else {
             if (NULL != $this->getAbsolutePath()) {
                 unlink($this->getAbsolutePath());
             }
-            if (NULL != $this->getAbsoluteThumbnailPath()) {
-                unlink($this->getAbsoluteThumbnailPath());
+            if (NULL != $this->getAbsoluteAlbumPath('thumb')) {
+                unlink($this->getAbsoluteAlbumPath('thumb'));
             }
         }
     }
-    
+
     public function removePhotos() {
-            if (NULL != $this->getAbsolutePath()) {
-                unlink($this->getAbsolutePath());
-            }
-            if (NULL != $this->getAbsoluteThumbnailPath()) {
-                unlink($this->getAbsoluteThumbnailPath());
-            }
+        if (NULL != $this->getAbsolutePath()) {
+            unlink($this->getAbsolutePath());
+        }
+        if (NULL != $this->getAbsoluteAlbumPath('thumb')) {
+            unlink($this->getAbsoluteAlbumPath('thumb'));
+        }
     }
 
     public function getAbsolutePath() {
         return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
-    public function getAbsoluteThumbnailPath() {
-        return null === $this->path ? null : $this->getUploadRootDir() . '/thumb/' . $this->path;
-    }
-
-    public function getAbsoluteAvatarPath() {
-        return null === $this->path ? null : $this->getUploadRootDir() . '/avatar/' . $this->path;
+    
+    public function getAbsoluteAlbumPath($aName) {
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $aName . '/' . $this->path;
     }
 
     public function getWebPath() {
@@ -208,13 +229,17 @@ class Photo implements Estimable {
     public function getUploadRootDir() {
         // the absolute directory path where uploaded
         // documents should be saved
+        
         return __DIR__ . '/../../../../uploads/' . $this->getUploadDir();
     }
 
     protected function getUploadDir() {
+        
+        $dir = (NULL != $this->getAlbum())? "/".$this->album : "";
+        
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        return 'photos/' . $this->getAccount()->getId();
+        return 'photos/' . $this->getAccount()->getId().$dir;;
     }
 
     /**
@@ -287,6 +312,16 @@ class Photo implements Estimable {
      */
     public function getPath() {
         return $this->path;
+    }
+    
+    public function getAlbum() {
+        return $this->account;
+    }
+    
+    public function setAlbum($album) {
+        $this->album = $album;
+        
+        return $this;
     }
 
     /**
@@ -431,4 +466,27 @@ class Photo implements Estimable {
         return $this->avatar;
     }
 
+
+    /**
+     * Set photoAlbum
+     *
+     * @param string $photoAlbum
+     * @return Photo
+     */
+    public function setPhotoAlbum($photoAlbum)
+    {
+        $this->photoAlbum = $photoAlbum;
+    
+        return $this;
+    }
+
+    /**
+     * Get photoAlbum
+     *
+     * @return string 
+     */
+    public function getPhotoAlbum()
+    {
+        return $this->photoAlbum;
+    }
 }
