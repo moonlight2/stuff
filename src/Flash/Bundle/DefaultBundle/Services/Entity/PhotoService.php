@@ -9,13 +9,19 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 class PhotoService extends CommonService {
 
-    public function processForm($photo, $albumName = NULL) {
+    public function processForm($photo, $albumId = NULL) {
 
         $request = $this->injector->getRequest();
         $em = $this->injector->getDoctrine()->getManager();
         $form = $this->injector->getForm()->create(new PhotoType(), $photo);
         $view = View::create();
+        $album = $em->getRepository('FlashDefaultBundle:Album')->find($albumId);
 
+        
+        if (NULL == $album) {
+            return $view->setData(array('error'=>'Not found'));
+        }
+        
         $form->bind(array(
             'file' => $request->files->get('qqfile')
         ));
@@ -27,11 +33,10 @@ class PhotoService extends CommonService {
             $file = $request->files->get('qqfile');
             $photo->setFile($file);
             $photo->setAccount($acc);
+            $photo->setAlbum($album);
+            $album->addPhoto($photo);
 
-            if (NULL != $albumName) {
-                $photo->setAlbum($albumName);
-            }
-
+            $em->persist($album);
             $em->persist($photo);
             $em->flush();
 
@@ -93,9 +98,9 @@ class PhotoService extends CommonService {
         $em = $this->injector->getDoctrine()->getManager();
         $acc = $this->context->getToken()->getUser();
 
-        $album = new \Flash\Bundle\DefaultBundle\Entity\PhotoAlbum($aName);
+        $album = new \Flash\Bundle\DefaultBundle\Entity\Album($aName);
         $album->setAccount($acc);
-        $acc->addPhotoAlbum($album);
+        $acc->addAlbum($album);
 
         $em->persist($album);
         $em->persist($acc);

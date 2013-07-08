@@ -157,9 +157,9 @@ class Account implements AdvancedUserInterface {
     protected $photos;
     
     /**
-     * @OneToMany(targetEntity="PhotoAlbum", mappedBy="account")
+     * @OneToMany(targetEntity="Album", mappedBy="account")
      */
-    protected $photoAlbums;
+    protected $albums;
 
     /**
      * @OneToMany(targetEntity="CustomRole", mappedBy="account")
@@ -365,7 +365,7 @@ class Account implements AdvancedUserInterface {
     public function getRoles() {
 
         $roles = $this->roles->getValues();
-
+        $roleNames = array();
         foreach ($roles as $role) {
             $rolesNames[] = $role->getRole();
         }
@@ -945,9 +945,9 @@ class Account implements AdvancedUserInterface {
      * @param \Flash\Bundle\DefaultBundle\Entity\PhotoAlbum $photoAlbums
      * @return Account
      */
-    public function addPhotoAlbum(\Flash\Bundle\DefaultBundle\Entity\PhotoAlbum $photoAlbums)
+    public function addAlbum(\Flash\Bundle\DefaultBundle\Entity\Album $album)
     {
-        $this->photoAlbums[] = $photoAlbums;
+        $this->albums[] = $album;
     
         return $this;
     }
@@ -955,11 +955,11 @@ class Account implements AdvancedUserInterface {
     /**
      * Remove photoAlbums
      *
-     * @param \Flash\Bundle\DefaultBundle\Entity\PhotoAlbum $photoAlbums
+     * @param \Flash\Bundle\DefaultBundle\Entity\PhotoAlbum 
      */
-    public function removePhotoAlbum(\Flash\Bundle\DefaultBundle\Entity\PhotoAlbum $photoAlbums)
+    public function removeAlbum(\Flash\Bundle\DefaultBundle\Entity\Album $album)
     {
-        $this->photoAlbums->removeElement($photoAlbums);
+        $this->albums->removeElement($album);
     }
 
     /**
@@ -967,8 +967,8 @@ class Account implements AdvancedUserInterface {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPhotoAlbums()
+    public function getAlbums()
     {
-        return $this->photoAlbums;
+        return $this->albums;
     }
 }

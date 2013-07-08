@@ -43,13 +43,13 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("logged/api/account/{acc_id}/photos", requirements={"acc_id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/album/{alb_id}/photos", requirements={"acc_id" = "\d+", "alb_id" = "\d+"})
      * @Route("")
      * @Method({"POST"})
      */
-    public function postAction() {
+    public function postAction($alb_id = null) {
 
-        return $this->handle($this->get('photo_service')->processForm(new Photo(), 'busssik'));
+        return $this->handle($this->get('photo_service')->processForm(new Photo(), $alb_id));
     }
 
 //    /**

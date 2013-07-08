@@ -54,13 +54,6 @@ class Photo implements Estimable {
      */
     protected $path;
     
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="album", type="string", length=255)
-     * @Expose
-     */
-    protected $photoAlbum;
 
     /**
      * @OneToMany(targetEntity="Account", mappedBy="photoLike")
@@ -82,9 +75,11 @@ class Photo implements Estimable {
     
     /**
      *
-     * @ManyToOne(targetEntity="PhotoAlbum", inversedBy="photos")
+     * @ManyToOne(targetEntity="Album", inversedBy="photos")
      */
     protected $album;
+    
+    protected $photoAlbum;
 
     /**
      * @var boolean
@@ -235,13 +230,22 @@ class Photo implements Estimable {
 
     protected function getUploadDir() {
         
-        //$dir = (NULL != $this->getAlbum())? "/".$this->album : "";
-        
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        return 'photos/' . $this->getAccount()->getId(). "/" .$this->getPhotoAlbum()->getName();;
+        return 'photos/' . $this->getAccount()->getId(). "/" .$this->getAlbum()->getName();;
     }
 
+    
+    public function getAlbum() {
+        return $this->album;
+    }
+    
+    public function setAlbum($album) {
+        $this->album = $album;
+        
+        return $this;
+    }
+    
     /**
      * Get id
      *
@@ -312,16 +316,6 @@ class Photo implements Estimable {
      */
     public function getPath() {
         return $this->path;
-    }
-    
-    public function getAlbum() {
-        return $this->account;
-    }
-    
-    public function setAlbum($album) {
-        $this->album = $album;
-        
-        return $this;
     }
 
     /**
@@ -466,27 +460,4 @@ class Photo implements Estimable {
         return $this->avatar;
     }
 
-
-    /**
-     * Set photoAlbum
-     *
-     * @param string $photoAlbum
-     * @return Photo
-     */
-    public function setPhotoAlbum($photoAlbum)
-    {
-        $this->photoAlbum = $photoAlbum;
-    
-        return $this;
-    }
-
-    /**
-     * Get photoAlbum
-     *
-     * @return string 
-     */
-    public function getPhotoAlbum()
-    {
-        return $this->photoAlbum;
-    }
 }

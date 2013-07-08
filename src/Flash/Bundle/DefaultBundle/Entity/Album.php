@@ -13,12 +13,12 @@ use JMS\Serializer\Annotation\Expose;
 /**
  * Group
  *
- * @ORM\Table(name="photo_album")
+ * @ORM\Table(name="album")
  * @ORM\Entity
  * @ExclusionPolicy("all")
  * @ORM\HasLifecycleCallbacks
  */
-class PhotoAlbum {
+class Album {
 
     /**
      * @var integer
@@ -40,7 +40,7 @@ class PhotoAlbum {
     protected $name;
 
     /**
-     * @OneToMany(targetEntity="Photo", mappedBy="photoAlbum")
+     * @OneToMany(targetEntity="Photo", mappedBy="album")
      */
     protected $photos;
 
