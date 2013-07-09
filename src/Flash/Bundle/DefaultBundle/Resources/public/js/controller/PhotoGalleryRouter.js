@@ -17,7 +17,7 @@ $(document).ready(function() {
         showPhotos: function() {
             var self = this;
             this.photos = new PhotoCollection();
-            this.photos.url = '../logged/api/account/' + acc_id + '/photos';
+            this.photos.url = '../logged/api/account/' + acc_id + '/album/1/photos';
             $('#thumbs').html('');
             this.photos.fetch({success: function(data) {
                     $('#thumbs').append(new PhotoListView({model: self.photos}).render().el);
@@ -26,7 +26,7 @@ $(document).ready(function() {
         photoDetails: function(id) {
             this.before(function() {
                 var photo = this.photos.get(id);
-                photo.rootUrl = '../logged/api/account/' + acc_id + '/photos';
+                photo.rootUrl = '../logged/api/account/' + acc_id + '/album/1/photos';
                 this.showView('#thumbs', new PhotoView({model: photo}));
             });
         },

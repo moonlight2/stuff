@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
 class PhotoRepository extends EntityRepository {
 
     public function getByAccountAndPath($acc, $path) {
-        
+
         $list = $this->getEntityManager()
                 ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
                                        WHERE p.account = :account
@@ -23,7 +23,7 @@ class PhotoRepository extends EntityRepository {
     }
 
     public function findByAccountAndId($acc, $id) {
-        
+
         $list = $this->getEntityManager()
                 ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
                                        WHERE p.account = :account
@@ -33,9 +33,9 @@ class PhotoRepository extends EntityRepository {
                 ->getResult();
         return (sizeof($list) > 0) ? $list[0] : null;
     }
-    
+
     public function findAllByAccount($acc) {
-        
+
         $list = $this->getEntityManager()
                 ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
                                        WHERE p.account = :account AND p.avatar = 0')
@@ -43,9 +43,22 @@ class PhotoRepository extends EntityRepository {
                 ->getResult();
         return (sizeof($list) > 0) ? $list : null;
     }
-    
+
+    public function findAllByAccountAndAlbum($acc, $alb) {
+
+        $list = $this->getEntityManager()
+                ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
+                                       WHERE p.account = :account
+                                       AND p.album = :album 
+                                       AND p.avatar = 0')
+                ->setParameter('account', $acc)
+                ->setParameter('album', $alb)
+                ->getResult();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+
     public function getAvatarByAccount($acc) {
-        
+
         $list = $this->getEntityManager()
                 ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
                                        WHERE p.account = :account AND p.avatar = 1')
@@ -53,9 +66,9 @@ class PhotoRepository extends EntityRepository {
                 ->getResult();
         return (sizeof($list) > 0) ? $list[0] : null;
     }
-    
+
     public function getAvatarsByAccount($acc) {
-        
+
         $list = $this->getEntityManager()
                 ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
                                        WHERE p.account = :account AND p.avatar = 1')
