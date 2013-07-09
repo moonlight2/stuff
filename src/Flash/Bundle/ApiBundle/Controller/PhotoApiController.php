@@ -155,7 +155,7 @@ class PhotoApiController extends RESTController implements GenericRestApi {
 //        }
 
         $album = $this->getDoctrine()->getManager()
-                        ->getRepository('FlashDefaultBundle:PhotoAlbum')->find($id);
+                        ->getRepository('FlashDefaultBundle:Album')->find($id);
 
         if (NULL == $album) {
             return $this->handle($this->getView(array('error' => 'Album not found.')));

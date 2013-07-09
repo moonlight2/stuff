@@ -119,12 +119,12 @@ class PhotoService extends CommonService {
         $em = $this->injector->getDoctrine()->getManager();
         $view = View::create();
 
-//        $photos = $album->getPhotos()->getValues();
-//        if ($album->getPhotos()->count() > 0) {
-//            foreach ($photos as $photo) {
-//                $this->delete($photo);
-//            }
-//        }
+        $photos = $album->getPhotos()->getValues();
+        if ($album->getPhotos()->count() > 0) {
+            foreach ($photos as $photo) {
+                $this->delete($photo);
+            }
+        }
 
         $em->persist($album);
         $em->remove($album);

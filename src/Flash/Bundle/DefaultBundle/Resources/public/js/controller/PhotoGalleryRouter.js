@@ -17,7 +17,7 @@ $(document).ready(function() {
         showPhotos: function() {
             var self = this;
             this.photos = new PhotoCollection();
-            this.photos.url = '../logged/api/account/' + acc_id + '/album/1/photos';
+            this.photos.url = '../logged/api/account/' + acc_id + '/album/3/photos';
             $('#thumbs').html('');
             this.photos.fetch({success: function(data) {
                     $('#thumbs').append(new PhotoListView({model: self.photos}).render().el);
