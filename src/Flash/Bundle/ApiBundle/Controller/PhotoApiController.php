@@ -15,7 +15,7 @@ use Flash\Bundle\DefaultBundle\Entity\Photo;
 class PhotoApiController extends RESTController implements GenericRestApi {
 
     /**
-     * @Route("logged/api/account/{acc_id}/album/{alb_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+", "alb_id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/albums/{alb_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+", "alb_id" = "\d+"})
      * @Method({"GET"})
      */
     public function getAction($acc_id, $id = NULL, $alb_id = null) {
@@ -44,7 +44,7 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("logged/api/account/{acc_id}/album/{alb_id}/photos", requirements={"acc_id" = "\d+", "alb_id" = "\d+"})
+     * @Route("logged/api/account/{acc_id}/albums/{alb_id}/photos", requirements={"acc_id" = "\d+", "alb_id" = "\d+"})
      * @Route("")
      * @Method({"POST"})
      */
@@ -64,7 +64,7 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     *  @Route("logged/api/account/{acc_id}/album/{alb_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+", "alb_id" = "\d+"})
+     *  @Route("logged/api/account/{acc_id}/albums/{alb_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+", "alb_id" = "\d+"})
      * @Method({"DELETE"})
      */
     public function deleteAction($acc_id, $id = NULL, $alb_id = NULL) {
@@ -83,7 +83,7 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     *  @Route("logged/api/account/{acc_id}/album/{alb_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+", "alb_id" = "\d+"})
+     *  @Route("logged/api/account/{acc_id}/albums/{alb_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+", "alb_id" = "\d+"})
      * @Method({"PUT"})
      */
     public function likeAction($acc_id, $id, $alb_id) {
@@ -134,7 +134,35 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/logged/api/account/{acc_id}/album/{aName}", requirements={"acc_id" = "\d+"})
+     * @Route("/logged/api/account/{acc_id}/albums/{id}", requirements={"id" = "\d+", "acc_id" = "\d+"})
+     * @Method({"GET"})
+     */
+    public function getAlbumAction($acc_id, $id = NULL) {
+
+        $em = $this->getDoctrine()->getManager();
+        $view = View::create();
+        $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+
+        if (NULL === $acc) {
+            return $this->handle($view->setData(array('error' => 'Not found')));
+        }
+
+        if (NULL !== $id) {
+            $alb = $em->getRepository('FlashDefaultBundle:Album')->find($id);
+            if (NULL != $alb) {
+                $view->setData($alb);
+            } else {
+                $view->setData(array('error' => 'Not found'));
+            }
+        } else {
+            $albums = $em->getRepository('FlashDefaultBundle:Album')->findAllByAccount($acc);
+            $view->setData($albums);
+        }
+        return $this->handle($view);
+    }
+
+    /**
+     * @Route("/logged/api/account/{acc_id}/albums/{aName}", requirements={"acc_id" = "\d+"})
      * @Method({"POST"})
      */
     public function createAlbumAction($acc_id, $aName) {
@@ -145,14 +173,10 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * @Route("/logged/api/account/{acc_id}/album/{id}", requirements={"acc_id" = "\d+"})
+     * @Route("/logged/api/account/{acc_id}/albums/{id}", requirements={"acc_id" = "\d+"})
      * @Method({"DELETE"})
      */
     public function deleteAlbumAction($acc_id, $id) {
-
-//        if ($aName == 'avatar' || $aName == 'thumb') {
-//            return $this->handle($this->getView(array('error' => 'Access denied')));
-//        }
 
         $album = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Album')->find($id);

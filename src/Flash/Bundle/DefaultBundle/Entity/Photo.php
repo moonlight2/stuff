@@ -232,7 +232,7 @@ class Photo implements Estimable {
         
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        return 'photos/' . $this->getAccount()->getId(). "/" .$this->getAlbum()->getName();;
+        return 'photos/' . $this->getAccount()->getId(). "/" .$this->getAlbum()->getDirname();;
     }
 
     
