@@ -1,10 +1,12 @@
-
+window.hash = window.location.hash.substring(1);
 
 window.PhotoView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($('#image-details-tpl').html());
+        this.alb_id = (hash.split('/'))[1];
     },
     render: function(eventName) {
+
         $(this.el).html(this.template(this.model.toJSON()));
         this.showComments();
         return this;
@@ -25,7 +27,7 @@ window.PhotoView = Backbone.View.extend({
         this.comments.url = '../logged/api/account/'
                 + acc_id +
                 '/photo/' + 
-                (hash.split('/'))[1] + 
+                this.model.get('id') + 
                 '/comment';
         console.log(this.comments);
 
@@ -50,7 +52,7 @@ window.PhotoView = Backbone.View.extend({
         var comment = this.comments.get(id);
         var hash = window.location.hash.substring(1);
 
-        comment.url = '../logged/api/account/' + acc_id +'/photo/' + (hash.split('/'))[1] + '/comment/' + id;
+        comment.url = '../logged/api/account/' + acc_id +'/photo/' + (hash.split('/'))[3] + '/comment/' + id;
 
         comment.destroy({
             success: function() {
@@ -80,9 +82,10 @@ window.PhotoView = Backbone.View.extend({
         return false;
     },
     nextPhoto: function() {
+        console.log('Next photo');
         app.photos.setElement(this.model);
         var id = app.photos.next().getElement().id;
-        app.navigate('#photo/' + id, true);
+        app.navigate('#album/' + this.alb_id + '/photo/' + id, true);
         return false;
     },
     commentPhoto: function(e) {
@@ -92,7 +95,7 @@ window.PhotoView = Backbone.View.extend({
         var hash = window.location.hash.substring(1);
         
         this.photoComment = new PhotoCommentModel();
-        this.photoComment.url = '../logged/api/account/' + acc_id +'/photo/' + (hash.split('/'))[1] + '/comment';
+        this.photoComment.url = '../logged/api/account/' + acc_id +'/photo/' + (hash.split('/'))[3] + '/comment';
 
         this.button = e.target;
         this.button.disabled = true;

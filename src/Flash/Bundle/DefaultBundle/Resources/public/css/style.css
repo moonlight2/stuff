@@ -21,6 +21,15 @@ root {
     float: right;
 }
 
+.photo-album {
+    padding: 15px;
+    border: 1px solid;
+    border-radius: 7px;
+    height: 100px;
+    width: 180px;
+    float: left;
+}
+
 .qq-upload-list ul {
     height: 20px;
 width: 180px;

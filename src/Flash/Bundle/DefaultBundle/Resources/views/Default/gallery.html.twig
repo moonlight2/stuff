@@ -9,7 +9,7 @@
 </script>
 
 <script type="text/template" id="image-list-tpl">
-    <a class="thumb"  title="<%= name %>" href='#photo/<%= id %>'>
+    <a title="<%= name %>">
         <img src="http://localhost/stuff/web/app_dev.php/image/thumb/{{ acc_id }}/<%= path %>"/>
     </a>
 </script>
@@ -24,6 +24,14 @@
     <p><b><%= account.first_name %> <%= account.last_name %></b> Пишет:</p>
     <p><%= text %></p>
     <button class='btn comment-delete' val='<%= id %>'>Удалить</button>
+</script>
+
+<script type="text/template" id="photo-album-tpl">
+    <div class = 'photo-album'>
+        <p><%= name %></p>
+        <button class='btn album-delete' val=''>Удалить</button>
+        <button class='btn album-open' val=''>Открыть</button>
+    </div>
 </script>
 
 <script type="text/template" id="image-details-tpl">

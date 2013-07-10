@@ -2,7 +2,7 @@
 window.UploaderModel = new qq.FineUploader({
     element: $('#manual-fine-uploader')[0],
     request: {
-        endpoint: '../logged/api/account/2/albums/8/photos',
+        endpoint: '../logged/api/account/' + acc_id + '/albums/' + (hash.split('/'))[1] + '/photos',
         customHeaders: {
             Accept: 'application/json'
         }
