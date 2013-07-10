@@ -116,7 +116,7 @@ class PhotoService extends CommonService {
         $acl->grant($album, MaskBuilder::MASK_VIEW);
         $acl->grant($album, MaskBuilder::MASK_DELETE);
 
-        return $view->setData(array('success' => 'true'));
+        return $view->setData($album);
     }
 
     public function deleteAlbum($album) {

@@ -2,17 +2,26 @@
 
 window.PhotoAlbumListView = Backbone.View.extend({
     tagName: 'div',
+    initialize: function() {
+        this.model.bind('reset', this.render, this);
+        this.model.bind('add', this.appendLast, this);
+    },
     render: function(eventName) {
         _.each(this.model.models, function(album) {
             $(this.el).attr('class', 'photo-albums').append(new PhotoAlbumListItemView({model: album}).render().el);
         }, this);
         return this;
     },
+    appendLast: function() {
+        var album = this.model.models[this.model.length - 1];
+        $(this.el).attr('class', 'photo-albums').append(new PhotoAlbumListItemView({model: album}).render().el);
+        return this;
+    },
 });
 
 window.PhotoAlbumListItemView = Backbone.View.extend({
     tagName: 'div',
-    template: _.template($('#photo-album-tpl').html()),
+    template: _.template($('#photo-album-list-tpl').html()),
     render: function() {
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
@@ -27,7 +36,6 @@ window.PhotoAlbumListItemView = Backbone.View.extend({
     },
     deleteAlbum: function(e) {
 
-        console.log(this);
         this.model.url = '../logged/api/account/' + acc_id + '/albums/' + this.model.get('id');
         this.model.destroy({
             success: function() {

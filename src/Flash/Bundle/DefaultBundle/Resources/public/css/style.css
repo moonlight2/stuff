@@ -16,6 +16,12 @@ root {
 
 }
 
+#album-form {
+float: left;
+position: absolute;
+top: 177px;
+}
+
 #uploader {
     width: 150px;
     float: right;
@@ -35,7 +41,7 @@ root {
 
 .qq-upload-list ul {
     height: 20px;
-width: 180px;
+    width: 180px;
 }
 
 .noUiSlider {
@@ -59,7 +65,7 @@ width: 180px;
     display: none;
     width: 100px;
     height: 50px;
-    
+
     position: relative;
     top: 5px;
     padding: 10px;

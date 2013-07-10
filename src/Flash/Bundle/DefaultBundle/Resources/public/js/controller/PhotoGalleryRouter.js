@@ -13,7 +13,7 @@ $(document).ready(function() {
             console.log('Starting gallery router2');
             console.log(this);
             this.uploaderInit();
-
+            this.showAlbumForm();
         },
         galleryInit: function() {
         },
@@ -23,9 +23,11 @@ $(document).ready(function() {
             this.albums.url = '../logged/api/account/' + acc_id + '/albums';
             $('#thumbs').html('');
             this.albums.fetch({success: function(data) {
-                    console.log(self.albums);
                     $('#thumbs').append(new PhotoAlbumListView({model: self.albums}).render().el);
                 }});
+        },
+        showAlbumForm: function(){
+            $('#album-form').append(new AlbumView({model: new PhototAlbumModel()}).render().el);
         },
         showPhotos: function(id) {
             

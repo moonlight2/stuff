@@ -30,7 +30,7 @@
     <button class='btn comment-delete' val='<%= id %>'>Удалить</button>
 </script>
 
-<script type="text/template" id="photo-album-tpl">
+<script type="text/template" id="photo-album-list-tpl">
     <div class = 'photo-album'>
         <p><%= name %></p>
         <div>
@@ -38,6 +38,22 @@
         </div>
         <button class='btn album-delete' val=''>Удалить</button>
     </div>
+</script>
+
+
+<script type="text/template" id="photo-album-tpl">
+        <div class="control-group">
+            <label class='control-label'>Название:</label>
+            <div class='controls'>
+                <input type="text" id="name" name="name"  value=""/>
+            </div>
+            <span class="help-inline" id='error-name'></span>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <button id='create-album' class="btn">Создать</button>
+            </div>
+        </div>        
 </script>
 
 <script type="text/template" id="image-details-tpl">
@@ -97,6 +113,7 @@
 
 
     <div class="content">
+        <div id='album-form'></div>
         <div id="thumbs" class="navigation">
         </div>
         <div class="slideshow-container">
