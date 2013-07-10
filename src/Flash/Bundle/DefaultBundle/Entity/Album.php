@@ -44,7 +44,6 @@ class Album {
      * @var string
      *
      * @ORM\Column(name="dirname", type="string", length=255)
-     * @Expose
      */
     protected $dirname;
 
@@ -58,6 +57,13 @@ class Album {
      * @ManyToOne(targetEntity="Account", inversedBy="photoAlbums")
      */
     protected $account;
+    
+    /**
+     *
+     * @ORM\Column(name="peview", type="string", length=255, nullable=true)
+     * @Expose
+     */
+    protected $preview = '64d7889dbcf0cbd60b2f443da668eba2d26fbda6.jpeg';
 
     /**
      * @var date
@@ -81,6 +87,10 @@ class Album {
 
         $this->setDirname(sha1(uniqid(mt_rand(), true)));
         
+        if (!file_exists($this->getBaseAccountDir())) {
+            mkdir($this->getBaseAccountDir());
+        }
+
         if (!file_exists($this->getUploadRootDir())) {
             mkdir($this->getUploadRootDir());
         }
@@ -141,6 +151,10 @@ class Album {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
         return 'photos/' . $this->getAccount()->getId() . "/" . $this->getDirname();
+    }
+    
+    public function getBaseAccountDir() {
+        return __DIR__ . '/../../../../uploads/photos/' . $this->getAccount()->getId();
     }
 
     /**
@@ -266,4 +280,19 @@ class Album {
         return $this->dirname;
     }
 
+    
+    public function setPreview($preview) {
+        $this->preview = $preview;
+
+        return $this;
+    }
+
+    /**
+     * Get preview
+     *
+     * @return string 
+     */
+    public function getPreview() {
+        return $this->preview;
+    }
 }

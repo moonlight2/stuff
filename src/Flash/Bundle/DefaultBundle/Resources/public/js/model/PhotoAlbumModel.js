@@ -6,6 +6,7 @@ window.PhototAlbumModel = Backbone.Model.extend({
         "name": "",
         "date_regist": "",
         "rating": "",
+        "preview": ""
     }
 });
 

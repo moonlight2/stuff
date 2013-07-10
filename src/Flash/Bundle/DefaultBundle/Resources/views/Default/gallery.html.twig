@@ -14,6 +14,10 @@
     </a>
 </script>
 
+
+
+
+
 <script type="text/template" id="comment-list-tpl">
     <p><b><%= account.first_name %> <%= account.last_name %></b> Пишет:</p>
     <p><%= text %></p>
@@ -29,8 +33,10 @@
 <script type="text/template" id="photo-album-tpl">
     <div class = 'photo-album'>
         <p><%= name %></p>
+        <div>
+            <img class= 'album-open' src="http://localhost/stuff/web/app_dev.php/image/thumb/{{ acc_id }}/<%= preview %>"/>
+        </div>
         <button class='btn album-delete' val=''>Удалить</button>
-        <button class='btn album-open' val=''>Открыть</button>
     </div>
 </script>
 

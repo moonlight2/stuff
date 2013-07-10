@@ -19,6 +19,7 @@ window.PhotoAlbumListItemView = Backbone.View.extend({
     },
     initialize: function() {
         this.model.bind('change', this.render, this);
+        this.model.bind('destroy', this.close, this);
     },
     events: {
         'click .album-delete': 'deleteAlbum',
@@ -27,16 +28,16 @@ window.PhotoAlbumListItemView = Backbone.View.extend({
     deleteAlbum: function(e) {
 
         console.log(this);
-//        this.model.destroy({
-//            success: function() {
-//                console.log('destroyed');
-//            }
-//        });
+        this.model.url = '../logged/api/account/' + acc_id + '/albums/' + this.model.get('id');
+        this.model.destroy({
+            success: function() {
+                console.log('destroyed');
+            }
+        });
         return false;
     },
     openAlbum: function() {
         app.navigate('album/' + this.model.get('id'), true);
-        console.log('Open album');
     },
 });
 

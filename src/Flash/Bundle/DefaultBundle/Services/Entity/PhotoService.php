@@ -17,11 +17,11 @@ class PhotoService extends CommonService {
         $view = View::create();
         $album = $em->getRepository('FlashDefaultBundle:Album')->find($albumId);
 
-        
+
         if (NULL == $album) {
-            return $view->setData(array('error'=>'Not found'));
+            return $view->setData(array('error' => 'Not found'));
         }
-        
+
         $form->bind(array(
             'file' => $request->files->get('qqfile')
         ));
@@ -34,6 +34,11 @@ class PhotoService extends CommonService {
             $photo->setFile($file);
             $photo->setAccount($acc);
             $photo->setAlbum($album);
+            if ($album->getPhotos()->count() > 0) {
+                $photos = $album->getPhotos()->getValues();
+                $p = $photos[0];
+                $album->setPreview($p->getPath());
+            }
             $album->addPhoto($photo);
 
             $em->persist($album);
@@ -129,8 +134,8 @@ class PhotoService extends CommonService {
         $em->persist($album);
         $em->remove($album);
         $em->flush();
-        
-        return $view->setData(array('success'=>'Album was deleted'));
+
+        return $view->setData(array('success' => 'Album was deleted'));
     }
 
     public function like($photo) {
