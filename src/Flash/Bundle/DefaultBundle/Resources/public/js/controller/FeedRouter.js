@@ -7,7 +7,6 @@ $(document).ready(function() {
             "not_confirmed": "showNotConfirmed"
         },
         initialize: function() {
-            console.log('Starting Feed router');
             this.uploaderInit();
         },
         showNotConfirmed: function() {
@@ -15,6 +14,7 @@ $(document).ready(function() {
             $('#feed').css('display', 'none');
             return false;
         },
+
         uploaderInit: function() {
             var self = this;
             $('#triggerUpload').click(function() {

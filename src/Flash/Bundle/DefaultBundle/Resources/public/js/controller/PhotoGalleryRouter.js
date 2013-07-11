@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     window.hash = window.location.hash.substring(1);
-    
+
     window.PhotoGalleryRouter = Backbone.Router.extend({
         routes: {
             "": "showAlbums",
@@ -10,18 +10,21 @@ $(document).ready(function() {
             "album/:id": "showPhotos"
         },
         initialize: function() {
-            console.log('Starting gallery router2');
-            console.log(this);
+            var self = this;
             this.uploaderInit();
-            this.showAlbumForm();
-        },
-        galleryInit: function() {
+            $('#show-album-form').click(function() {
+                self.showAlbumForm();
+            });
         },
         showAlbums: function() {
-    
+
             $('#uploader').hide();
             $('#album-form').show();
-            
+            $('.nav-pills').show();
+
+            if (this.form)
+                this.form.close();
+
             var self = this;
             this.albums = new PhotoAlbumCollection();
             this.albums.url = '../logged/api/account/' + acc_id + '/albums';
@@ -30,14 +33,23 @@ $(document).ready(function() {
                     $('#thumbs').append(new PhotoAlbumListView({model: self.albums}).render().el);
                 }});
         },
-        showAlbumForm: function(){
-            $('#album-form').append(new AlbumView({model: new PhototAlbumModel()}).render().el);
+        showAlbumForm: function() {
+
+            var self = this;
+            if (this.form) {
+                this.form.close();
+                this.form = false;
+            } else {
+                this.form = new AlbumView({model: new PhototAlbumModel()});
+                $('#album-form').append(self.form.render().el);
+            }
         },
         showPhotos: function(id) {
-    
+
             $('#uploader').show();
             $('#album-form').hide();
-            
+            $('.nav-pills').hide();
+
             var self = this;
             this.photos = new PhotoCollection();
             this.photos.url = '../logged/api/account/' + acc_id + '/albums/' + id + '/photos';
@@ -47,9 +59,9 @@ $(document).ready(function() {
                 }});
         },
         photoDetails: function(a_id, id) {
-    
+
             $('#uploader').hide();
-            
+
             this.before(function() {
                 var photo = this.photos.get(id);
                 photo.rootUrl = '../logged/api/account/' + acc_id + '/albums/' + a_id + '/photos' + id;
@@ -57,7 +69,7 @@ $(document).ready(function() {
             });
         },
         uploaderInit: function() {
-            
+
             var self = this;
 
             $('#triggerUpload').click(function() {
