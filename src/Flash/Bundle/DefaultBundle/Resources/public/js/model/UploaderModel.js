@@ -1,4 +1,8 @@
 
+if (typeof (hash) == 'undefined') {
+    window.hash = '';
+}
+
 window.UploaderModel = new qq.FineUploader({
     element: $('#manual-fine-uploader')[0],
     request: {

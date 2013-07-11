@@ -96,6 +96,44 @@ class PhotoService extends CommonService {
         }
         return $view->setData(array('success' => 'true', 'photo' => $photo));
     }
+    
+    public function processToEventForm($photo) {
+
+        $request = $this->injector->getRequest();
+        $em = $this->injector->getDoctrine()->getManager();
+        $form = $this->injector->getForm()->create(new PhotoType(), $photo);
+        $view = View::create();
+
+        $form->bind(array(
+            'file' => $request->files->get('qqfile')
+        ));
+
+        if ($form->isValid()) {
+
+            $acc = $this->context->getToken()->getUser();
+
+            $file = $request->files->get('qqfile');
+            $photo->setFile($file);
+            $photo->setAccount($acc);
+            $photo->setGarbage(true);
+
+            $em->persist($photo);
+
+            $em->flush();
+
+            if ($request->getMethod() == 'POST') {
+                $acl = $this->injector->getAcl();
+                $acl->grant($photo, MaskBuilder::MASK_EDIT);
+                $acl->grant($photo, MaskBuilder::MASK_VIEW);
+                $acl->grant($photo, MaskBuilder::MASK_DELETE);
+            }
+            $response = $photo;
+        } else {
+            $view->setStatusCode(400);
+            $response = $this->getErrorMessages($form);
+        }
+        return $view->setData(array('success' => 'true', 'photo' => $photo));
+    }
 
     public function createAlbum($aName) {
 

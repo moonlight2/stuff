@@ -132,6 +132,19 @@ class PhotoApiController extends RESTController implements GenericRestApi {
 
         return $this->handle($this->get('photo_service')->processAvatarForm(new Photo()));
     }
+    
+    /**
+     * 
+     * @Route("/logged/api/account/{acc_id}/photos/album/garbage")
+     * @Method({"POST"})
+     */
+    public function postToEventAction() {
+
+        $acc = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        return $this->handle($this->get('photo_service')->processToEventForm(new Photo()));
+    }
 
     /**
      * @Route("/logged/api/account/{acc_id}/albums/{id}", requirements={"id" = "\d+", "acc_id" = "\d+"})

@@ -53,7 +53,6 @@ class Photo implements Estimable {
      * @Expose
      */
     protected $path;
-    
 
     /**
      * @OneToMany(targetEntity="Account", mappedBy="photoLike")
@@ -72,13 +71,12 @@ class Photo implements Estimable {
      * @ManyToOne(targetEntity="Account", inversedBy="photos")
      */
     protected $account;
-    
+
     /**
      *
      * @ManyToOne(targetEntity="Album", inversedBy="photos")
      */
     protected $album;
-    
     protected $photoAlbum;
 
     /**
@@ -88,6 +86,14 @@ class Photo implements Estimable {
      * @Expose
      */
     protected $avatar = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="garbage", type="boolean")
+     * @Expose
+     */
+    protected $garbage = false;
 
     /**
      * Constructor
@@ -120,21 +126,17 @@ class Photo implements Estimable {
             return;
         }
 
-        // if there is an error when moving the file, an exception will
-        // be automatically thrown by move(). This will properly prevent
-        // the entity from being persisted to the database on error
+        if ($this->isGarbage()) {
+            $this->createAlbum('garbage');
+            $this->getFile()->move($this->getUploadRootDir() . "/garbage", $this->path);
+        } else {
+            $this->getFile()->move($this->getUploadRootDir(), $this->path);
+        }
 
-        $this->getFile()->move($this->getUploadRootDir(), $this->path); 
+        if (false == $this->isAvatar() && true !== $this->isGarbage()) {
+            $this->createThumbnail();
+        }
 
-        // check if we have an old image
-//        if (isset($this->temp)) {
-//            // delete the old image
-//            unlink($this->getUploadRootDir() . '/' . $this->temp);
-//            // clear the temp image path
-//            $this->temp = null;
-//        }
-
-        $this->createThumbnail();
         if (false != $this->isAvatar()) {
             $this->createAvatar();
             $this->removePhotos();
@@ -142,12 +144,8 @@ class Photo implements Estimable {
         $this->file = null;
     }
 
-    public function isAvatar() {
-        return $this->avatar;
-    }
-
     public function createThumbnail() {
-        
+
         $this->createAlbum('thumb');
 
         $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
@@ -157,14 +155,14 @@ class Photo implements Estimable {
     }
 
     public function createAlbum($aName) {
-        
+
         if (!file_exists($this->getUploadRootDir() . '/' . $aName)) {
             mkdir($this->getUploadRootDir() . '/' . $aName);
         }
     }
-    
+
     public function deleteAlbum($aName) {
-        
+
         if (!file_exists($this->getUploadRootDir() . '/' . $aName)) {
             mkdir($this->getUploadRootDir() . '/' . $aName);
         }
@@ -178,6 +176,16 @@ class Photo implements Estimable {
         $image->load($this->getAbsolutePath());
         $image->resizeToWidth(150);
         $image->save($this->getAbsoluteAlbumPath('avatar'));
+    }
+
+    public function moveToGarbage() {
+
+        $this->createAlbum('garbage');
+
+        $image = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $image->load($this->getAbsolutePath());
+        $image->resizeToWidth(150);
+        $image->save($this->getAbsoluteAlbumPath('garbage'));
     }
 
     /**
@@ -212,7 +220,6 @@ class Photo implements Estimable {
         return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
-    
     public function getAbsoluteAlbumPath($aName) {
         return null === $this->path ? null : $this->getUploadRootDir() . '/' . $aName . '/' . $this->path;
     }
@@ -224,28 +231,31 @@ class Photo implements Estimable {
     public function getUploadRootDir() {
         // the absolute directory path where uploaded
         // documents should be saved
-        
+
         return __DIR__ . '/../../../../uploads/' . $this->getUploadDir();
     }
 
     protected function getUploadDir() {
-        
+
         // get rid of the __DIR__ so it doesn't screw up
-        // when displaying uploaded doc/image in the view.
-        return 'photos/' . $this->getAccount()->getId(). "/" .$this->getAlbum()->getDirname();;
+        // when displaying uploaded doc/image in the view.t
+        if ($this->isAvatar() || $this->isGarbage()) {
+            return 'photos/' . $this->getAccount()->getId();
+        } else {
+            return 'photos/' . $this->getAccount()->getId() . "/" . $this->getAlbum()->getDirname();
+        }
     }
 
-    
     public function getAlbum() {
         return $this->album;
     }
-    
+
     public function setAlbum($album) {
         $this->album = $album;
-        
+
         return $this;
     }
-    
+
     /**
      * Get id
      *
@@ -458,6 +468,20 @@ class Photo implements Estimable {
      */
     public function getAvatar() {
         return $this->avatar;
+    }
+
+    public function setGarbage($garbage) {
+        $this->garbage = $garbage;
+
+        return $this;
+    }
+
+    public function isAvatar() {
+        return $this->avatar;
+    }
+
+    public function isGarbage() {
+        return $this->garbage;
     }
 
 }

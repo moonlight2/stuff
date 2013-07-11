@@ -70,8 +70,6 @@ $(document).ready(function() {
         },
         uploaderInit: function() {
 
-            var self = this;
-
             $('#triggerUpload').click(function() {
                 UploaderModel.uploadStoredFiles();
             });
