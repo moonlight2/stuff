@@ -18,6 +18,10 @@ $(document).ready(function() {
         galleryInit: function() {
         },
         showAlbums: function() {
+    
+            $('#uploader').hide();
+            $('#album-form').show();
+            
             var self = this;
             this.albums = new PhotoAlbumCollection();
             this.albums.url = '../logged/api/account/' + acc_id + '/albums';
@@ -30,6 +34,9 @@ $(document).ready(function() {
             $('#album-form').append(new AlbumView({model: new PhototAlbumModel()}).render().el);
         },
         showPhotos: function(id) {
+    
+            $('#uploader').show();
+            $('#album-form').hide();
             
             var self = this;
             this.photos = new PhotoCollection();
@@ -40,7 +47,9 @@ $(document).ready(function() {
                 }});
         },
         photoDetails: function(a_id, id) {
-            console.log('Photo details');
+    
+            $('#uploader').hide();
+            
             this.before(function() {
                 var photo = this.photos.get(id);
                 photo.rootUrl = '../logged/api/account/' + acc_id + '/albums/' + a_id + '/photos' + id;

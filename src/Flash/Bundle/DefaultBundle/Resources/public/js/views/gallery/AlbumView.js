@@ -11,7 +11,7 @@ window.AlbumView = Backbone.View.extend({
     events: {
         'click #create-album': 'createAlbum',
     },
-    createAlbum: function(){
+    createAlbum: function() {
 
         var self = this;
         this.model.set({
@@ -19,14 +19,10 @@ window.AlbumView = Backbone.View.extend({
         });
         this.model.url = '../logged/api/account/' + acc_id + '/albums/' + this.model.get('name');
         if (this.model.isNew()) {
-            this.model.save(null, {
-                success: function(model, response) {
-                    app.albums.add(model);
-                    $('#name').val('')
-                },
-                error: function(model, response) {
-                    self.showErrors(response.responseText);
-                    app.navigate('error', true);
+            app.albums.create(self.model, {
+                success: function() {
+                    app.navigate('album/' + self.model.id, true);
+                    $('#name').val('');
                 }
             });
         }

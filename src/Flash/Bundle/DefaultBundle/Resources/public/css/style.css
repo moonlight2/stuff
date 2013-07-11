@@ -17,9 +17,10 @@ root {
 }
 
 #album-form {
-float: left;
-position: absolute;
-top: 177px;
+    float: left;
+    clear: both;
+    width: 700px;
+    height: 150px;
 }
 
 #uploader {
