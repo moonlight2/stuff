@@ -32,6 +32,31 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
     }
 
     /**
+     * @Route("/fi/{acc_id}/{img_name}", requirements={"acc_id" = "\d+"})
+     * @Method({"GET"})
+     */
+    public function getFeedImageAction($acc_id, $img_name = null) {
+
+        $acc = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+
+        $image = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Photo')->getByAccountAndPath($acc, $img_name);
+
+        if (NULL == $image) {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+        }
+
+        header('Content-Type: image/jpeg');
+        if ($image->isGarbage()) {
+            readfile($image->getAbsoluteAlbumPath('garbage'));
+        } else {
+            readfile($image->getAbsolutePath());
+        }
+        exit();
+    }
+
+    /**
      * @Route("/thumb/{acc_id}/{img_name}")
      * @Method({"GET"})
      */
@@ -51,7 +76,7 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         readfile($image->getAbsoluteAlbumPath('thumb'));
         exit();
     }
-    
+
     /**
      * @Route("/avatar/{acc_id}")
      * @Method({"GET"})
@@ -60,7 +85,7 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
 
         $acc = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Account')->find($acc_id);
-        
+
 
         $image = $this->getDoctrine()->getManager()
                         ->getRepository('FlashDefaultBundle:Photo')->getAvatarByAccount($acc);

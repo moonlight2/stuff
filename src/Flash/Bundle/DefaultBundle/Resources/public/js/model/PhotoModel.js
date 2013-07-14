@@ -1,5 +1,5 @@
 
-window.PhototModel = Backbone.Model.extend({
+window.PhotoModel = Backbone.Model.extend({
     urlRoot: 'photos',
     defaults: {
         "id": null,
@@ -10,7 +10,7 @@ window.PhototModel = Backbone.Model.extend({
 });
 
 window.PhotoCollection = Backbone.Collection.extend({
-    model: PhototModel,
+    model: PhotoModel,
     url: 'photos',
     initialize: function() {
         //this.bindAll(this);

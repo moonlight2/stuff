@@ -14,13 +14,43 @@ $(document).ready(function() {
             $('#feed').css('display', 'none');
             return false;
         },
-
         uploaderInit: function() {
+    
             var self = this;
-            $('#triggerUpload').click(function() {
-                UploaderModel.setEndpoint('logged/api/account/'+own_id+'/photos/album/garbage');
-                UploaderModel.uploadStoredFiles();
+            self.photo = new PhotoModel();
+            
+            this.uploader = new qq.FineUploader({
+                element: $('#manual-fine-uploader')[0],
+                request: {
+                    endpoint: 'logged/api/account/' + own_id + '/photos/album/garbage',
+                    customHeaders: {
+                        Accept: 'application/json'
+                    }
+                },
+                autoUpload: false,
+                validation: {
+                    allowedExtensions: ['jpeg', 'jpg', 'gif', 'png'],
+                    sizeLimit: 512000 // 50 kB = 50 * 1024 bytes
+                },
+                text: {
+                    uploadButton: '<i class="icon-plus icon-white"></i> Выберите файл'
+                },
+                callbacks: {
+                    onComplete: function(id, fileName, responseJSON) {
+                        var model = responseJSON.photo;
+                        self.photo.set({id: model.id});
+                        self.photo.set({name: model.name});
+                        self.photo.set({path: model.path});
+                        self.imgView = new PhotoView({model: self.photo});
+                         $('#image').append(self.imgView.render().el);
+                    }
+                }
             });
+
+            $('#triggerUpload').click(function() {
+                self.uploader.uploadStoredFiles();
+            });
+
         },
         showEvents: function() {
             $('#pre-feed').css('display', 'none');
@@ -32,7 +62,7 @@ $(document).ready(function() {
                 $('#feed-form').append(this.details.render().el);
             }
         },
-        showSuccess: function(){
+        showSuccess: function() {
             $('#success').show();
         },
         showErrors: function() {

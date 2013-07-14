@@ -38,6 +38,19 @@
         <p><%= description %></p>
         <p><%= date %></p>
     </script>
+    
+    <script type="text/template" id="photo-tpl">
+        <p>
+            <img src="http://localhost/stuff/web/app_dev.php/image/fi/{{ own_id }}/<%= path %>"/>
+        </p>
+        <input type='hidden' val='<%= path %>' id='photo-path'/>
+        <div class="control-group">
+            <div class="controls">
+                <button id='delete-photo' class="btn">Удалить</button>
+            </div>
+        </div> 
+    </script>
+    
     <script type="text/template" id="pre-events-list-tpl">
 
         <p><a href='p<%= account.id %>'><%= account.first_name %> <%= account.last_name %></a> пишет:</p>
@@ -82,6 +95,10 @@
                 <textarea id="description" name="description"  ></textarea>
             </div>
             <span class="help-inline" id='error-description'></span>
+        </div>
+
+        <div class = "control-group">
+            <div id = 'image'></div>
         </div>
 
         <div class="control-group">

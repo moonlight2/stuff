@@ -211,9 +211,9 @@ class Photo implements Estimable {
         if (NULL != $this->getAbsolutePath()) {
             unlink($this->getAbsolutePath());
         }
-        if (NULL != $this->getAbsoluteAlbumPath('thumb')) {
-            unlink($this->getAbsoluteAlbumPath('thumb'));
-        }
+        //if (NULL != $this->getAbsoluteAlbumPath('thumb')) {
+        //    unlink($this->getAbsoluteAlbumPath('thumb'));
+        //}
     }
 
     public function getAbsolutePath() {

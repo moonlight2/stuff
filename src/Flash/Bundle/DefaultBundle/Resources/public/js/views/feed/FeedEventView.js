@@ -57,6 +57,7 @@ window.FeedEventView = Backbone.View.extend({
         this.model.set({
             name: $('#name').val(),
             description: $('#description').val(),
+            image: $('#photo-path').val()
         });
 
         if (this.model.isNew()) {
