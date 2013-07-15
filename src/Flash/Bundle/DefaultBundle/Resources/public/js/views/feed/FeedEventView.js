@@ -68,6 +68,7 @@ window.FeedEventView = Backbone.View.extend({
                         self.preEvents.add(model);
                     }
                     self.close();
+                    $('#feed-form').hide();
                     console.log(self);
                 },
                 error: function(model, response) {

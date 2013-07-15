@@ -37,6 +37,13 @@
         <p>
             <img src="http://localhost/stuff/web/app_dev.php/image/fi/{{ own_id }}/<%= image %>"/>
         </p>
+        {% if is_granted('ROLE_MODERATOR') %}
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn delete-event">Удалить</button>
+                </div>
+            </div> 
+        {% endif %}
     </script>
     
     <script type="text/template" id="photo-tpl">

@@ -64,7 +64,7 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     *  @Route("logged/api/account/{acc_id}/albums/{alb_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+", "alb_id" = "\d+"})
+     *  @Route("logged/api/account/{acc_id}/albums/{alb_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+"})
      * @Method({"DELETE"})
      */
     public function deleteAction($acc_id, $id = NULL, $alb_id = NULL) {

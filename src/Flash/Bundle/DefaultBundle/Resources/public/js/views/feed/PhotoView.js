@@ -11,15 +11,10 @@ window.PhotoView = Backbone.View.extend({
     },
     deletePhoto: function(e) {
 
-        var id = $(e.target).attr('val');
-        var comment = this.comments.get(id);
-        var hash = window.location.hash.substring(1);
-
-        comment.url = '../logged/api/account/' + acc_id + '/photo/' + (hash.split('/'))[3] + '/comment/' + id;
-
-        comment.destroy({
+        this.model.url = 'logged/api/account/' + acc_id + '/albums/garbage/photos/' + this.model.get('id');
+        this.model.destroy({
             success: function() {
-                console.log('destroyed');
+                //window.history.back();
             }
         });
         return false;

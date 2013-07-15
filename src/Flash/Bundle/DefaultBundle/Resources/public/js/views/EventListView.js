@@ -35,7 +35,7 @@ window.EventListView = Backbone.View.extend({
         $(this.el).attr('class', 'events-list').append(view.render().el);
         return this;
     },
-    addAFew: function(){
+    addAFew: function() {
 
         this.count = this.count + 2;
         this.collection.url = this.url + "/" + this.count + "/2";
@@ -80,6 +80,13 @@ window.EventListView = Backbone.View.extend({
 window.EventListItemView = Backbone.View.extend({
     tagName: 'div',
     template: _.template($('#events-list-tpl').html()),
+    events: {
+        'click .delete-event': 'deleteEvent'
+    },
+    deleteEvent: function() {
+        this.model.url = 'moderator/api/feed/events/' + this.model.get('id');
+        this.model.destroy();
+    },
     render: function() {
         $(this.el).attr('class', 'event').html(this.template(this.model.toJSON()));
         return this;

@@ -10,14 +10,16 @@ window.EventListViewForAll = Backbone.View.extend({
     events: {
         'click #confirm-event': 'confirmEvent',
         'click #reject-event': 'rejectEvent',
+        
     },
+
     rejectEvent: function(e) {
         var id = $(e.currentTarget).attr('val');
         var event = this.collection.get(id);
         event.url = this.modUrl + "/" + id;
         event.destroy();
     },
-    addOne: function(){
+    addOne: function() {
 
         var event = this.collection.models[this.collection.length - 1];
         view = new EventListItemView({model: event});
@@ -32,15 +34,15 @@ window.EventListViewForAll = Backbone.View.extend({
         this.event = this.collection.get(id);
         this.event.set({is_confirmed: true});
         this.event.url = this.modUrl + "/" + id;
-         this.event.save(null, {
-                success: function(model, response) {
-                    self.event.trigger('destroy', event);
-                    self.collection.add(model);
-                },
-                error: function(model, response) {
-                    app.navigate('error', true);
-                }
-            })
+        this.event.save(null, {
+            success: function(model, response) {
+                self.event.trigger('destroy', event);
+                self.collection.add(model);
+            },
+            error: function(model, response) {
+                app.navigate('error', true);
+            }
+        })
         return this;
     },
     render: function() {
@@ -64,6 +66,12 @@ window.EventListViewForAll = Backbone.View.extend({
 window.EventListItemView = Backbone.View.extend({
     tagName: 'div',
     template: _.template($('#events-list-tpl').html()),
+    events: {
+        'click .delete-event': 'deleteEvent'
+    },
+    deleteEvent: function() {
+        console.log('DeleteEvent');
+    },
     render: function() {
         $(this.el).attr('class', 'event').html(this.template(this.model.toJSON()));
         return this;
