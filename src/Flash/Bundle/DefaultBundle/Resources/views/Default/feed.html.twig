@@ -29,21 +29,21 @@
       <button class="btn btn-large btn-primary" id = 'more' type="button">Увидеть больше</button>
     </p>
 </div>
-    
-    
-
 
     <script type="text/template" id="events-list-tpl">
         <h2><%= name %></h2>
         <p><%= description %></p>
         <p><%= date %></p>
+        <p>
+            <img src="http://localhost/stuff/web/app_dev.php/image/fi/{{ own_id }}/<%= image %>"/>
+        </p>
     </script>
     
     <script type="text/template" id="photo-tpl">
         <p>
             <img src="http://localhost/stuff/web/app_dev.php/image/fi/{{ own_id }}/<%= path %>"/>
         </p>
-        <input type='hidden' val='<%= path %>' id='photo-path'/>
+        <input type='hidden' value='<%= path %>' id='photo-path'/>
         <div class="control-group">
             <div class="controls">
                 <button id='delete-photo' class="btn">Удалить</button>
@@ -57,6 +57,9 @@
         <h2><%= name %></h2>
         <p><%= description %></p>
         <p><%= date %></p>
+        <p>
+            <img src="http://localhost/stuff/web/app_dev.php/image/fi/{{ own_id }}/<%= image %>"/>
+        </p>
         <div class="control-group">
             <div class="controls">
                 <button id='confirm-event' val=<%= id %> class="btn">Подтвердить</button>

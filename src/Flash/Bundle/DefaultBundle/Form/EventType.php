@@ -15,6 +15,7 @@ class EventType extends AbstractType {
                 ->add('city')
                 ->add('country')
                 ->add('isConfirmed')
+                ->add('image')
         ;
         $builder->add('date', 'date', array(
             'widget' => 'single_text',

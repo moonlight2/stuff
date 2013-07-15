@@ -90,7 +90,7 @@ class Event {
      * @Expose
      */
     protected $isConfirmed = false;
-    
+
     /**
      * @var boolean
      *
@@ -100,17 +100,24 @@ class Event {
     protected $isShared = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255)
+     * @Expose
+     */
+    private $image;
+
+    /**
      * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Account", inversedBy="calendarEvents")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @Expose
      */
     protected $account;
-    
+
     public function __construct(\Symfony\Component\Security\Core\User\UserInterface $account) {
         $this->account = $account;
     }
-    
-    
+
     /**
      * Get id
      *
@@ -271,6 +278,27 @@ class Event {
     public function getType() {
         return $this->type;
     }
+    
+    /**
+     * Set image
+     *
+     * @param string $type
+     * @return Event
+     */
+    public function setImage($image) {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string 
+     */
+    public function getImage() {
+        return $this->image;
+    }
 
     /**
      * Set isConfirmed
@@ -293,17 +321,15 @@ class Event {
         return $this->isConfirmed;
     }
 
-
     /**
      * Set account
      *
      * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
      * @return Event
      */
-    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null)
-    {
+    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null) {
         $this->account = $account;
-    
+
         return $this;
     }
 
@@ -312,8 +338,7 @@ class Event {
      *
      * @return \Flash\Bundle\DefaultBundle\Entity\Account 
      */
-    public function getAccount()
-    {
+    public function getAccount() {
         return $this->account;
     }
 
@@ -323,10 +348,9 @@ class Event {
      * @param boolean $isShared
      * @return Event
      */
-    public function setIsShared($isShared)
-    {
+    public function setIsShared($isShared) {
         $this->isShared = $isShared;
-    
+
         return $this;
     }
 
@@ -335,8 +359,8 @@ class Event {
      *
      * @return boolean 
      */
-    public function getIsShared()
-    {
+    public function getIsShared() {
         return $this->isShared;
     }
+
 }
