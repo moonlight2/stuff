@@ -109,8 +109,13 @@
     
         <h1>Cтраница пользователя <b>{{ firstName }} {{ lastName }}</b></h1>
         <div class='sidebar'>
+            <div id='avatar'>
+                <img src='image/avatar/{{ own_id }}' />
+            </div>
             <div id='loader'>Loading....</div>
-        </div>
+        </div>   
+
+
         <div class='main-content'>        
             <div id='calendar'></div>
             <div id='events'></div>
