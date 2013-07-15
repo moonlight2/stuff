@@ -182,14 +182,14 @@ class PhotoService extends CommonService {
         $view = View::create();
         $acc = $this->context->getToken()->getUser();
 
-        if ($photo->existsRating($acc)) {
-            $acc->removePhotoLike($photo);
-            $photo->removeRating($acc);
-        } else {
-            $acc->setPhotoLike($photo);
+        if (!$photo->existsRating($acc)) {
             $photo->addRating($acc);
+            $acc->addPhotoLike($photo);
+        } else {
+            $photo->removeRating($acc);
+            $acc->removePhotoLike($photo);
         }
-
+        
         $em->persist($acc);
         $em->persist($photo);
 

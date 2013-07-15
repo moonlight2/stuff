@@ -120,10 +120,6 @@ class Account implements AdvancedUserInterface {
      */
     protected $group;
 
-    /**
-     * @ManyToOne(targetEntity="Photo", inversedBy="rating")
-     */
-    protected $photoLike;
 
     /**
      * @ManyToOne(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Comment\PhotoComment", inversedBy="rating")
@@ -150,6 +146,12 @@ class Account implements AdvancedUserInterface {
      * @ORM\ManyToMany(targetEntity="\Flash\Bundle\DefaultBundle\Entity\Calendar\CalendarEvent", inversedBy="\Flash\Bundle\DefaultBundle\Entity\Account")
      */
     protected $calendarEvents;
+    
+    /**
+     * @Expose
+     * @ORM\ManyToMany(targetEntity="Photo", inversedBy="rating")
+     */
+    protected $photoLike;
 
     /**
      * @OneToMany(targetEntity="Photo", mappedBy="account")
@@ -205,6 +207,7 @@ class Account implements AdvancedUserInterface {
         $this->videos = new ArrayCollection();
         $this->photoComments = new ArrayCollection();
         $this->photoAlbums = new ArrayCollection();
+        $this->photoLike = new ArrayCollection();
         $this->calendarEvents = new ArrayCollection();
         $this->followers = new ArrayCollection();
     }
@@ -755,33 +758,6 @@ class Account implements AdvancedUserInterface {
     }
 
     /**
-     * Set photoLike
-     *
-     * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photoLike
-     * @return Account
-     */
-    public function setPhotoLike(\Flash\Bundle\DefaultBundle\Entity\Photo $photoLike = null) {
-        $this->photoLike = $photoLike;
-
-        return $this;
-    }
-
-    /**
-     * Get photoLike
-     *
-     * @return \Flash\Bundle\DefaultBundle\Entity\Photo 
-     */
-    public function getPhotoLike() {
-        return $this->photoLike;
-    }
-
-    public function removePhotoLike() {
-        unset($this->photoLike);
-
-        return $this;
-    }
-
-    /**
      * Set dateRegist
      *
      * @param \DateTime $dateRegist
@@ -970,5 +946,38 @@ class Account implements AdvancedUserInterface {
     public function getAlbums()
     {
         return $this->albums;
+    }
+
+    /**
+     * Add photoLike
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photoLike
+     * @return Account
+     */
+    public function addPhotoLike(\Flash\Bundle\DefaultBundle\Entity\Photo $photoLike)
+    {
+        $this->photoLike[] = $photoLike;
+    
+        return $this;
+    }
+
+    /**
+     * Remove photoLike
+     *
+     * @param \Flash\Bundle\DefaultBundle\Entity\Photo $photoLike
+     */
+    public function removePhotoLike(\Flash\Bundle\DefaultBundle\Entity\Photo $photoLike)
+    {
+        $this->photoLike->removeElement($photoLike);
+    }
+
+    /**
+     * Get photoLike
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhotoLike()
+    {
+        return $this->photoLike;
     }
 }

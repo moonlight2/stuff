@@ -26,9 +26,7 @@ class PhotoRepository extends EntityRepository {
 
         $list = $this->getEntityManager()
                 ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
-                                       WHERE p.account = :account
-                                       AND p.id = :id')
-                ->setParameter('account', $acc)
+                                       WHERE p.id = :id')
                 ->setParameter('id', $id)
                 ->getResult();
         return (sizeof($list) > 0) ? $list[0] : null;

@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\PhotoRepository")
  */
-class Photo implements Estimable {
+class Photo {
 
     /**
      * @var integer
@@ -53,12 +53,6 @@ class Photo implements Estimable {
      * @Expose
      */
     protected $path;
-
-    /**
-     * @OneToMany(targetEntity="Account", mappedBy="photoLike")
-     * @Expose
-     */
-    protected $rating;
 
     /**
      * @Expose
@@ -96,11 +90,59 @@ class Photo implements Estimable {
     protected $garbage = false;
 
     /**
+     * Bidirectional - Many comments are favorited by many users (INVERSE SIDE)
+     *
+     * @ORM\ManyToMany(targetEntity="Account", mappedBy="photoLike")
+     * @Expose
+     */
+    protected $rating;
+
+    /**
      * Constructor
      */
     public function __construct() {
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rating = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get rating count
+     * 
+     * @return int
+     */
+    public function getRatingCount() {
+        return $this->rating->count();
+    }
+
+    /**
+     * Check rating for exists
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
+     */
+    public function existsRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
+
+        $accs = $this->rating->getValues();
+        foreach ($accs as $acc) {
+            if ($acc->getEmail() == $rating->getEmail()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove rating
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
+     */
+    public function removeRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
+        $this->rating->removeElement($rating);
+    }
+
+    public function addRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
+        $this->rating[] = $rating;
+
+        return $this;
     }
 
     /**
@@ -383,70 +425,6 @@ class Photo implements Estimable {
      */
     public function getComments() {
         return $this->comments;
-    }
-
-    /**
-     * Add rating
-     *
-     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
-     */
-    public function addRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
-        $this->rating[] = $rating;
-
-        return $this;
-    }
-
-    /**
-     * Clear rating
-     *
-     */
-    public function clearRating() {
-        $this->rating->clear();
-
-        return $this;
-    }
-
-    /**
-     * Get rating
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRating() {
-        return $this->rating;
-    }
-
-    /**
-     * Check rating for exists
-     *
-     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
-     */
-    public function existsRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
-
-        $accs = $this->rating->getValues();
-        foreach ($accs as $acc) {
-            if ($acc->getEmail() == $rating->getEmail()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Remove rating
-     *
-     * @param \Symfony\Component\Security\Core\User\UserInterface $rating
-     */
-    public function removeRating(\Symfony\Component\Security\Core\User\UserInterface $rating) {
-        $this->rating->removeElement($rating);
-    }
-
-    /**
-     * Get rating count
-     * 
-     * @return int
-     */
-    public function getRatingCount() {
-        return $this->rating->count();
     }
 
     /**
