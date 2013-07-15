@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Flash\Bundle\DefaultBundle\Repository\PhotoRepository")
  */
-class Photo {
+class Photo implements Estimable {
 
     /**
      * @var integer
@@ -112,6 +112,25 @@ class Photo {
      */
     public function getRatingCount() {
         return $this->rating->count();
+    }
+
+    /**
+     * Get rating 
+     * 
+     * @return rating
+     */
+    public function getRating() {
+        return $this->rating;
+    }
+
+    /**
+     * Clear rating
+     *
+     */
+    public function clearRating() {
+        $this->rating->clear();
+
+        return $this;
     }
 
     /**

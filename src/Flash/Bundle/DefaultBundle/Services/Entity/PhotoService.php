@@ -205,10 +205,10 @@ class PhotoService extends CommonService {
 
         if ($this->context->isGranted('DELETE', $photo)) {
 
-            if ($photo->getRating()->count() > 0) {
+            if ($photo->getRatingCount() > 0) {
                 $accs = $photo->getRating()->getValues();
                 foreach ($accs as $acc) {
-                    $acc->removePhotoLike();
+                    $acc->removePhotoLike($photo);
                     $em->persist($acc);
                 }
                 $photo->clearRating();
