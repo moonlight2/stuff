@@ -11,7 +11,7 @@ window.EventListView = Backbone.View.extend({
         this.count = 0;
     },
     events: {
-        'click #confirm-event': 'confirmEvent',
+        'click .confirm-event': 'confirmEvent',
         'click #reject-event': 'rejectEvent',
     },
     initEvents: function() {
@@ -47,6 +47,8 @@ window.EventListView = Backbone.View.extend({
         var self = this;
         this.event = this.collection.get(id);
         this.event.set({is_confirmed: true});
+                console.log(this.event);
+       // return false;
         this.event.url = this.modUrl + "/" + id;
         this.event.save(null, {
             success: function(model, response) {

@@ -62,19 +62,19 @@ class EventService extends CommonService {
         ));
 
         if ($form->isValid()) {
-            
+
             if ($request->getMethod() == 'POST') {
                 $acc = $this->context->getToken()->getUser();
                 $acc->addCalendarEvent($event);
-                $em->persist($acc);               
-                
+                $em->persist($acc);
+
                 $event->setIsShown(false);
             }
             $event->setAllDay($request->get('allDay'));
             $em->persist($event);
-            
+
             $em->flush();
-      
+
             if ($request->getMethod() == 'POST') {
                 $acl = $this->injector->getAcl();
                 $acl->grant($event, MaskBuilder::MASK_EDIT);
@@ -85,7 +85,7 @@ class EventService extends CommonService {
             $view->setStatusCode(400);
             return $view->setData($this->getErrorMessages($form));
         }
- 
+
         return $view->setData($event);
     }
 
@@ -104,9 +104,8 @@ class EventService extends CommonService {
         return $view->setData(array('success' => 'Event was deleted'));
     }
 
-    
     public function delete($event) {
-        
+
         $view = View::create();
         $em = $this->injector->getDoctrine()->getManager();
 
@@ -116,7 +115,7 @@ class EventService extends CommonService {
 
         return $view->setData(array('success' => 'Event was deleted'));
     }
-    
+
     public function processFeedEventForm($event) {
 
         $request = $this->injector->getRequest();
@@ -125,19 +124,31 @@ class EventService extends CommonService {
         $view = View::create();
 
         $date = new \DateTime('now');
-        
-        $form->bind(array(
-            'name' => $request->get('name'),
-            'image' => $request->get('image'),
-            'description' => $request->get('description'),
-            'isConfirmed' => $request->get('is_confirmed'),
-            'date' => $date->format('d-m-Y H:i'),
-            'country' => 1,
-            'city' => 2,
-        ));
+        $updDate = new \DateTime($request->get('date'));
 
+        if ($request->getMethod() == 'POST') {
+            $form->bind(array(
+                'name' => $request->get('name'),
+                'image' => $request->get('image'),
+                'description' => $request->get('description'),
+                'isConfirmed' => $request->get('is_confirmed'),
+                'date' => $request->get('date'),
+                'country' => $request->get('country'),
+                'city' => $request->get('city'),
+            ));
+        } else {
+            $form->bind(array(
+                'name' => $request->get('name'),
+                'image' => $request->get('image'),
+                'description' => $request->get('description'),
+                'isConfirmed' => $request->get('is_confirmed'),
+                'date' => $updDate->format('m/d/Y H:i'),
+                'country' => $request->get('country'),
+                'city' => $request->get('city'),
+            ));
+        }
         if ($form->isValid()) {
-            
+
             $event->setType($this->FEED_EVENT);
             $em->persist($event);
             $em->flush();

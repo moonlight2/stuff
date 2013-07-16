@@ -4,10 +4,17 @@ $(document).ready(function() {
         routes: {
             "": "showEvents",
             "success": "showSuccess",
-            "not_confirmed": "showNotConfirmed"
+            "not_confirmed": "showNotConfirmed",
+            "click #country li": "changeCountryInput",
+            "click #city li": "changeCityInput",
+            "input #city-input": "getSimilarCities",
+            "mouseover .dropdown-menu li": "changeListBackground",
         },
         initialize: function() {
             this.uploaderInit();
+            $(function() {
+                $('#date').datepicker();
+            })
         },
         showNotConfirmed: function() {
             $('#pre-feed').css('display', 'block');
@@ -15,10 +22,10 @@ $(document).ready(function() {
             return false;
         },
         uploaderInit: function() {
-    
+
             var self = this;
             self.photo = new PhotoModel();
-            
+
             this.uploader = new qq.FineUploader({
                 element: $('#manual-fine-uploader')[0],
                 request: {
@@ -42,7 +49,7 @@ $(document).ready(function() {
                         self.photo.set({name: model.name});
                         self.photo.set({path: model.path});
                         self.imgView = new PhotoView({model: self.photo});
-                         $('#image').append(self.imgView.render().el);
+                        $('#image').append(self.imgView.render().el);
                     }
                 }
             });
@@ -58,6 +65,7 @@ $(document).ready(function() {
 
             if (!this.details) {
                 this.details = new FeedEventView({model: new EventModel()});
+                this.details.getCountries();
                 this.details.getEventList();
                 $('#feed-form').append(this.details.render().el);
             }

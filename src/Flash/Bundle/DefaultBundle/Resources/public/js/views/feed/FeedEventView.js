@@ -5,6 +5,7 @@ window.FeedEventView = Backbone.View.extend({
         this.url = 'api/feed/events';
         this.modUrl = 'moderator/api/feed/events';
         this.rendered = false;
+
     },
     render: function(eventName) {
         $(this.el).html(this.template(this.model.toJSON()));
@@ -12,8 +13,18 @@ window.FeedEventView = Backbone.View.extend({
         return this;
     },
     events: {
+        "click": "hideDropdown",
         'click #create-event': 'saveEvent',
         'click #show-pre-feed': 'switchFeed',
+        "change #date": "prepareDateToSend",
+        "change #hour": "prepareDateToSend",
+        "change #minutes": "prepareDateToSend",
+        "click #country li": "changeCountryInput",
+        "click #city li": "changeCityInput",
+        "input #city-input": "getSimilarCities",
+        "mouseover .dropdown-menu li": "changeListBackground",
+        "click .dropdown-toggle": "switchDropdown",
+        
     },
     switchFeed: function() {
 
@@ -57,7 +68,10 @@ window.FeedEventView = Backbone.View.extend({
         this.model.set({
             name: $('#name').val(),
             description: $('#description').val(),
-            image: $('#photo-path').val()
+            image: $('#photo-path').val(),
+            country: $('#send-country').val(),
+            city: $("#send-city").val(),
+            date: $('#send-date').val(),
         });
 
         if (this.model.isNew()) {
@@ -69,7 +83,6 @@ window.FeedEventView = Backbone.View.extend({
                     }
                     self.close();
                     $('#feed-form').hide();
-                    console.log(self);
                 },
                 error: function(model, response) {
                     self.showErrors(response.responseText);

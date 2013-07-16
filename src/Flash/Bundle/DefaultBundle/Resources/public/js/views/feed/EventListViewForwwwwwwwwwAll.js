@@ -8,7 +8,7 @@ window.EventListViewForAll = Backbone.View.extend({
         this.url = 'api/all_events';
     },
     events: {
-        'click #confirm-event': 'confirmEvent',
+        'click .confirm-event': 'confirmEvent',
         'click #reject-event': 'rejectEvent',
         
     },
@@ -32,6 +32,8 @@ window.EventListViewForAll = Backbone.View.extend({
         var id = $(e.currentTarget).attr('val');
         var self = this;
         this.event = this.collection.get(id);
+        console.log(event);
+        return false;
         this.event.set({is_confirmed: true});
         this.event.url = this.modUrl + "/" + id;
         this.event.save(null, {

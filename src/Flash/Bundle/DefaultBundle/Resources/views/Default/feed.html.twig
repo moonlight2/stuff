@@ -30,6 +30,10 @@
     </p>
 </div>
 
+    <script type="text/template" id="city-tpl"><%= name %></script>
+    
+    <script type="text/template" id="country-tpl"><%= name %></script>
+
     <script type="text/template" id="events-list-tpl">
         <h2><%= name %></h2>
         <p><%= description %></p>
@@ -69,7 +73,7 @@
         </p>
         <div class="control-group">
             <div class="controls">
-                <button id='confirm-event' val=<%= id %> class="btn">Подтвердить</button>
+                <button val=<%= id %> class="btn confirm-event">Подтвердить</button>
                 <button id='reject-event' val=<%= id %> class="btn">Отклонить</button>
             </div>
         </div>
@@ -110,7 +114,83 @@
         <div class = "control-group">
             <div id = 'image'></div>
         </div>
+        
+        <div class="control-group ">
+            <label class='control-label'>Время начала:</label>
+            <div class='controls form-inline'>
+                <input type="text" class='span2' id="date" />
 
+                <select id='hour' class='span1' >
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                </select>
+                <select id='minutes' class='span1' >
+                    <option>00</option>
+                    <option>05</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>20</option>
+                    <option>25</option>
+                    <option>30</option>
+                    <option>35</option>
+                    <option>40</option>
+                    <option>45</option>
+                    <option>50</option>
+                    <option>55</option>
+                </select>
+            </div>
+            <input type='hidden' name='date' id='send-date' value='0000/00/00 00 00'/>
+            <span class="help-inline" id='error-date'></span>
+        </div>
+        <div class="control-group">
+            <label class='control-label'>Cтрана:</label>
+            <div class='controls selector input-append' style='display:block' id="country">
+                <input type="text" id="country-input" readonly placeholder='Выберите страну' />
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                        <span class="caret"></span>
+                    </button>
+                </div>
+            </div>
+            <input type='hidden' name='country' id='send-country' />
+            <span class="help-inline" id='error-country'></span>
+        </div>
+
+        <div class="control-group" id='city-block'>
+            <label class='control-label'>Город:</label>
+            <div class='controls selector input-append' style='display:block' id='city'>
+                <input type="text" id="city-input" placeholder='Выберите город'/>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                        <span class="caret"></span>
+                    </button>
+                </div>
+            </div>
+            <input type='hidden' name='city' id='send-city' />
+            <span class="help-inline" id='error-city'></span>
+        </div>
         <div class="control-group">
             <div class="controls">
                 <button id='create-event' class="btn">Создать</button>

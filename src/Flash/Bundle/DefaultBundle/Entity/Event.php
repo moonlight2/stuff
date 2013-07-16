@@ -56,11 +56,20 @@ class Event {
     /**
      * @var date
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="date", type="datetime", nullable=true)
      * @Assert\DateTime(message = "Неверные данные date")
      * @Expose
      */
     private $date;
+    
+    /**
+     * @var registered
+     *
+     * @ORM\Column(name="registered", type="datetime")
+     * @Assert\DateTime(message = "Неверные данные date")
+     * @Expose
+     */
+    private $registered;
 
     /**
      * @ORM\Column(name="city_id", type="integer")
@@ -102,7 +111,7 @@ class Event {
     /**
      * @var string
      *
-     * @ORM\Column(name="image", type="string", length=255)
+     * @ORM\Column(name="image", type="string", length=255, nullable=true)
      * @Expose
      */
     private $image;
@@ -116,6 +125,7 @@ class Event {
 
     public function __construct(\Symfony\Component\Security\Core\User\UserInterface $account) {
         $this->account = $account;
+        $this->setRegistered(new \DateTime('now'));
     }
 
     /**
@@ -363,4 +373,27 @@ class Event {
         return $this->isShared;
     }
 
+
+    /**
+     * Set registered
+     *
+     * @param \DateTime $registered
+     * @return Event
+     */
+    public function setRegistered($registered)
+    {
+        $this->registered = $registered;
+    
+        return $this;
+    }
+
+    /**
+     * Get registered
+     *
+     * @return \DateTime 
+     */
+    public function getRegistered()
+    {
+        return $this->registered;
+    }
 }
