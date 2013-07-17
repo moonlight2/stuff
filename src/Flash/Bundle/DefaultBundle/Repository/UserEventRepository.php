@@ -10,12 +10,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserEventRepository extends EntityRepository {
 
-    public function findAllByUser($user) {
+    public function findAllByUser($user, $from, $to) {
 
         $list = $this->getEntityManager()
                 ->createQuery('SELECT e FROM FlashDefaultBundle:UserEvent e
                                        WHERE e.account = :account ORDER BY e.id DESC')
                 ->setParameter('account', $user)
+                ->setFirstResult($from)
+                ->setMaxResults($to)
                 ->getResult();
         return (sizeof($list) > 0) ? $list : null;
     }

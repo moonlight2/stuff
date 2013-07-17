@@ -24,7 +24,6 @@ window.FeedEventView = Backbone.View.extend({
         "input #city-input": "getSimilarCities",
         "mouseover .dropdown-menu li": "changeListBackground",
         "click .dropdown-toggle": "switchDropdown",
-        
     },
     switchFeed: function() {
 
@@ -60,6 +59,12 @@ window.FeedEventView = Backbone.View.extend({
         }
         return false;
     },
+    changeUrls: function(text) {
+        var urlRegex = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/g;
+        return text.replace(urlRegex, function(url) {
+            return '<a href="' + url + '">' + url + '</a>';
+        });
+    },
     saveEvent: function() {
 
         var self = this;
@@ -67,7 +72,7 @@ window.FeedEventView = Backbone.View.extend({
         this.model.url = this.url;
         this.model.set({
             name: $('#name').val(),
-            description: $('#description').val(),
+            description: this.changeUrls($('#description').val()),
             image: $('#photo-path').val(),
             country: $('#send-country').val(),
             city: $("#send-city").val(),

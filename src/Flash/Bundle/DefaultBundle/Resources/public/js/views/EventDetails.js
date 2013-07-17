@@ -31,11 +31,17 @@ window.EventView = Backbone.View.extend({
             }});
 
     },
+    changeUrls: function(text) {
+        var urlRegex = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/g;
+        return text.replace(urlRegex, function(url) {
+            return '<a href="' + url + '">' + url + '</a>';
+        });
+    },
     saveEvent: function() {
         var self = this;
         this.model.set({
             name: $('#name').val(),
-            description: $('#description').val(),
+            description: this.changeUrls($('#description').val()),
             country: $('#send-country').val(),
             city: $('#send-city').val(),
             date: $('#send-date').val(),

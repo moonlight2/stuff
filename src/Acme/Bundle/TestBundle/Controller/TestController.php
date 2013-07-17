@@ -14,10 +14,15 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference,
     Symfony\Component\Routing\Exception\ResourceNotFoundException,
     Symfony\Component\Validator\ValidatorInterface;
 
-class TestdController extends FOSRestController {
+class TestController extends FOSRestController {
 
-    public function indexAction($name) {
-        echo $name;
+    /**
+     * @Route("testik")
+     * @Method({"GET"})
+     */
+    public function indexAction() {
+        echo 'Testik';
+        $end = new \DateTime($request->get('end'));
         exit();
     }
 
@@ -31,17 +36,17 @@ class TestdController extends FOSRestController {
 
         $data = array('name' => array('musers' => 'users'));
         $view = $this->view($data, 404)
-        ->setHeader('Content-Type', 'application/json')
+                ->setHeader('Content-Type', 'application/json')
                 ->setTemplate(new TemplateReference('AcmeTestBundle', 'Default', 'index'))
 //                ->setTemplateVar('root');
-        ->setData($account);
+                ->setData($account);
 
 //        $user = false;
 //        if (!$user) {
 //            throw new NotFoundHttpException('User not found');
 //        }
 
-        return array('this'=>'ilis');
+        return array('this' => 'ilis');
     }
 
     public function serializedAction() {

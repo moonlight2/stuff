@@ -40,7 +40,7 @@ class PhotoService extends CommonService {
                 $album->setPreview($p->getPath());
             }
             $album->addPhoto($photo);
-
+            
             $em->persist($album);
             $em->persist($photo);
             $em->flush();
@@ -56,6 +56,12 @@ class PhotoService extends CommonService {
             $view->setStatusCode(400);
             $response = $this->getErrorMessages($form);
         }
+
+        $uEventFactory = $this->injector->getUserEventFactory();
+        $uEvent = $uEventFactory->get($uEventFactory::NEW_PHOTO, $acc, $photo);
+        $em->persist($uEvent);
+        $em->flush();
+        
         return $view->setData(array('success' => 'true', 'photo' => $photo));
     }
 
@@ -96,7 +102,7 @@ class PhotoService extends CommonService {
         }
         return $view->setData(array('success' => 'true', 'photo' => $photo));
     }
-    
+
     public function processToEventForm($photo) {
 
         $request = $this->injector->getRequest();
@@ -189,7 +195,7 @@ class PhotoService extends CommonService {
             $photo->removeRating($acc);
             $acc->removePhotoLike($photo);
         }
-        
+
         $em->persist($acc);
         $em->persist($photo);
 

@@ -17,7 +17,7 @@ $(document).ready(function() {
             var self = this;
 
             this.events = new UserEventCollection();
-            this.events.url = 'p' + $('#acc_id').val() + '/user_events';
+            this.events.url = 'api/logged/account/'+ acc_id +'/events/0/3';
             this.events.fetch({success: function(data) {
                     $('#events').append(new UserEventListView({model: self.events}).render().el);
                 }});

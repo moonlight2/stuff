@@ -77,7 +77,7 @@ class AccountApiController extends RESTController implements GenericRestApi {
     }
 
     /**
-     * Method returns extended information aout own account
+     * Method returns extended information about own account
      * 
      * @Route("/logged/api/accounts/own")
      * @Method({"GET"})

@@ -23,13 +23,14 @@ class UserEventFactory {
                 $uEvent->setAccount($acc);
                 break;
             case 'add_event':
-                $uEvent->setTitle($acc->getUsername() . ' создал в группе новое событие.');
-                $uEvent->setDescription('Парам-пам-пам!');
-                $uEvent->setAccount($acc);
+                //$uEvent->setTitle(' создал в группе новое событие.');
+                //$uEvent->setDescription('Парам-пам-пам!');
+                //$uEvent->setAccount($acc);
                 break;
-            case 'new_group':
-                $uEvent->setTitle($acc->getUsername() . ' создал группу ' . $obj->getName());
-                $uEvent->setDescription('Поздравляем с новой группой!');
+            case 'new_photo':
+                
+                $uEvent->setTitle($acc->getFirstName() . ' Добавил новое фото ');
+                $uEvent->setDescription('Вот оно фото <br /><img src="image/thumb/'.$acc->getId().'/'. $obj->getPath() . '" />');
                 $uEvent->setAccount($acc);
                 break;
             default :

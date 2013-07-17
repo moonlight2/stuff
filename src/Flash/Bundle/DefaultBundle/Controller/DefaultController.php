@@ -45,11 +45,18 @@ class DefaultController extends Controller {
      */
     public function testAction() {
 
-        $time = '2011-08-12T09:55:03Z';
+        $time = '2011-08-11T09:15:03Z';
+        $time2 = '2011-08-12T09:55:03Z';
 
-        print_r(new \DateTime($time));
+        $mydate = new \DateTime($time);
+        $mydate2 = new \DateTime($time2);
 
-        echo date("U", strtotime('2011-08-12T09:55:03Z'));
+
+        if ($mydate->format('Y') == $mydate2->format('Y') &&
+                $mydate->format('m') == $mydate2->format('m') &&
+                $mydate->format('d') == $mydate2->format('d')) {
+            echo "The same date";
+        }
         exit();
 
 
@@ -94,8 +101,8 @@ class DefaultController extends Controller {
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($id);
         $loggedAcc = $this->get('security.context')->getToken()->getUser();
 
-        $is_leader = ($loggedAcc->getIsLeader())? 1 : 0; 
-        
+        $is_leader = ($loggedAcc->getIsLeader()) ? 1 : 0;
+
         if (null != $acc) {
             return array(
                 'firstName' => $acc->getFirstName(),
@@ -122,7 +129,7 @@ class DefaultController extends Controller {
             'own_id' => $acc->getId(),
         );
     }
-    
+
     /**
      * @Route("/feed2", name="_feed2_page")
      * @Template()

@@ -98,9 +98,19 @@ class Photo implements Estimable {
     protected $rating;
 
     /**
+     * @var date
+     *
+     * @ORM\Column(name="uploaded", type="datetime")
+     * @Expose
+     */
+    protected $uploaded;
+
+    /**
      * Constructor
      */
     public function __construct() {
+        
+        $this->uploaded =  new \DateTime('now');
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rating = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -481,4 +491,25 @@ class Photo implements Estimable {
         return $this->garbage;
     }
 
+    
+    /**
+     * Set uploaded
+     *
+     * @param \DateTime $uploaded
+     * @return Photo
+     */
+    public function setUploaded($uploaded) {
+        $this->uploaded = $uploaded;
+
+        return $this;
+    }
+
+    /**
+     * Get uploaded
+     *
+     * @return \DateTime 
+     */
+    public function getUploaded() {
+        return $this->uploaded;
+    }
 }
