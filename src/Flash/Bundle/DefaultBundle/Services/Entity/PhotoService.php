@@ -57,6 +57,15 @@ class PhotoService extends CommonService {
             $response = $this->getErrorMessages($form);
         }
 
+        $this->createUserEvent($photo);
+
+        return $view->setData(array('success' => 'true', 'photo' => $photo));
+    }
+
+    private function createUserEvent($photo) {
+
+        $acc = $this->context->getToken()->getUser();
+        $em = $this->injector->getDoctrine()->getManager();
         $todayEvents = $em->getRepository('FlashDefaultBundle:UserEvent')->getTodaysEvents('photo');
         $uEvent = null;
 
@@ -70,15 +79,15 @@ class PhotoService extends CommonService {
         }
 
         if (null != $uEvent) {
-            $uEvent->addToDescription('<a href="p'.$acc->getId().'/gallery#album/'.$photo->getAlbum()->getId().'/photo/'.$photo->getId().'"><img src="image/thumb/'.$acc->getId().'/'. $photo->getPath() . '" /></a>'); // create new description 
+            $src = 'image/thumb/' . $acc->getId() . '/' . $photo->getPath();
+            $href = 'p' . $acc->getId() . '/gallery#album/' . $photo->getAlbum()->getId() . '/photo/' . $photo->getId();
+            $uEvent->addToDescription('<a href="' . $href . '"><img src="' . $src . '" /></a>'); // create new description 
         } else {
             $uEventFactory = $this->injector->getUserEventFactory();
             $uEvent = $uEventFactory->get($uEventFactory::NEW_PHOTO, $acc, $photo);
         }
         $em->persist($uEvent);
         $em->flush();
-
-        return $view->setData(array('success' => 'true', 'photo' => $photo));
     }
 
     private function compareDates($d1, $d2) {
@@ -128,6 +137,7 @@ class PhotoService extends CommonService {
     public function processToEventForm($photo) {
 
         $request = $this->injector->getRequest();
+        $acc = $this->context->getToken()->getUser();
         $em = $this->injector->getDoctrine()->getManager();
         $form = $this->injector->getForm()->create(new PhotoType(), $photo);
         $view = View::create();
