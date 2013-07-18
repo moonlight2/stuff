@@ -40,7 +40,7 @@ class PhotoService extends CommonService {
                 $album->setPreview($p->getPath());
             }
             $album->addPhoto($photo);
-            
+
             $em->persist($album);
             $em->persist($photo);
             $em->flush();
@@ -57,12 +57,34 @@ class PhotoService extends CommonService {
             $response = $this->getErrorMessages($form);
         }
 
-        $uEventFactory = $this->injector->getUserEventFactory();
-        $uEvent = $uEventFactory->get($uEventFactory::NEW_PHOTO, $acc, $photo);
+        $todayEvents = $em->getRepository('FlashDefaultBundle:UserEvent')->getTodaysEvents('photo');
+        $uEvent = null;
+
+        if (null != $todayEvents) {
+            foreach ($todayEvents as $e) {
+                if ($this->compareDates($photo->getUploaded(), new \DateTime($e['edate']))) {
+                    $uEvent = $em->getRepository('FlashDefaultBundle:UserEvent')->find($e['id']);
+                    break;
+                }
+            }
+        }
+
+        if (null != $uEvent) {
+            $uEvent->addToDescription('<img src="image/thumb/'.$acc->getId().'/'. $photo->getPath() . '" />'); // create new description 
+        } else {
+            $uEventFactory = $this->injector->getUserEventFactory();
+            $uEvent = $uEventFactory->get($uEventFactory::NEW_PHOTO, $acc, $photo);
+        }
         $em->persist($uEvent);
         $em->flush();
-        
+
         return $view->setData(array('success' => 'true', 'photo' => $photo));
+    }
+
+    private function compareDates($d1, $d2) {
+        return $d1->format('Y') == $d2->format('Y') &&
+                $d1->format('m') == $d2->format('m') &&
+                $d1->format('d') == $d2->format('d');
     }
 
     public function processAvatarForm($photo) {

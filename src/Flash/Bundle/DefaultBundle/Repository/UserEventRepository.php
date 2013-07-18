@@ -31,4 +31,28 @@ class UserEventRepository extends EntityRepository {
         return (sizeof($list) > 0) ? $list : null;
     }
 
+    public function getLast($from, $to) {
+        $list = $this->getEntityManager()
+                ->createQuery("SELECT e FROM FlashDefaultBundle:UserEvent e ORDER BY e.id DESC")
+                ->setFirstResult($from)
+                ->setMaxResults($to)
+                ->getResult();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+
+    public function getTodaysEvents($type = null) {
+
+        $sql = "SELECT id, account_id, title, description, edate, type
+                FROM user_event
+                WHERE DATE( edate ) >= DATE( NOW( ) )";
+        if (null != $type) {
+            $sql.= "AND type = '".$type."'";
+        }
+                
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $list = $stmt->fetchAll();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+
 }

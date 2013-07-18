@@ -44,11 +44,20 @@ class UserEvent {
     private $description;
 
     /**
-     * @var date
+     * @var string
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
      * @Expose
      */
+    private $type;
+
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="edate", type="datetime")
+     * @Expose
+     */
+    private $edate;
     private $date;
 
     /**
@@ -58,19 +67,16 @@ class UserEvent {
      */
     private $account;
 
-    
     public function __construct() {
-        $this->setDate(new \DateTime("now"));
+        $this->setEdate(new \DateTime("now"));
     }
-
 
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -80,10 +86,9 @@ class UserEvent {
      * @param string $title
      * @return UserEvent
      */
-    public function setTitle($title)
-    {
+    public function setTitle($title) {
         $this->title = $title;
-    
+
         return $this;
     }
 
@@ -92,8 +97,7 @@ class UserEvent {
      *
      * @return string 
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
@@ -103,10 +107,21 @@ class UserEvent {
      * @param string $description
      * @return UserEvent
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
+
+        return $this;
+    }
     
+    /**
+     * Add new part to description
+     *
+     * @param string $description
+     * @return UserEvent
+     */
+    public function addToDescription($description) {
+        $this->description.= $description;
+
         return $this;
     }
 
@@ -115,8 +130,7 @@ class UserEvent {
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -126,10 +140,9 @@ class UserEvent {
      * @param \DateTime $date
      * @return UserEvent
      */
-    public function setDate($date)
-    {
-        $this->date = $date;
-    
+    public function setEdate($date) {
+        $this->edate = $date;
+
         return $this;
     }
 
@@ -138,9 +151,8 @@ class UserEvent {
      *
      * @return \DateTime 
      */
-    public function getDate()
-    {
-        return $this->date;
+    public function getEdate() {
+        return $this->edate;
     }
 
     /**
@@ -149,10 +161,9 @@ class UserEvent {
      * @param \Flash\Bundle\DefaultBundle\Entity\Account $account
      * @return UserEvent
      */
-    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null)
-    {
+    public function setAccount(\Flash\Bundle\DefaultBundle\Entity\Account $account = null) {
         $this->account = $account;
-    
+
         return $this;
     }
 
@@ -161,8 +172,29 @@ class UserEvent {
      *
      * @return \Flash\Bundle\DefaultBundle\Entity\Account 
      */
-    public function getAccount()
-    {
+    public function getAccount() {
         return $this->account;
     }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Event
+     */
+    public function setType($type) {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType() {
+        return $this->type;
+    }
+
 }

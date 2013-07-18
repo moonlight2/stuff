@@ -30,8 +30,9 @@ class UserEventFactory {
             case 'new_photo':
                 
                 $uEvent->setTitle($acc->getFirstName() . ' Добавил новое фото ');
-                $uEvent->setDescription('Вот оно фото <br /><img src="image/thumb/'.$acc->getId().'/'. $obj->getPath() . '" />');
+                $uEvent->setDescription('<img src="image/thumb/'.$acc->getId().'/'. $obj->getPath() . '" />');
                 $uEvent->setAccount($acc);
+                $uEvent->setType('photo');
                 break;
             default :
                 break;

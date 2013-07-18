@@ -75,4 +75,13 @@ class PhotoRepository extends EntityRepository {
         return (sizeof($list) > 0) ? $list : null;
     }
 
+    public function getLast($from, $to) {
+        $list = $this->getEntityManager()
+                ->createQuery("SELECT p FROM FlashDefaultBundle:Photo p ORDER BY p.id DESC")
+                ->setFirstResult($from)
+                ->setMaxResults($to)
+                ->getResult();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+
 }

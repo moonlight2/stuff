@@ -44,6 +44,33 @@ class DefaultController extends Controller {
      * @Template()
      */
     public function testAction() {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $events = $em->getRepository('FlashDefaultBundle:UserEvent')->getTodaysEvents('photo');
+
+        print_r($events);
+        
+        
+        $d = new \DateTime('now');
+        
+        $current_day_start = mktime(0, 0, 0, date("m"), date("d"), date("Y"));
+        $current_day_end = mktime(23, 59, 59, date("m"), date("d"), date("Y"));
+        
+//        print_r($current_day_end); 
+//        echo "<br>";
+        print_r($d->format('Y-m-d'));
+
+        
+        $photos = $em->getRepository('FlashDefaultBundle:Photo')->getLast(0, 10);
+
+        //print_r($photos);
+
+        foreach ($photos as $p) {
+            echo $p->getId() . "<br>";
+        }
+
+        exit();
 
         $time = '2011-08-11T09:15:03Z';
         $time2 = '2011-08-12T09:55:03Z';
