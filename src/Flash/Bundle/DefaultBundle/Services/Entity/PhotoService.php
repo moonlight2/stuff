@@ -70,7 +70,7 @@ class PhotoService extends CommonService {
         }
 
         if (null != $uEvent) {
-            $uEvent->addToDescription('<img src="image/thumb/'.$acc->getId().'/'. $photo->getPath() . '" />'); // create new description 
+            $uEvent->addToDescription('<a href="p'.$acc->getId().'/gallery#album/'.$photo->getAlbum()->getId().'/photo/'.$photo->getId().'"><img src="image/thumb/'.$acc->getId().'/'. $photo->getPath() . '" /></a>'); // create new description 
         } else {
             $uEventFactory = $this->injector->getUserEventFactory();
             $uEvent = $uEventFactory->get($uEventFactory::NEW_PHOTO, $acc, $photo);

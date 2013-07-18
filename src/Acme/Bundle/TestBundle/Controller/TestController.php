@@ -16,15 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference,
 
 class TestController extends FOSRestController {
 
-    /**
-     * @Route("testik")
-     * @Method({"GET"})
-     */
-    public function indexAction() {
-        echo 'Testik';
-        $end = new \DateTime($request->get('end'));
-        exit();
-    }
 
     /**
      * @Rest\View

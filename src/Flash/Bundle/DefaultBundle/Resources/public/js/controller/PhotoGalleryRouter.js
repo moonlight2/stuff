@@ -60,9 +60,10 @@ $(document).ready(function() {
         },
         photoDetails: function(a_id, id) {
 
+            console.log('Photo details');
             $('#uploader').hide();
 
-            this.before(function() {
+            this.before(a_id, function() {
                 var photo = this.photos.get(id);
                 photo.rootUrl = '../logged/api/account/' + acc_id + '/albums/' + a_id + '/photos' + id;
                 this.showView('#thumbs', new PhotoView({model: photo}));
@@ -74,18 +75,17 @@ $(document).ready(function() {
                 UploaderModel.uploadStoredFiles();
             });
         },
-        before: function(callback) {
+        before: function(a_id, callback) {
             if (this.photos) {
                 if (callback)
                     callback.call(this);
             } else {
                 this.photos = new PhotoCollection();
                 var self = this;
-                this.photos.url = '../logged/api/account/' + this.acc_id + '/photos';
+                this.photos.url = '../logged/api/account/' + acc_id + '/albums/'+ a_id +'/photos';
                 this.photos.fetch({
                     success: function(data) {
                         $('#thumbs').html(new PhotoListView({model: self.photos}).render().el);
-                        self.galleryInit();
                         if (callback)
                             callback.call(self);
                     }});
