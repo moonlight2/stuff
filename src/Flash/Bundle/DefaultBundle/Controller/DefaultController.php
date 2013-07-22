@@ -40,58 +40,75 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/test", name="test_page")
+     * @Route("/test/{id}", name="test_page")
      * @Template()
      */
-    public function testAction() {
-        
-        $em = $this->getDoctrine()->getManager();
-        
-        $events = $em->getRepository('FlashDefaultBundle:UserEvent')->getTodaysEvents('photo');
+    public function testAction($id = null) {
 
-        print_r($events);
-        
-        
-        $d = new \DateTime('now');
-        
-        $current_day_start = mktime(0, 0, 0, date("m"), date("d"), date("Y"));
-        $current_day_end = mktime(23, 59, 59, date("m"), date("d"), date("Y"));
-        
-//        print_r($current_day_end); 
-//        echo "<br>";
-        print_r($d->format('Y-m-d'));
+        //Создаём новый объект Memcache
+        $memcache_obj = new \Memcache();
 
-        
-        $photos = $em->getRepository('FlashDefaultBundle:Photo')->getLast(0, 10);
+//Соединяемся с нашим сервером
+        $memcache_obj->connect('127.0.0.1', 11211) or die("Could not connect");
 
-        //print_r($photos);
 
-        foreach ($photos as $p) {
-            echo $p->getId() . "<br>";
+//Попытаемся получить объект с ключом image
+        $image_bin = @$memcache_obj->get('image');
+
+        var_dump($image_bin);
+        exit();
+        if (empty($image_bin)) {
+
+//Если в кэше нет картинки, сгенерируем её и закэшируем
+            imagepng($this->LoadCPU(), getcwd() . '/tmp.png', 9);
+            $image_bin = file_get_contents(getcwd() . '/tmp.png');
+            unlink(getcwd() . '/tmp.png');
+            $memcache_obj->set('image', $image_bin, false, 30);
         }
 
-        exit();
+//Выведем картинку из кэша
+        header('Content-type: image/png');
+        echo $image_bin;
 
-        $time = '2011-08-11T09:15:03Z';
-        $time2 = '2011-08-12T09:55:03Z';
-
-        $mydate = new \DateTime($time);
-        $mydate2 = new \DateTime($time2);
+//Закрываем соединение с сервером Memcached
+        $memcache_obj->close();
 
 
-        if ($mydate->format('Y') == $mydate2->format('Y') &&
-                $mydate->format('m') == $mydate2->format('m') &&
-                $mydate->format('d') == $mydate2->format('d')) {
-            echo "The same date";
+
+//        $em = $this->getDoctrine()->getManager();
+//
+//        $img = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
+//
+//        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+//
+//        if (null != $img) {
+//
+//            $si->load($img->getAbsolutePath());
+//
+//            //echo $si->getHeight();
+//            if ($si->getHeight() >= 400) {
+//                $si->resizeToHeight(230);
+//            }
+//            //echo $si->getWidth();
+//            $si->output();
+//        } else {
+//            echo "Image with id " . $id . " not found";
+//        }
+    }
+
+    function LoadCPU() {
+
+        $image = imagecreate(800, 600);
+
+
+        $color = imagecolorallocate($image, 255, 255, 255);
+
+        $color2 = imagecolorallocate($image, 0, 0, 0);
+
+        for ($i = 0; $i < 10000; $i++) {
+            imagesetpixel($image, rand(0, 800), rand(0, 600), $color2);
         }
-        exit();
-
-
-        $date = '2011-10-02T23:25:42Z';
-        var_dump($this->validateDate($date));
-
-        $date = '2011-17-17T23:25:42Z';
-        var_dump($this->validateDate($date));
+        return $image;
     }
 
     function validateDate($date) {

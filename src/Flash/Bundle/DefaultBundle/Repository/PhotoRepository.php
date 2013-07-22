@@ -10,6 +10,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class PhotoRepository extends EntityRepository {
 
+    public function getByPath($path) {
+
+        $list = $this->getEntityManager()
+                ->createQuery('SELECT p FROM FlashDefaultBundle:Photo p
+                                       WHERE p.path = :path')
+                ->setParameter('path', $path)
+                ->getResult();
+        return (sizeof($list) > 0) ? $list[0] : null;
+    }
+    
     public function getByAccountAndPath($acc, $path) {
 
         $list = $this->getEntityManager()
