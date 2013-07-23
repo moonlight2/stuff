@@ -71,6 +71,26 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         $si->output();
         exit();
     }
+    
+    /**
+     * @Route("/thumb/crop/w{c_w}/h{c_h}/{acc_id}/{img_name}", requirements={"acc_id" = "\d+", "h" = "\d+", "c_h" = "\d+", "c_w" = "\d+"})
+     * @Method({"GET"})
+     */
+    public function smartCropAction($acc_id, $c_w, $c_h, $img_name = null) {
+
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $img = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
+
+        if (NULL == $img) {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+        }
+        $si->load($img->getAbsolutePath());
+        $si->smartCrop($c_w, $c_h);
+
+        $si->output();
+        exit();
+    }
 
     /**
      * @Route("/thumb/w{w}/{acc_id}/{img_name}", requirements={"acc_id" = "\d+", "w" = "\d+"})
@@ -89,6 +109,29 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         if ($si->getWidth() > $w) {
             $si->resizeToWidth($w);
         }
+        $si->output();
+        exit();
+    }
+
+    /**
+     * @Route("/thumb/w{w}/crop/w{c_w}/h{c_h}/{acc_id}/{img_name}", requirements={"acc_id" = "\d+", "w" = "\d+", "c_h" = "\d+", "c_w" = "\d+"})
+     * @Method({"GET"})
+     */
+    public function resizeWidthAndCropAction($acc_id, $w, $c_w, $c_h, $img_name = null) {
+
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $img = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
+
+        if (NULL == $img) {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+        }
+        $si->load($img->getAbsolutePath());
+        if ($si->getWidth() > $w) {
+            $si->resizeToWidth($w);
+        }
+        $si->crop($c_w, $c_h);
+
         $si->output();
         exit();
     }

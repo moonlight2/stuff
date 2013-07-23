@@ -10,7 +10,7 @@
 
 <script type="text/template" id="image-list-tpl">
     <a title="<%= name %>">
-        <img src="http://localhost/stuff/web/app_dev.php/image/thumb/{{ acc_id }}/<%= path %>"/>
+        <img src="http://localhost/stuff/web/app_dev.php/image/thumb/crop/w150/h150/{{ acc_id }}/<%= path %>"/>
     </a>
 </script>
 
@@ -34,7 +34,7 @@
     <div class = 'photo-album'>
         <p><%= name %></p>
         <div>
-            <img class= 'album-open' src="http://localhost/stuff/web/app_dev.php/image/thumb/{{ acc_id }}/<%= preview %>"/>
+            <img class= 'album-open' src="http://localhost/stuff/web/app_dev.php/image/thumb/crop/w200/h200/{{ acc_id }}/<%= preview %>"/>
         </div>
         <button class='btn album-delete' val=''>Удалить</button>
     </div>

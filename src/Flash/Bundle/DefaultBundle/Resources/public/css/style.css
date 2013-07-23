@@ -31,10 +31,9 @@ root {
 }
 
 .photo-album {
-    padding: 15px;
+    padding: 15px !important;
     border: 1px solid;
     border-radius: 7px;
-    width: 180px;
     float: left;
 }
 
