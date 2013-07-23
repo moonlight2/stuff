@@ -15,10 +15,10 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
      * @Method({"GET"})
      */
     public function getAction($acc_id, $img_name = null) {
-        
-        $si =  new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
         $img = $this->getDoctrine()->getManager()
-                ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
+                        ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
 
         if (NULL == $img) {
             throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
@@ -27,16 +27,16 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         $si->output();
         exit();
     }
-    
+
     /**
      * @Route("/thumb/h{h}/{acc_id}/{img_name}", requirements={"acc_id" = "\d+", "h" = "\d+"})
      * @Method({"GET"})
      */
-    public function getAndResizeHeigthAction($acc_id, $h, $img_name = null) {
-        
-        $si =  new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+    public function resizeHeigthAction($acc_id, $h, $img_name = null) {
+
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
         $img = $this->getDoctrine()->getManager()
-                ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
+                        ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
 
         if (NULL == $img) {
             throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
@@ -48,16 +48,39 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         $si->output();
         exit();
     }
-    
+
+    /**
+     * @Route("/thumb/h{h}/crop/w{c_w}/h{c_h}/{acc_id}/{img_name}", requirements={"acc_id" = "\d+", "h" = "\d+", "c_h" = "\d+", "c_w" = "\d+"})
+     * @Method({"GET"})
+     */
+    public function resizeHeigthAndCropAction($acc_id, $h, $c_w, $c_h, $img_name = null) {
+
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $img = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
+
+        if (NULL == $img) {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+        }
+        $si->load($img->getAbsolutePath());
+        if ($si->getHeight() > $h) {
+            $si->resizeToHeight($h);
+        }
+        $si->crop($c_w, $c_h);
+
+        $si->output();
+        exit();
+    }
+
     /**
      * @Route("/thumb/w{w}/{acc_id}/{img_name}", requirements={"acc_id" = "\d+", "w" = "\d+"})
      * @Method({"GET"})
      */
-    public function getAndResizeWidthAction($acc_id, $w, $img_name = null) {
-        
-        $si =  new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+    public function resizeWidthAction($acc_id, $w, $img_name = null) {
+
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
         $img = $this->getDoctrine()->getManager()
-                ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
+                        ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
 
         if (NULL == $img) {
             throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
@@ -100,10 +123,10 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
      * @Method({"GET"})
      */
     public function getThumbnailAction($acc_id, $img_name = null) {
-        
-        $si =  new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
         $img = $this->getDoctrine()->getManager()
-                ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
+                        ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
 
         if (NULL == $img) {
             throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
@@ -111,7 +134,6 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         $si->load($img->getAbsoluteAlbumPath('thumb'));
         $si->output();
         exit();
-
     }
 
     /**

@@ -45,71 +45,26 @@ class DefaultController extends Controller {
      */
     public function testAction($id = null) {
 
-        //Создаём новый объект Memcache
-        $memcache_obj = new \Memcache();
 
-//Соединяемся с нашим сервером
-        $memcache_obj->connect('127.0.0.1', 11211) or die("Could not connect");
+        $em = $this->getDoctrine()->getManager();
 
+        $img = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
 
-//Попытаемся получить объект с ключом image
-        $image_bin = @$memcache_obj->get('image');
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
 
-        var_dump($image_bin);
-        exit();
-        if (empty($image_bin)) {
+        if (null != $img) {
 
-//Если в кэше нет картинки, сгенерируем её и закэшируем
-            imagepng($this->LoadCPU(), getcwd() . '/tmp.png', 9);
-            $image_bin = file_get_contents(getcwd() . '/tmp.png');
-            unlink(getcwd() . '/tmp.png');
-            $memcache_obj->set('image', $image_bin, false, 30);
+            $si->load($img->getAbsolutePath());
+
+            header('Content-Type: image/jpeg');
+            $si->crop(150, 150);
+            $si->output();
+        } else {
+            echo "Image with id " . $id . " not found";
         }
-
-//Выведем картинку из кэша
-        header('Content-type: image/png');
-        echo $image_bin;
-
-//Закрываем соединение с сервером Memcached
-        $memcache_obj->close();
-
-
-
-//        $em = $this->getDoctrine()->getManager();
-//
-//        $img = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
-//
-//        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
-//
-//        if (null != $img) {
-//
-//            $si->load($img->getAbsolutePath());
-//
-//            //echo $si->getHeight();
-//            if ($si->getHeight() >= 400) {
-//                $si->resizeToHeight(230);
-//            }
-//            //echo $si->getWidth();
-//            $si->output();
-//        } else {
-//            echo "Image with id " . $id . " not found";
-//        }
     }
 
-    function LoadCPU() {
 
-        $image = imagecreate(800, 600);
-
-
-        $color = imagecolorallocate($image, 255, 255, 255);
-
-        $color2 = imagecolorallocate($image, 0, 0, 0);
-
-        for ($i = 0; $i < 10000; $i++) {
-            imagesetpixel($image, rand(0, 800), rand(0, 600), $color2);
-        }
-        return $image;
-    }
 
     function validateDate($date) {
         if (preg_match('/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/', $date, $parts) == true) {

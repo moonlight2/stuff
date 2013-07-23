@@ -26,11 +26,14 @@ class SimpleImage {
 
     private $image;
     private $image_type;
+    private $image_info;
+    private $filename;
 
     function load($filename) {
 
-        $image_info = getimagesize($filename);
-        $this->image_type = $image_info[2];
+        $this->filename = $filename;
+        $this->image_info = getimagesize($filename);
+        $this->image_type = $this->image_info[2];
         if ($this->image_type == IMAGETYPE_JPEG) {
 
             $this->image = imagecreatefromjpeg($filename);
@@ -41,6 +44,24 @@ class SimpleImage {
 
             $this->image = imagecreatefrompng($filename);
         }
+    }
+
+    function crop($w, $h) {
+
+        $w_orig = $this->image_info[1];
+        $h_orig = $this->image_info[0];
+
+        if ($w > $this->getWidth() && $h > $this->getHeight()) {
+            $tmp = imagecreatetruecolor($this->getWidth(), $this->getHeight());
+        } else if ($h > $this->getHeight() && $w < $this->getWidth()) {
+            $tmp = imagecreatetruecolor($w, $this->getHeight());
+        } else if ($w > $this->getWidth() && $h < $this->getHeight()) {
+            $tmp = imagecreatetruecolor($this->getWidth(), $h);
+        } else {
+            $tmp = imagecreatetruecolor($w, $h);
+        }
+        imagecopyresampled($tmp, $this->image, 0, 0, 0, 0, $w, $h, $w, $h);
+        $this->image = $tmp;
     }
 
     function save($filename, $image_type = IMAGETYPE_JPEG, $compression = 75, $permissions = null) {
@@ -108,11 +129,11 @@ class SimpleImage {
         imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
         $this->image = $new_image;
     }
-    
+
     public function getImage() {
         return $this->image;
     }
-    
+
 }
 
 ?>
