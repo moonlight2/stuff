@@ -64,7 +64,7 @@ class SimpleImage {
         $this->image = $tmp;
     }
 
-    function smartCrop($w, $h) {
+    function cubeCrop($w) {
 
         $w_orig = $this->image_info[1];
         $h_orig = $this->image_info[0];
@@ -75,18 +75,62 @@ class SimpleImage {
             $flag = true;
         }
         if ($flag) {
-            $this->resizeToHeight($h);
+            $this->resizeToHeight($w);
         } else {
             $this->resizeToWidth($w);
         }
 
-        if ($w > $this->getWidth() && $h > $this->getHeight()) {
+        if ($w > $this->getWidth() && $w > $this->getHeight()) {
+
             $tmp = imagecreatetruecolor($this->getWidth(), $this->getHeight());
-        } else if (($h > $this->getHeight()) && $w < $this->getWidth()) {
+        } else if (($w > $this->getHeight()) && $w < $this->getWidth()) {
+
             $tmp = imagecreatetruecolor($w, $this->getHeight());
         } else if (($w > $this->getWidth()) && $h < $this->getHeight()) {
+
+            $tmp = imagecreatetruecolor($this->getWidth(), $w);
+        } else {
+            
+            $tmp = imagecreatetruecolor($w, $w);
+        }
+        imagecopyresampled($tmp, $this->image, 0, 0, 0, 0, $w, $w, $w, $w);
+        $this->image = $tmp;
+    }
+
+    function smartCrop($w, $h) {
+
+        $w_orig = $this->image_info[1];
+        $h_orig = $this->image_info[0];
+
+        $flag = false;
+
+//        if ($this->getWidth() > $this->getHeight()) {
+//            $flag = true;
+//        }
+//        if ($flag) {
+//            $this->resizeToHeight($h);
+//        } else {
+//            $this->resizeToWidth($w);
+//        }
+
+        if ($w > $this->getWidth() && $h > $this->getHeight()) {
+
+            $tmp = imagecreatetruecolor($this->getWidth(), $this->getHeight());
+        } else if (($h > $this->getHeight()) && $w < $this->getWidth()) {
+
+            $tmp = imagecreatetruecolor($w, $this->getHeight());
+        } else if (($w > $this->getWidth()) && $h < $this->getHeight()) {
+
             $tmp = imagecreatetruecolor($this->getWidth(), $h);
         } else {
+            //print_r($this->getWidth());
+            //print_r($this->getHeight());
+            //exit();
+            if ($h > $w) {
+                $this->resizeToHeight($h);
+            } else {
+                $this->resizeToWidth($w);
+            }
             $tmp = imagecreatetruecolor($w, $h);
         }
         imagecopyresampled($tmp, $this->image, 0, 0, 0, 0, $w, $h, $w, $h);

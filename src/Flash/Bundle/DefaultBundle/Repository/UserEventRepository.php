@@ -40,11 +40,12 @@ class UserEventRepository extends EntityRepository {
         return (sizeof($list) > 0) ? $list : null;
     }
 
-    public function getTodaysEvents($type = null) {
+    public function getOwnTodaysEvents($acc, $type = null) {
 
         $sql = "SELECT id, account_id, title, description, edate, type
                 FROM user_event
-                WHERE DATE( edate ) >= DATE( NOW( ) )";
+                WHERE account_id = '". $acc->getId() ."'
+                AND DATE( edate ) >= DATE( NOW( ) )";
         if (null != $type) {
             $sql.= "AND type = '".$type."'";
         }

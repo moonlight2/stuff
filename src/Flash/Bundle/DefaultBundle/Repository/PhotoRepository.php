@@ -19,7 +19,7 @@ class PhotoRepository extends EntityRepository {
                 ->getResult();
         return (sizeof($list) > 0) ? $list[0] : null;
     }
-    
+
     public function getByAccountAndPath($acc, $path) {
 
         $list = $this->getEntityManager()
@@ -91,6 +91,19 @@ class PhotoRepository extends EntityRepository {
                 ->setFirstResult($from)
                 ->setMaxResults($to)
                 ->getResult();
+        return (sizeof($list) > 0) ? $list : null;
+    }
+
+    public function getOwnTodaysPhoto($acc) {
+
+        $sql = "SELECT *
+                FROM photo
+                WHERE account_id = '" . $acc->getId() . "' 
+                AND DATE( uploaded ) >= DATE( NOW( ) )";
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $list = $stmt->fetchAll();
         return (sizeof($list) > 0) ? $list : null;
     }
 

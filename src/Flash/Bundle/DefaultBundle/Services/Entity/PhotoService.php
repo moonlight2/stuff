@@ -17,7 +17,6 @@ class PhotoService extends CommonService {
         $view = View::create();
         $album = $em->getRepository('FlashDefaultBundle:Album')->find($albumId);
 
-
         if (NULL == $album) {
             return $view->setData(array('error' => 'Not found'));
         }
@@ -62,32 +61,44 @@ class PhotoService extends CommonService {
         return $view->setData(array('success' => 'true', 'photo' => $photo));
     }
 
-    private function createUserEvent($photo) {
+    private function createUserEvent($photo, $limit = NULL) {
+
+        $photoLimit = (NULL == $limit) ? 4 : $limit;
 
         $acc = $this->context->getToken()->getUser();
         $em = $this->injector->getDoctrine()->getManager();
-        $todayEvents = $em->getRepository('FlashDefaultBundle:UserEvent')->getTodaysEvents('photo');
-        $uEvent = null;
 
-        if (null != $todayEvents) {
-            foreach ($todayEvents as $e) {
-                if ($this->compareDates($photo->getUploaded(), new \DateTime($e['edate']))) {
-                    $uEvent = $em->getRepository('FlashDefaultBundle:UserEvent')->find($e['id']);
-                    break;
+        $todayPhotos = $em->getRepository('FlashDefaultBundle:Photo')->getOwnTodaysPhoto($acc);
+        $uEvent = null;
+        $isLimit = false;
+
+        if ((sizeof($todayPhotos) < $photoLimit) && (sizeof($todayPhotos != 0))) {
+            $todayEvents = $em->getRepository('FlashDefaultBundle:UserEvent')
+                    ->getOwnTodaysEvents($acc, 'photo');
+            if (null != $todayEvents) {
+                foreach ($todayEvents as $e) {
+                    if ($this->compareDates($photo->getUploaded(), new \DateTime($e['edate']))) {
+                        $uEvent = $em->getRepository('FlashDefaultBundle:UserEvent')->find($e['id']);
+                        break;
+                    }
                 }
             }
+        } else {
+            $isLimit = true;
         }
 
-        if (null != $uEvent) {
-            $src = 'image/thumb/' . $acc->getId() . '/' . $photo->getPath();
-            $href = 'p' . $acc->getId() . '/gallery#album/' . $photo->getAlbum()->getId() . '/photo/' . $photo->getId();
-            $uEvent->addToDescription('<a href="' . $href . '"><img src="' . $src . '" /></a>'); // create new description 
-        } else {
-            $uEventFactory = $this->injector->getUserEventFactory();
-            $uEvent = $uEventFactory->get($uEventFactory::NEW_PHOTO, $acc, $photo);
+        if (!$isLimit) {
+            if (NULL != $uEvent) {
+                $src = 'image/thumb/' . $acc->getId() . '/' . $photo->getPath();
+                $href = 'p' . $acc->getId() . '/gallery#album/' . $photo->getAlbum()->getId() . '/photo/' . $photo->getId();
+                $uEvent->addToDescription('<a href="' . $href . '"><img src="' . $src . '" /></a>'); // create new description 
+            } else {
+                $uEventFactory = $this->injector->getUserEventFactory();
+                $uEvent = $uEventFactory->get($uEventFactory::NEW_PHOTO, $acc, $photo);
+            }
+            $em->persist($uEvent);
+            $em->flush();
         }
-        $em->persist($uEvent);
-        $em->flush();
     }
 
     private function compareDates($d1, $d2) {

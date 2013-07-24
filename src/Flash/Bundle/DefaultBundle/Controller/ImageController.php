@@ -92,6 +92,27 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         exit();
     }
 
+        /**
+     * @Route("/thumb/crop/{crop}/{acc_id}/{img_name}", requirements={"acc_id" = "\d+", "crop" = "\d+"})
+     * @Method({"GET"})
+     */
+    public function cubeCropAction($acc_id, $crop, $img_name = null) {
+
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $img = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
+
+        if (NULL == $img) {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+        }
+        $si->load($img->getAbsolutePath());
+        $si->cubeCrop($crop);
+
+        $si->output();
+        exit();
+    }
+    
+    
     /**
      * @Route("/thumb/w{w}/{acc_id}/{img_name}", requirements={"acc_id" = "\d+", "w" = "\d+"})
      * @Method({"GET"})
