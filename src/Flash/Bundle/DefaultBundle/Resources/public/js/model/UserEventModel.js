@@ -5,7 +5,7 @@ window.UserEventModel = Backbone.Model.extend({
         "id": null,
         "title": "",
         "description": "",
-        "date": "",
+        "edate": "",
     }
 });
 

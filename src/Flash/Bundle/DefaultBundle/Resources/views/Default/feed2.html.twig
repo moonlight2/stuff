@@ -1,4 +1,4 @@
-{% extends "FlashDefaultBundle::feed.html.twig" %}
+{% extends "FlashDefaultBundle::feed2.html.twig" %}
 
 {% block title "Feed page" %}
 
@@ -17,10 +17,17 @@
 </div>
     
 
-    <script type="text/template" id="events-list-tpl">
+    <script type="text/template" id="user-event-list-tpl">
         <h2><%= title %></h2>
         <p><%= description %></p>
-        <p><%= date %></p>
+        <p><%= edate %></p>
+        {% if is_granted('ROLE_MODERATOR') %}
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn delete-event">Удалить</button>
+                </div>
+            </div> 
+        {% endif %}
     </script>
 
 {% endblock %}

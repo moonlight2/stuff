@@ -1,0 +1,55 @@
+{% extends "TwigBundle::layout.html.twig" %}
+
+{% block head %}
+<link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/style.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/bootstrap.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/fullcalendar.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/smoothness/jquery-ui-1.9.2.custom.min.css') }}" />
+<script src="{{ asset('bundles/acmedemo/js/lib/jquery-1.7.1.min.js') }}"></script>
+
+<script src="{{ asset('bundles/acmedemo/js/lib/underscore-min.js') }}"></script>
+<script src="{{ asset('bundles/acmedemo/js/lib/backbone-min.js') }}"></script>
+<script src="{{ asset('bundles/flashdefault/js/lib/date.min.js') }}"></script>
+
+
+<link rel="stylesheet" href="{{ asset('bundles/flashdefault/css/fineuploader-3.5.0.css') }}" />
+<script src="{{ asset('bundles/flashdefault/js/lib/jquery.fineuploader-3.5.0.min.js') }}"></script>
+{% endblock %}
+
+
+{% block body %}
+    {% block content_header %}
+<div class="navbar">
+    <div class="navbar-inner">             
+            {% block content_header_more %}
+                {% if is_granted('ROLE_ADMINdsfdf') %}
+                    {{ knp_menu_render('FlashDefaultBundle:Builder:adminMenu') }}
+                {% elseif is_granted('ROLE_LEADER')%}
+                    {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
+                {% elseif is_granted('ROLE_USER')%}
+                    {{ knp_menu_render('FlashDefaultBundle:Builder:leaderMenu') }}
+                {% endif %}
+            {% endblock %}
+    </div>
+</div>
+        <div style="clear: both"></div>
+    {% endblock %}
+        
+
+    <div class="block" id='main'>
+         {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ asset('bundles/flashdefault/js/common/BasicViewExtend.js') }}"></script>   
+    <script src="{{ asset('bundles/flashdefault/js/common/BasicRouterExtend.js') }}"></script>   
+
+    <script src="{{ asset('bundles/flashdefault/js/views/feed/FeedEventView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/feed/PhotoView.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/UserEventModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/model/PhotoModel.js') }}"></script>
+    <script src="{{ asset('bundles/flashdefault/js/views/UserEventListView.js') }}"></script>
+      
+    <script src="{{ asset('bundles/flashdefault/js/controller/UserFeedRouter.js') }}"></script>   
+
+{% endblock %}

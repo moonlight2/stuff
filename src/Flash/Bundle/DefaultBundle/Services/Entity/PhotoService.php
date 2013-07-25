@@ -72,7 +72,7 @@ class PhotoService extends CommonService {
         $uEvent = null;
         $isLimit = false;
 
-        if ((sizeof($todayPhotos) < $photoLimit) && (sizeof($todayPhotos != 0))) {
+        if ((sizeof($todayPhotos) <= $photoLimit)) {
             $todayEvents = $em->getRepository('FlashDefaultBundle:UserEvent')
                     ->getOwnTodaysEvents($acc, 'photo');
             if (null != $todayEvents) {
@@ -88,7 +88,7 @@ class PhotoService extends CommonService {
         }
 
         if (!$isLimit) {
-            if (NULL != $uEvent) {
+            if (sizeof($todayPhotos > 1)) {
                 $src = 'image/thumb/' . $acc->getId() . '/' . $photo->getPath();
                 $href = 'p' . $acc->getId() . '/gallery#album/' . $photo->getAlbum()->getId() . '/photo/' . $photo->getId();
                 $uEvent->addToDescription('<a href="' . $href . '"><img src="' . $src . '" /></a>'); // create new description 
@@ -98,6 +98,8 @@ class PhotoService extends CommonService {
             }
             $em->persist($uEvent);
             $em->flush();
+            $acl = $this->injector->getAcl();
+            $acl->grant($uEvent, MaskBuilder::MASK_DELETE);
         }
     }
 

@@ -20,7 +20,15 @@ window.UserEventListItemView = Backbone.View.extend({
         $(this.el).attr('class', 'user-event').html(this.template(this.model.toJSON()));
         return this;
     },
+    events: {
+        "click .delete-event": "deleteEvent",
+    },
     initialize: function() {
+        this.model.bind("destroy", this.close, this);
         this.model.bind('change', this.render, this);
     },
+    deleteEvent: function() {
+        this.model.url = 'api/logged/account/1/events/' + this.model.get('id');
+        this.model.destroy();
+    }
 });

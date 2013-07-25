@@ -24,7 +24,7 @@ class UserEventRepository extends EntityRepository {
 
     public function findAllByLimit($from, $to) {
         $list = $this->getEntityManager()
-                ->createQuery('SELECT e FROM FlashDefaultBundle:UserEvent e')
+                ->createQuery('SELECT e FROM FlashDefaultBundle:UserEvent e ORDER BY e.id DESC')
                 ->setFirstResult($from)
                 ->setMaxResults($to)
                 ->getResult();
