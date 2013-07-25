@@ -4,7 +4,9 @@ window.PhotoListView = Backbone.View.extend({
         this.hash = window.location.hash.substring(1);
         this.model.bind('reset', this.render, this);
         this.model.bind('add', this.appendLast, this);
-        UploaderModel.setEndpoint('../logged/api/account/' + acc_id + '/albums/' + (this.hash.split('/'))[1] + '/photos');
+        if (acc_id == own_id) {
+            UploaderModel.setEndpoint('../logged/api/account/' + acc_id + '/albums/' + (this.hash.split('/'))[1] + '/photos');
+        }
     },
     appendLast: function() {
         var photo = this.model.models[this.model.length - 1];

@@ -63,7 +63,7 @@ class PhotoService extends CommonService {
 
     private function createUserEvent($photo, $limit = NULL) {
 
-        $photoLimit = (NULL == $limit) ? 4 : $limit;
+        $photoLimit = (NULL == $limit) ? 14 : $limit;
 
         $acc = $this->context->getToken()->getUser();
         $em = $this->injector->getDoctrine()->getManager();
@@ -71,6 +71,7 @@ class PhotoService extends CommonService {
         $todayPhotos = $em->getRepository('FlashDefaultBundle:Photo')->getOwnTodaysPhoto($acc);
         $uEvent = null;
         $isLimit = false;
+
 
         if ((sizeof($todayPhotos) <= $photoLimit)) {
             $todayEvents = $em->getRepository('FlashDefaultBundle:UserEvent')
@@ -89,9 +90,14 @@ class PhotoService extends CommonService {
 
         if (!$isLimit) {
             if (sizeof($todayPhotos > 1)) {
-                $src = 'image/thumb/' . $acc->getId() . '/' . $photo->getPath();
-                $href = 'p' . $acc->getId() . '/gallery#album/' . $photo->getAlbum()->getId() . '/photo/' . $photo->getId();
-                $uEvent->addToDescription('<a href="' . $href . '"><img src="' . $src . '" /></a>'); // create new description 
+                if (null == $uEvent) {
+                    $uEventFactory = $this->injector->getUserEventFactory();
+                    $uEvent = $uEventFactory->get($uEventFactory::NEW_PHOTO, $acc, $photo);
+                } else {
+                    $src = 'image/thumb/' . $acc->getId() . '/' . $photo->getPath();
+                    $href = 'p' . $acc->getId() . '/gallery#album/' . $photo->getAlbum()->getId() . '/photo/' . $photo->getId();
+                    $uEvent->addToDescription('<a href="' . $href . '"><img src="' . $src . '" /></a>'); // create new description 
+                }
             } else {
                 $uEventFactory = $this->injector->getUserEventFactory();
                 $uEvent = $uEventFactory->get($uEventFactory::NEW_PHOTO, $acc, $photo);
