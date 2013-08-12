@@ -72,6 +72,7 @@ $(document).ready(function() {
         uploaderInit: function() {
 
             $('#triggerUpload').click(function() {
+                localStorage.clear();
                 UploaderModel.uploadStoredFiles();
             });
         },

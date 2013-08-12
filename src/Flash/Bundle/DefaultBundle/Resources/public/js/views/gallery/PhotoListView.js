@@ -14,9 +14,27 @@ window.PhotoListView = Backbone.View.extend({
         return this;
     },
     render: function() {
+
         _.each(this.model.models, function(photo) {
-            $(this.el).attr('class', 'thumbs').append(new PhotoListItemView({model: photo}).render().el);
+            if (localStorage.length > 0) {
+                for (var key in localStorage) {
+                    if (photo.get('path') == key) {
+                        photo.set("dataurl", localStorage.getItem(key));
+                        var view = new PhotoListItemView({model: photo});
+                        view.template = _.template($('#image-list-storage-tpl').html());
+                        $(this.el).attr('class', 'thumbs').append(view.render().el);
+                        break;
+                    }
+                }
+            } else {
+                $(this.el).attr('class', 'thumbs').append(new PhotoListItemView({model: photo}).render().el);
+                var url = '../image/thumb64/' + acc_id + '/' + photo.get('path');
+                var g = $.get(url, function(data) {
+                    localStorage.setItem(photo.get('path'), data);
+                })
+            }
         }, this);
+
         return this;
     }
 });
