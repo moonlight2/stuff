@@ -199,6 +199,28 @@ class ImageController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         $si->output();
         exit();
     }
+    
+    /**
+     * @Route("/thumb64/{acc_id}/{img_name}")
+     * @Method({"GET"})
+     */
+    public function getThumbnail64Action($acc_id, $img_name = null) {
+
+        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
+        $img = $this->getDoctrine()->getManager()
+                        ->getRepository('FlashDefaultBundle:Photo')->getByPath($img_name);
+
+        if (NULL == $img) {
+            throw new \Symfony\Component\Translation\Exception\NotFoundResourceException('Not found');
+        }
+
+        $path = $img->getAbsoluteAlbumPath('thumb');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        echo $base64;
+        exit();
+    }
 
     /**
      * @Route("/avatar/{acc_id}")

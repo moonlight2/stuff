@@ -90,7 +90,7 @@ class SimpleImage {
 
             $tmp = imagecreatetruecolor($this->getWidth(), $w);
         } else {
-            
+
             $tmp = imagecreatetruecolor($w, $w);
         }
         imagecopyresampled($tmp, $this->image, 0, 0, 0, 0, $w, $w, $w, $w);
@@ -104,15 +104,6 @@ class SimpleImage {
 
         $flag = false;
 
-//        if ($this->getWidth() > $this->getHeight()) {
-//            $flag = true;
-//        }
-//        if ($flag) {
-//            $this->resizeToHeight($h);
-//        } else {
-//            $this->resizeToWidth($w);
-//        }
-
         if ($w > $this->getWidth() && $h > $this->getHeight()) {
 
             $tmp = imagecreatetruecolor($this->getWidth(), $this->getHeight());
@@ -123,9 +114,6 @@ class SimpleImage {
 
             $tmp = imagecreatetruecolor($this->getWidth(), $h);
         } else {
-            //print_r($this->getWidth());
-            //print_r($this->getHeight());
-            //exit();
             if ($h > $w) {
                 $this->resizeToHeight($h);
             } else {
@@ -166,6 +154,11 @@ class SimpleImage {
 
             imagepng($this->image);
         }
+    }
+
+    function output64($image_type = IMAGETYPE_JPEG) {
+
+        return base64_encode($this->image);
     }
 
     function getWidth() {
