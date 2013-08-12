@@ -15,6 +15,7 @@ $(document).ready(function() {
             $('#show-album-form').click(function() {
                 self.showAlbumForm();
             });
+            localStorage.clear();
         },
         showAlbums: function() {
 
@@ -72,7 +73,6 @@ $(document).ready(function() {
         uploaderInit: function() {
 
             $('#triggerUpload').click(function() {
-                localStorage.clear();
                 UploaderModel.uploadStoredFiles();
             });
         },

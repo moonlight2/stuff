@@ -11,7 +11,15 @@ window.PhotoListView = Backbone.View.extend({
     appendLast: function() {
         var photo = this.model.models[this.model.length - 1];
         $(this.el).attr('class', 'thumbs').append(new PhotoListItemView({model: photo}).render().el);
+        this.addItemToStorage(photo);
         return this;
+    },
+    addItemToStorage: function(model) {
+
+        var url = '../image/thumb64/' + acc_id + '/' + model.get('path');
+        var g = $.get(url, function(data) {
+            localStorage.setItem(model.get('path'), data);
+        })
     },
     render: function() {
 
@@ -20,6 +28,7 @@ window.PhotoListView = Backbone.View.extend({
                 for (var key in localStorage) {
                     if (photo.get('path') == key) {
                         photo.set("dataurl", localStorage.getItem(key));
+
                         var view = new PhotoListItemView({model: photo});
                         view.template = _.template($('#image-list-storage-tpl').html());
                         $(this.el).attr('class', 'thumbs').append(view.render().el);
@@ -28,11 +37,9 @@ window.PhotoListView = Backbone.View.extend({
                 }
             } else {
                 $(this.el).attr('class', 'thumbs').append(new PhotoListItemView({model: photo}).render().el);
-                var url = '../image/thumb64/' + acc_id + '/' + photo.get('path');
-                var g = $.get(url, function(data) {
-                    localStorage.setItem(photo.get('path'), data);
-                })
+                this.addItemToStorage(photo);
             }
+
         }, this);
 
         return this;
