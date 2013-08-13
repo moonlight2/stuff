@@ -15,7 +15,7 @@ $(document).ready(function() {
             $('#show-album-form').click(function() {
                 self.showAlbumForm();
             });
-            
+
         },
         showAlbums: function() {
 
@@ -56,6 +56,9 @@ $(document).ready(function() {
             this.photos = new PhotoCollection();
             this.photos.url = '../logged/api/account/' + acc_id + '/albums/' + id + '/photos';
             $('#thumbs').html('');
+            $(document.body).animate({
+                'scrollTop': $('#albums').offset().top
+            }, 200);
             this.photos.fetch({success: function(data) {
                     $('#thumbs').append(new PhotoListView({model: self.photos}).render().el);
                 }});
@@ -84,7 +87,7 @@ $(document).ready(function() {
             } else {
                 this.photos = new PhotoCollection();
                 var self = this;
-                this.photos.url = '../logged/api/account/' + acc_id + '/albums/'+ a_id +'/photos';
+                this.photos.url = '../logged/api/account/' + acc_id + '/albums/' + a_id + '/photos';
                 this.photos.fetch({
                     success: function(data) {
                         $('#thumbs').html(new PhotoListView({model: self.photos}).render().el);

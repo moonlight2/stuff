@@ -73,6 +73,7 @@ window.PhotoListItemView = Backbone.View.extend({
         var hash = window.location.hash.substring(1);
         var alb_id = (hash.split('/'))[1];
         app.navigate('album/' + alb_id + '/photo/' + this.model.get('id'), true);
+        this.scroll('album', 500);
     },
     initialize: function() {
         this.model.bind('change', this.render, this);

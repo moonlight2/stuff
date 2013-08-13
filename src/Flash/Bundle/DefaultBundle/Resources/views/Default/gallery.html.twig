@@ -62,6 +62,8 @@
 </script>
 
 <script type="text/template" id="image-details-tpl">
+    
+    <div id='album'></div>
     <div class="photo-details">
     
         <div class="thumb"  title="<%= id %>">
@@ -106,7 +108,7 @@
 </script>
 
 <div class='main-content' style='width: 800px'>
-
+    <div id='albums'></div>
     {% if (acc_id == own_id) %}
         <div id='uploader' style='display: none'>
             <div id="manual-fine-uploader"></div>

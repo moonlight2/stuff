@@ -29,3 +29,9 @@ Backbone.View.prototype.removeElements = function(text, selector) {
     });
     return wrapped.html();
 };
+
+Backbone.View.prototype.scroll = function(id, speed) {
+    $(document.body).animate({
+        'scrollTop': $('#' + id).offset().top
+    }, speed);
+};
