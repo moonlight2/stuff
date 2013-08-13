@@ -11,11 +11,10 @@ window.PhotoListView = Backbone.View.extend({
     appendLast: function() {
         var photo = this.model.models[this.model.length - 1];
         $(this.el).attr('class', 'thumbs').append(new PhotoListItemView({model: photo}).render().el);
-        this.addItemToStorage(photo);
+        this.addPhotoToStorage(photo);
         return this;
     },
-    addItemToStorage: function(model) {
-
+    addPhotoToStorage: function(model) {
         var url = '../image/thumb64/' + acc_id + '/' + model.get('path');
         var g = $.get(url, function(data) {
             localStorage.setItem(model.get('path'), data);
@@ -23,26 +22,40 @@ window.PhotoListView = Backbone.View.extend({
     },
     render: function() {
 
+        var self = this;
+        var flag = false;
+
         _.each(this.model.models, function(photo) {
             if (localStorage.length > 0) {
                 for (var key in localStorage) {
                     if (photo.get('path') == key) {
-                        photo.set("dataurl", localStorage.getItem(key));
 
+                        photo.set("dataurl", localStorage.getItem(key));
                         var view = new PhotoListItemView({model: photo});
                         view.template = _.template($('#image-list-storage-tpl').html());
                         $(this.el).attr('class', 'thumbs').append(view.render().el);
+                        flag = true;
                         break;
                     }
                 }
             } else {
-                $(this.el).attr('class', 'thumbs').append(new PhotoListItemView({model: photo}).render().el);
-                this.addItemToStorage(photo);
+                this.appendModel(photo);
+                this.addPhotoToStorage(photo);
             }
-
         }, this);
 
+        if (flag == false && localStorage.length > 0) {
+            localStorage.clear();
+            _.each(this.model.models, function(photo) {
+                this.appendModel(photo);
+                this.addPhotoToStorage(photo);
+            }, this);
+        }
+
         return this;
+    },
+    appendModel: function(model) {
+        $(this.el).attr('class', 'thumbs').append(new PhotoListItemView({model: model}).render().el);
     }
 });
 

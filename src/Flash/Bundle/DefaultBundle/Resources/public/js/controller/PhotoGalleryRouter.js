@@ -15,10 +15,11 @@ $(document).ready(function() {
             $('#show-album-form').click(function() {
                 self.showAlbumForm();
             });
-            localStorage.clear();
+            
         },
         showAlbums: function() {
 
+            //localStorage.clear();
             $('#uploader').hide();
             $('#album-form').show();
             $('.nav-pills').show();
