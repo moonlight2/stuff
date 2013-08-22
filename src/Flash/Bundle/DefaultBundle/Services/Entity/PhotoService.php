@@ -194,7 +194,7 @@ class PhotoService extends CommonService {
 
     public function createAlbum($aName) {
 
-        $view = View::create();
+
         $em = $this->injector->getDoctrine()->getManager();
         $acc = $this->context->getToken()->getUser();
 
@@ -211,7 +211,7 @@ class PhotoService extends CommonService {
         $acl->grant($album, MaskBuilder::MASK_VIEW);
         $acl->grant($album, MaskBuilder::MASK_DELETE);
 
-        return $view->setData($album);
+        return $album;
     }
 
     public function deleteAlbum($album) {

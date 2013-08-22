@@ -4,6 +4,7 @@ window.PhotoView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($('#image-details-tpl').html());
         this.alb_id = (hash.split('/'))[1];
+        console.log(this.alb_id);
     },
     render: function(eventName) {
 
@@ -15,6 +16,7 @@ window.PhotoView = Backbone.View.extend({
         'click #like': 'likePhoto',
         'click #send': 'commentPhoto',
         'click #delete': 'deletePhoto',
+        'click #save': 'saveToAlbum',
         'click .comment-delete': 'deleteComment',
         'click .comment-answer': 'answerComment',
         'click .thumb': 'nextPhoto',
@@ -26,8 +28,8 @@ window.PhotoView = Backbone.View.extend({
         this.comments = new PhotoCommentCollection();
         this.comments.url = '../logged/api/account/'
                 + acc_id +
-                '/photo/' + 
-                this.model.get('id') + 
+                '/photo/' +
+                this.model.get('id') +
                 '/comment';
         console.log(this.comments);
 
@@ -44,7 +46,7 @@ window.PhotoView = Backbone.View.extend({
 
         $('textarea#comment').val('');
         $('textarea#comment').val(acc.first_name + ' ' + acc.last_name + ', ');
-        
+
     },
     deleteComment: function(e) {
 
@@ -52,7 +54,7 @@ window.PhotoView = Backbone.View.extend({
         var comment = this.comments.get(id);
         var hash = window.location.hash.substring(1);
 
-        comment.url = '../logged/api/account/' + acc_id +'/photo/' + (hash.split('/'))[3] + '/comment/' + id;
+        comment.url = '../logged/api/account/' + acc_id + '/photo/' + (hash.split('/'))[3] + '/comment/' + id;
 
         comment.destroy({
             success: function() {
@@ -91,15 +93,15 @@ window.PhotoView = Backbone.View.extend({
     commentPhoto: function(e) {
 
         var self = this;
-        
+
         var hash = window.location.hash.substring(1);
-        
+
         this.photoComment = new PhotoCommentModel();
-        this.photoComment.url = '../logged/api/account/' + acc_id +'/photo/' + (hash.split('/'))[3] + '/comment';
+        this.photoComment.url = '../logged/api/account/' + acc_id + '/photo/' + (hash.split('/'))[3] + '/comment';
 
         this.button = e.target;
         this.button.disabled = true;
-        
+
         this.photoComment.set({
             text: $('textarea#comment').val(),
             photo_id: $(e.target).attr('val')
@@ -116,5 +118,24 @@ window.PhotoView = Backbone.View.extend({
             }
         });
         return false;
+    },
+    saveToAlbum: function() {
+         this.alb_id = (hash.split('/'))[1];
+         console.log(this.alb_id);
+
+        var url = '../logged/api/account/' + acc_id + '/albums/' + this.alb_id + '/photos/' + this.model.get('id') + '/save';
+        //alert('Save');
+        $.ajax({
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            type: "POST",
+            url: url,
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+            }});
+
     }
 });

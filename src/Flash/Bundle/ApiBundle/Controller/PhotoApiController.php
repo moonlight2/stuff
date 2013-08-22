@@ -59,12 +59,54 @@ class PhotoApiController extends RESTController implements GenericRestApi {
         return $this->handle($this->get('photo_service')->processForm(new Photo(), $alb_id));
     }
 
+    /**
+     * @Route("logged/api/account/{acc_id}/albums/{alb_id}/photos/{id}/save", requirements={"acc_id" = "\d+", "alb_id" = "\d+", "id" = "\d+"})
+     * @Route("")
+     * @Method({"POST"})
+     */
+    public function saveAction($acc_id, $alb_id, $id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $view = View::create();
+        $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
+        $ownAcc = $this->get('security.context')->getToken()->getUser();
+        $alb = $em->getRepository('FlashDefaultBundle:Album')->find($alb_id);
+
+        if (NULL === $acc || NULL === $alb || NULL === $id) {
+            return $this->handle($view->setData(array('error' => 'Not found')));
+        }
+
+        // need create new photo
+        $photo = $em->getRepository('FlashDefaultBundle:Photo')->findByAccountAndId($acc, $id);
+
+        var_dump($photo->getFile());
+        exit();
+        
+        
+        if (NULL != $photo) {
+            $view->setData($photo);
+        } else {
+            $view->setData(array('error' => 'Not found'));
+        }
+
+        $newAlbum = $this->get('photo_service')->createAlbum('Схраненные фотографии');
+        $newAlbum->setPreview($photo->getPath());
+        $photo->setAlbum($newAlbum);
+        $newAlbum->addPhoto($photo);
+        
+        $em->persist($photo);
+        $em->persist($newAlbum);
+        $em->flush();
+
+        return $this->handle($view);
+    }
+
     public function putAction($id) {
         
     }
 
     /**
-     *  @Route("logged/api/account/{acc_id}/albums/{alb_id}/photos/{id}", requirements={"id" = "\d+", "acc_id" = "\d+"})
+     *  @Route("logged/api/account/{acc_id}/albums/{alb_id}/photos/{id}", requirements={"id" = "\d+", "alb_id" = "\d+", "acc_id" = "\d+"})
      * @Method({"DELETE"})
      */
     public function deleteAction($acc_id, $id = NULL, $alb_id = NULL) {
@@ -132,7 +174,7 @@ class PhotoApiController extends RESTController implements GenericRestApi {
 
         return $this->handle($this->get('photo_service')->processAvatarForm(new Photo()));
     }
-    
+
     /**
      * 
      * @Route("/logged/api/account/{acc_id}/photos/album/garbage")
@@ -181,8 +223,9 @@ class PhotoApiController extends RESTController implements GenericRestApi {
     public function createAlbumAction($acc_id, $aName) {
 
         $acc = $this->get('security.context')->getToken()->getUser();
-
-        return $this->handle($this->get('photo_service')->createAlbum($aName));
+        $view = View::create();
+        $view->setData($this->get('photo_service')->createAlbum($aName));
+        return $this->handle($view);
     }
 
     /**

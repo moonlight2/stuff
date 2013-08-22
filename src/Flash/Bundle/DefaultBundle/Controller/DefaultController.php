@@ -40,31 +40,21 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/test/{id}", name="test_page")
+     * @Route("/test/{name}", name="test_page")
      * @Template()
      */
-    public function testAction($id = null) {
+    public function testAction($name = null) {
 
-
-        $em = $this->getDoctrine()->getManager();
-
-        $img = $em->getRepository('FlashDefaultBundle:Photo')->find($id);
-
-        $si = new \Flash\Bundle\DefaultBundle\Lib\SimpleImage();
-
-        if (null != $img) {
-
-            $si->load($img->getAbsolutePath());
-
-            header('Content-Type: image/jpeg');
-            $si->crop(150, 150);
-            $si->output();
-        } else {
-            echo "Image with id " . $id . " not found";
-        }
+        $message = \Swift_Message::newInstance()
+                ->setSubject('Hello Email')
+                ->setFrom('yakov.the.smart@gmail.com')
+                ->setTo('yakov.the.smart@gmail.com')
+                ->setBody('Latter'
+                )
+        ;
+        $this->get('mailer')->send($message);
+        exit('1');
     }
-
-
 
     function validateDate($date) {
         if (preg_match('/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/', $date, $parts) == true) {

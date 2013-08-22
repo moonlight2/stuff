@@ -40,7 +40,10 @@
         <div>
             <img class= 'album-open' src="http://localhost/stuff/web/app_dev.php/image/thumb/crop/200/{{ acc_id }}/<%= preview %>"/>
         </div>
-        <button class='btn album-delete' val=''>Удалить</button>
+        {% if (acc_id == own_id) %}
+            <button class='btn album-delete' val=''>Удалить</button>
+        {% endif %}
+        
     </div>
 </script>
 
@@ -89,6 +92,11 @@
                 {% if (acc_id == own_id) %}
                     <div class='photo-edit'>
                         <button class='delete btn' id='delete' val='<%= id %>'>Удалить</button>
+                    </div>
+                {% endif %}
+                {% if (acc_id != own_id) %}
+                    <div class='photo-save'>
+                        <button class='save btn' id='save' val='<%= id %>'>Сохранить себе</button>
                     </div>
                 {% endif %}
                     
