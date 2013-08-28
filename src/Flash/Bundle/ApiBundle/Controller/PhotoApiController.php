@@ -68,37 +68,38 @@ class PhotoApiController extends RESTController implements GenericRestApi {
 
         $em = $this->getDoctrine()->getManager();
         $view = View::create();
+        $albRep = $em->getRepository('FlashDefaultBundle:Album');
         $acc = $em->getRepository('FlashDefaultBundle:Account')->find($acc_id);
         $ownAcc = $this->get('security.context')->getToken()->getUser();
-        $alb = $em->getRepository('FlashDefaultBundle:Album')->find($alb_id);
+        $alb = $albRep->find($alb_id);
+        
 
         if (NULL === $acc || NULL === $alb || NULL === $id) {
             return $this->handle($view->setData(array('error' => 'Not found')));
         }
 
-        // need create new photo
-        $photo = $em->getRepository('FlashDefaultBundle:Photo')->findByAccountAndId($acc, $id);
+        $name = 'Схраненные фотографии';
 
-        var_dump($photo->getFile());
-        exit();
+        $photo = $em->getRepository('FlashDefaultBundle:Photo')->findByAccountAndId($acc, $id);
+        $newPhoto = clone $photo;
         
-        
-        if (NULL != $photo) {
-            $view->setData($photo);
+        $em->detach($photo);
+
+        if ($albRep->exists($name, $ownAcc)) {
+            $newAlbum = $albRep->getByAccountAndName($ownAcc, $name);
         } else {
-            $view->setData(array('error' => 'Not found'));
+            $newAlbum = $this->get('photo_service')->createAlbum($name);
+            $newAlbum->setPreview($newPhoto->getPath());
         }
 
-        $newAlbum = $this->get('photo_service')->createAlbum('Схраненные фотографии');
-        $newAlbum->setPreview($photo->getPath());
-        $photo->setAlbum($newAlbum);
-        $newAlbum->addPhoto($photo);
-        
-        $em->persist($photo);
+        $newPhoto->setAccount($ownAcc);
+        $newPhoto->setAlbum($newAlbum);
+        $newAlbum->addPhoto($newPhoto);
+        $em->persist($newPhoto);
         $em->persist($newAlbum);
         $em->flush();
 
-        return $this->handle($view);
+        return $this->handle($view->setData($newPhoto));
     }
 
     public function putAction($id) {

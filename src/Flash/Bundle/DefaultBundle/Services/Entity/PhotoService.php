@@ -109,6 +109,7 @@ class PhotoService extends CommonService {
         }
     }
 
+
     private function compareDates($d1, $d2) {
         return $d1->format('Y') == $d2->format('Y') &&
                 $d1->format('m') == $d2->format('m') &&

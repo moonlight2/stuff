@@ -67,7 +67,7 @@ class Photo implements Estimable {
     protected $account;
 
     /**
-     *
+     * @Expose
      * @ManyToOne(targetEntity="Album", inversedBy="photos")
      */
     protected $album;
@@ -88,6 +88,14 @@ class Photo implements Estimable {
      * @Expose
      */
     protected $garbage = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="copy", type="boolean")
+     * @Expose
+     */
+    protected $copy = false;
 
     /**
      * Bidirectional - Many comments are favorited by many users (INVERSE SIDE)
@@ -109,10 +117,23 @@ class Photo implements Estimable {
      * Constructor
      */
     public function __construct() {
-        
-        $this->uploaded =  new \DateTime('now');
+
+        $this->uploaded = new \DateTime('now');
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rating = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function copyToAlbum(Flash\Bundle\DefaultBundle\Entity\Album $album) {
+        
+    }
+
+    public function __clone() {
+        $this->id = null;
+        $this->copy = true;
+    }
+    
+    public function isCopy() {
+        return $this->copy;
     }
 
     /**
@@ -193,6 +214,11 @@ class Photo implements Estimable {
      */
     public function upload() {
 
+        if ($this->isCopy()) {
+//            exit('Copy');
+             move_uploaded_file($this->path, $this->getUploadRootDir());
+        }
+        
         if (null === $this->getFile()) {
             return;
         }
@@ -491,7 +517,6 @@ class Photo implements Estimable {
         return $this->garbage;
     }
 
-    
     /**
      * Set uploaded
      *
@@ -512,4 +537,5 @@ class Photo implements Estimable {
     public function getUploaded() {
         return $this->uploaded;
     }
+
 }

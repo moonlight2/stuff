@@ -6,3 +6,4 @@
 /app/config/parameters.yml
 /nbproject
 /src/uploads
+/src/Flash/Bundle/ApiBundle/Controller/uploads/
