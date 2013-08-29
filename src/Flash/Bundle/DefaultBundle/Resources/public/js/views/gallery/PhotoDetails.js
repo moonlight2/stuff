@@ -3,8 +3,6 @@ window.hash = window.location.hash.substring(1);
 window.PhotoView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($('#image-details-tpl').html());
-        this.alb_id = (hash.split('/'))[1];
-        console.log(this.alb_id);
     },
     render: function(eventName) {
 
@@ -32,9 +30,12 @@ window.PhotoView = Backbone.View.extend({
                 this.model.get('id') +
                 '/comment';
         console.log(this.comments);
+        this.alb_id = (hash.split('/'))[1];
+        console.log(this.alb_id);
 
         $('#comments').html('');
         this.comments.fetch({success: function(data) {
+
                 $('#comments').append(new PhotoCommentListView({model: self.comments}).render().el);
             }});
 
@@ -120,8 +121,8 @@ window.PhotoView = Backbone.View.extend({
         return false;
     },
     saveToAlbum: function() {
-         this.alb_id = (hash.split('/'))[1];
-         console.log(this.alb_id);
+        this.alb_id = (hash.split('/'))[1];
+        console.log(this.alb_id);
 
         var url = '../logged/api/account/' + acc_id + '/albums/' + this.alb_id + '/photos/' + this.model.get('id') + '/save';
         //alert('Save');

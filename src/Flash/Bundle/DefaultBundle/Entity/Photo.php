@@ -128,8 +128,8 @@ class Photo implements Estimable {
     }
 
     public function __clone() {
-        $this->id = null;
-        $this->copy = true;
+        //$this->id = null;
+        //$this->copy = true;
     }
     
     public function isCopy() {
